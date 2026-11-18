@@ -5,12 +5,20 @@ Open [Agent Skills](https://agentskills.io/home) for building and tailoring a CV
 
 **Who this is for:** people who use an Agent Skills client and keep career facts in their own private project.
 
+![Evidence bank to CV pipeline](docs/assets/visuals/hero-readme.jpeg)
+
 **Two skills:**
 
 | Skill | Job |
 | :--- | :--- |
-| `evidence-bank` | Maintain a de-styled facts bank (YAML). Validate before you trust it. |
-| `cv-creation` | Run a per-application CV pipeline (match job → draft → export). |
+| <img src="docs/assets/visuals/icon-evidence-bank.jpeg" alt="" width="40" height="40" /> `evidence-bank` | Maintain a de-styled facts bank (YAML). Validate before you trust it. |
+| <img src="docs/assets/visuals/icon-cv-creation.jpeg" alt="" width="40" height="40" /> `cv-creation` | Run a per-application CV pipeline (match job → draft → export). |
+
+```mermaid
+flowchart LR
+  bank[evidence-bank] --> pipe[cv-creation]
+  pipe --> out[export]
+```
 
 **Private career data lives elsewhere.** This repo ships skills, docs, and fixtures only. Put real identity, evidence YAML, and applications in your own career tree.
 
@@ -40,6 +48,14 @@ Use these when you want reliable scripts (validate, export).
 
 Pick one path. Copy the paste-prompt into a new agent chat with this repo available.
 
+```mermaid
+flowchart TD
+  q{Agent Skills client?}
+  q -->|yes| full[Install Full]
+  q -->|yes| lite[Install Lite]
+  q -->|no| web[Web chat page]
+```
+
 | You want… | Open |
 | :--- | :--- |
 | Skills + reliable Python deps | [`prompts/install-full.md`](prompts/install-full.md) |
@@ -51,9 +67,9 @@ The agent should use **its own** skill-install location (see that product’s do
 
 ## Web chat (no skills client)
 
-**Normal web chat cannot install Agent Skills folders.** It cannot load `skills/evidence-bank` or `skills/cv-creation` from disk.
+Normal web chat cannot install Agent Skills folders from disk. If you use ChatGPT, Claude.ai, Gemini, or similar, follow the guided path in [`docs/web-chat.md`](docs/web-chat.md).
 
-If you only have ChatGPT, Claude.ai, Gemini, or similar, use the weaker mega-prompt path: [`docs/web-chat.md`](docs/web-chat.md). Prefer Full or Lite when you can.
+When an Agent Skills client is available, prefer **Full** or **Lite** above — those paths load the skills and scripts for you.
 
 ---
 
