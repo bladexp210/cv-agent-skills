@@ -46,7 +46,11 @@ Use these when you want reliable scripts (validate, export).
 
 ## Install
 
-Pick one path. Copy the paste-prompt into a new agent chat with this repo available.
+Pick one path. Copy the paste-prompt into a new agent chat in your **career** project (skills repo need not be open).
+
+Default skill source is the public GitHub repo:  
+https://github.com/bladexp210/cv-agent-skills  
+(Use a local checkout only if you explicitly tell the agent that path.)
 
 ```mermaid
 flowchart TD
