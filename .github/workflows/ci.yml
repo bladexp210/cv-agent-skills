@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Pytest
+        run: pytest -q
+
+      - name: Architecture smoke
+        run: |
+          set -euo pipefail
+          SKILL_ROOT=skills
+          python -m py_compile $SKILL_ROOT/evidence-bank/scripts/*.py $SKILL_ROOT/cv-creation/scripts/*.py
+          python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
+            $SKILL_ROOT/evidence-bank/assets/fixtures/ok.yaml
+          if python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
+            $SKILL_ROOT/evidence-bank/assets/fixtures/bad-missing-source.yaml; then
+            echo "expected validate_evidence to fail on bad-missing-source.yaml" >&2
+            exit 1
+          fi

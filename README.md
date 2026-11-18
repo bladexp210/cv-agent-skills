@@ -111,6 +111,12 @@ Evidence contract and samples:
 
 Repo map (design, architecture, contract, agent load order): [`docs/README.md`](docs/README.md).
 
+Maintainer smoke (after cloning):
+
+```bash
+pip install -r requirements.txt -r requirements-dev.txt && pytest -q
+```
+
 ---
 
 ## License
