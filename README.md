@@ -55,15 +55,17 @@ https://github.com/bladexp210/cv-agent-skills
 ```mermaid
 flowchart TD
   q{Agent Skills client?}
-  q -->|yes| full[Install Full]
-  q -->|yes| lite[Install Lite]
+  q -->|yes first| full[Install Full]
+  q -->|yes first| lite[Install Lite]
+  q -->|yes already| upd[Update skills]
   q -->|no| web[Web chat page]
 ```
 
 | You want… | Open |
 | :--- | :--- |
-| Skills + reliable Python deps | [`prompts/install-full.md`](prompts/install-full.md) |
-| Skills only; ask before any package install | [`prompts/install-lite.md`](prompts/install-lite.md) |
+| Skills + reliable Python deps (first time) | [`prompts/install-full.md`](prompts/install-full.md) |
+| Skills only; ask before any package install (first time) | [`prompts/install-lite.md`](prompts/install-lite.md) |
+| Refresh skills already installed (keep career data) | [`prompts/update.md`](prompts/update.md) |
 
 The agent should use **its own** skill-install location (see that product’s docs). Do not assume one vendor path.
 
