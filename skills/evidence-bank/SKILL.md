@@ -19,6 +19,7 @@ Design SoT: `docs/design/EVIDENCE-BANK-DECISIONS.md`. UI labeling: `COMMUNICATIO
 | File | When |
 |---|---|
 | `references/evidence-schema.md` | Creating or editing evidence rows |
+| `assets/evidence.schema.json` | Machine-readable shape pin (JSON Schema; prose + validator remain SoT for hard-fails) |
 | `references/destyling-rules.md` | Ingesting resume / LinkedIn / manual / route-to-bank claims |
 | `references/probe-question-bank.md` | Running a gap or ambiguity probe |
 | `references/status-taxonomy.md` | Setting `status` / waiver reasons |

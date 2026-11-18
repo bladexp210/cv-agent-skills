@@ -1,5 +1,7 @@
 # Evidence schema
 
+Machine pin: `assets/evidence.schema.json`.
+
 ## File
 
 Single file: `profile/evidence.yaml` holds `experiences`, `evidence`, and `evidence_skills`.
