@@ -17,7 +17,7 @@ Source of skill files (important)
   (clone, sparse checkout, or download — your choice; prefer a fresh clone into a temp dir if needed).
 - Do NOT use a random local folder such as application-skills, or any sibling project, unless I explicitly give you that path.
 - If both a local checkout and GitHub are available, still prefer GitHub unless I say otherwise.
-- After install, you may delete any temporary clone.
+- Temporary fetch only: if you clone/download into a temp dir to obtain the pack, you MUST delete that temp dir after skills are copied (required cleanup). Do not delete a path I explicitly named as my permanent local checkout.
 
 Goals
 1. Install the skills only: evidence-bank and cv-creation.
@@ -29,6 +29,7 @@ How to install skills
 - Do not hardcode one vendor path.
 - Obtain the pack from GitHub (default) or from an explicit local path I gave you.
 - Copy or link both skill trees from the pack’s skills/ folder into the correct skills location for this client.
+- If you used a temporary clone/download dir, delete it now (required). Confirm path removed, or state “no temp dir — used explicit permanent path.” Never delete my career project, skill install target, or a permanent path I gave you.
 - Confirm both skills load (or say clearly if one did not).
 - Report the source you used (GitHub URL + ref/commit if known, or the explicit local path).
 
@@ -70,8 +71,9 @@ Bootstrap the career project (you do this — do not ask me to DIY)
 
 When you finish
 1. Confirm both skills are installed (or what failed) and the source used.
-2. Confirm career bootstrap / inbox paths.
-3. Show the strong vs weak inventory.
-4. Tell me where to drop CV / LinkedIn / URL saves (`inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`).
-5. Ask me whether to install any missing deps, stay lite, ingest from inbox, or adapt another way — offer to do the next step yourself when I agree.
+2. Confirm temp fetch cleaned up (yes + path / n/a permanent path).
+3. Confirm career bootstrap / inbox paths.
+4. Show the strong vs weak inventory.
+5. Tell me where to drop CV / LinkedIn / URL saves (`inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`).
+6. Ask me whether to install any missing deps, stay lite, ingest from inbox, or adapt another way — offer to do the next step yourself when I agree.
 ```

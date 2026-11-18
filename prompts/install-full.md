@@ -19,7 +19,7 @@ You are installing the CV Agent Skills (Agent Skills open standard) into this pr
   (clone, sparse checkout, or download — your choice; prefer a fresh clone into a temp dir if needed).
 - Do NOT use a random local folder such as application-skills, or any sibling project, unless I explicitly give you that path.
 - If both a local checkout and GitHub are available, still prefer GitHub unless I say otherwise.
-- After install, you may delete any temporary clone.
+- Temporary fetch only: if you clone/download into a temp dir to obtain the pack, you MUST delete that temp dir after skills are copied (required cleanup). Do not delete a path I explicitly named as my permanent local checkout.
 
 ## Goal
 Install evidence-bank and cv-creation so I can maintain a de-styled evidence bank and run a per-application CV pipeline with bundled scripts.
@@ -46,6 +46,11 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
   - `skills/evidence-bank/` → `<skill-root>/evidence-bank/`
   - `skills/cv-creation/` → `<skill-root>/cv-creation/`
 - Keep folder names and `SKILL.md` files intact.
+
+### 3b) Cleanup temporary fetch (required when you used a temp dir)
+- If you cloned or unpacked the pack into a temporary directory, delete that directory now.
+- Confirm cleanup in one line (path removed), or state “no temp dir — used explicit permanent path.”
+- Never delete my career project, skill install target, or a permanent checkout path I gave you.
 
 ### 4) Confirm skills load
 - Reload or restart skills if your client requires it.
@@ -76,6 +81,7 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
 ### 8) Hand off
 Tell me in short bullets:
 - Source used (GitHub vs explicit local path)
+- Temp fetch cleaned up? (yes + path removed / n/a permanent path)
 - Skill install path used
 - Both skills load? (yes/no)
 - Python packages installed (names)
