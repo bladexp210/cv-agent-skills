@@ -76,6 +76,7 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
   (use this project root; adjust if I named another career root).
 - If the tree already exists, still run bootstrap so missing pieces (especially `inbox/`) are created; it skips existing files safely.
 - If the script cannot run, create the same layout yourself: `profile/`, `applications/`, `_skill_state/`, and `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/` plus `inbox/README.md` from the skill asset `inbox.README.md`.
+- After bootstrap, set `paths.skills_dir` in `career.config.yaml` to the skill root you actually used (relative to the career project, e.g. `.agents/skills` or `.cursor/skills`). Do not leave a mismatched default.
 - After it finishes, tell me briefly what was created or already present. Do not stop at “you should create folders.”
 
 ### 8) Hand off

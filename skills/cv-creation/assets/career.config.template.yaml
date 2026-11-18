@@ -22,7 +22,7 @@ ats:
   coverage_warn: 65
   must_have_gap_blocks: true
 paths:
-  skills_dir: ".cursor/skills"
+  skills_dir: ".agents/skills"
   profile_dir: "profile"
   applications_dir: "applications"
   inbox_dir: "inbox"

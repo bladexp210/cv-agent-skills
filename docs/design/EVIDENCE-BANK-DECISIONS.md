@@ -73,7 +73,7 @@ pending → destyled → awaiting_hitl → fact | waived | ambiguous
 | `PROVISIONAL.md` | **Delete** after build |
 
 **Repo skill root (2026-11-18 layout A):** `skills/evidence-bank/`  
-**Install target:** copy into a career project’s `.cursor/skills/evidence-bank/`.
+**Install target:** copy into a career project’s Agent Skills folder (default `.agents/skills/evidence-bank/`; `.cursor/skills/` also fine if that is the client path).
 
 ---
 

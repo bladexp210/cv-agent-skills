@@ -202,7 +202,7 @@ python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
 # expect exit 1
 
 # Install into a career project (examples — use your client’s skills folder)
-# cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.cursor/skills/
+# cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.agents/skills/
 # cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.agents/skills/
 ```
 

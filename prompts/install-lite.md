@@ -67,6 +67,7 @@ Bootstrap the career project (you do this — do not ask me to DIY)
   `python <skill-root>/cv-creation/scripts/bootstrap_career.py .`
 - If Python/script fails, create the layout yourself: `profile/`, `applications/`, `_skill_state/`, `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`, and copy `inbox/README.md` from the skill assets when available.
 - If the tree already exists, still ensure `inbox/` and subfolders exist.
+- After bootstrap, set `paths.skills_dir` in `career.config.yaml` to the skill root you actually used (relative path, e.g. `.agents/skills` or `.cursor/skills`). Do not leave a mismatched default.
 - Tell me briefly what you created. Do not stop at “you should create folders.”
 
 When you finish
