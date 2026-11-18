@@ -4,7 +4,7 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-18 (repo layout option A)
+**Updated:** 2026-11-18 (repo layout option A; Option C trust-pack inventory)
 
 Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Do not invent files beyond this inventory.
 
@@ -12,7 +12,16 @@ Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Ski
 
 ### Folder tree
 
+Repo root (trust / CI / tests) plus skill SoT under `skills/`. Paths under `skills/` stay relative to that folder (same as before).
+
 ```
+SECURITY.md
+requirements-dev.txt
+.github/workflows/ci.yml
+tests/test_validate_evidence.py
+tests/test_validate_application.py
+tests/test_export_resume_md_html.py
+tests/test_evidence_schema_json.py
 skills/
   cv-creation/SKILL.md
   cv-creation/assets/application-meta.template.yaml
@@ -76,6 +85,7 @@ skills/
   evidence-bank/SKILL.md
   evidence-bank/assets/de-styling-checklist.md
   evidence-bank/assets/evidence-record-template.yaml
+  evidence-bank/assets/evidence.schema.json
   evidence-bank/assets/probe-checklist.md
   evidence-bank/assets/fixtures/ok.yaml
   evidence-bank/assets/fixtures/bad-missing-source.yaml
@@ -93,6 +103,13 @@ skills/
 
 | Path | Purpose |
 |---|---|
+| `SECURITY.md` | Script I/O / network / exit matrix and privacy boundary for this repo. |
+| `requirements-dev.txt` | Dev-only pytest and jsonschema pins for local tests and CI. |
+| `.github/workflows/ci.yml` | GitHub Actions workflow: pytest plus architecture smoke. |
+| `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
+| `tests/test_validate_application.py` | Pytest for validate_application against mini-app. |
+| `tests/test_export_resume_md_html.py` | Pytest for md/html export on a temp mini-app copy. |
+| `tests/test_evidence_schema_json.py` | Pytest that fixtures match evidence.schema.json. |
 | `cv-creation/SKILL.md` | CV-creation skill entrypoint, stages, and shared T3/T6 contract. |
 | `cv-creation/assets/application-meta.template.yaml` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/ats-rules.template.yaml` | Copy-ready template or checklist asset. |
@@ -156,6 +173,7 @@ skills/
 | `evidence-bank/SKILL.md` | Evidence-bank skill entrypoint, ingest/lifecycle, shared T3/T6 contract. |
 | `evidence-bank/assets/de-styling-checklist.md` | Copy-ready template or checklist asset. |
 | `evidence-bank/assets/evidence-record-template.yaml` | Copy-ready template or checklist asset. |
+| `evidence-bank/assets/evidence.schema.json` | Machine-readable JSON Schema pin for evidence.yaml (tests only). |
 | `evidence-bank/assets/probe-checklist.md` | Copy-ready template or checklist asset. |
 | `evidence-bank/assets/fixtures/ok.yaml` | Bank CI fixture — valid evidence.yaml. |
 | `evidence-bank/assets/fixtures/bad-missing-source.yaml` | Bank CI fixture — expected validate fail. |
@@ -186,6 +204,17 @@ Added across design sessions:
 - `cv-creation/assets/inbox.README.md`
 - `cv-creation/assets/fixtures/mini-app/`
 - `cv-creation/scripts/export_resume.py`
+
+Option C trust pack (shipped):
+
+- `SECURITY.md`
+- `requirements-dev.txt`
+- `.github/workflows/ci.yml`
+- `tests/test_validate_evidence.py`
+- `tests/test_validate_application.py`
+- `tests/test_export_resume_md_html.py`
+- `tests/test_evidence_schema_json.py`
+- `evidence-bank/assets/evidence.schema.json` (repo path: `skills/evidence-bank/assets/evidence.schema.json`)
 
 Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `_skill_state/LIVE.yaml`, `_skill_state/STATUS.md`, `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
 
