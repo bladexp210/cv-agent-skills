@@ -1,0 +1,6 @@
+export/*.docx
+export/*.pdf
+_skill_state/**/tmp-*
+*.pyc
+__pycache__/
+.DS_Store

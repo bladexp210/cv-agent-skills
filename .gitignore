@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.mcp_memory/
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+!.env.example

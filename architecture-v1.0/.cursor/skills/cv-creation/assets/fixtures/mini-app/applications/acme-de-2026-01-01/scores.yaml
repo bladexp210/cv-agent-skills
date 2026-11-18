@@ -1,0 +1,7 @@
+job_skill_scores:
+  - skill_id: sk_python
+    priority_norm: 100
+    ats_weight: 4
+  - skill_id: sk_airflow
+    priority_norm: 80
+    ats_weight: 3

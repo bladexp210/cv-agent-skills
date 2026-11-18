@@ -1,0 +1,11 @@
+application:
+  id: acme-de-2026-01-01
+  company: Acme
+  role: Data Engineer
+  jd_source: fixture
+  language: en
+  created: 2026-01-01T00:00:00Z
+  stage: composition
+  stage_items: { total: 2, done: 2, awaiting_hitl: 0, pending: 0 }
+  open_flags: []
+  revision_counts: {}

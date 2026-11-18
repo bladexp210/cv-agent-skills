@@ -1,0 +1,13 @@
+skills:
+  - id: sk_python
+    canonical_name: Python
+    type: language
+    parent_id: null
+    aliases: [python3]
+    ats_forms: [Python]
+  - id: sk_airflow
+    canonical_name: Airflow
+    type: tool
+    parent_id: null
+    aliases: []
+    ats_forms: [Airflow]

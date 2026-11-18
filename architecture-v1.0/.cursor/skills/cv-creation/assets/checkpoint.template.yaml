@@ -1,0 +1,8 @@
+state:
+  stage: ""
+  items: { total: 0, done: 0, awaiting_hitl: 0, pending: 0 }
+  revision_counts: {}
+  open_flags: []
+decisions: []
+rejected: []
+recent_context: []

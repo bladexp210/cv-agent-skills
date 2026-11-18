@@ -1,0 +1,12 @@
+matching:
+  - skill_id: sk_python
+    priority_norm: 100
+    best_evidence_id: ev_001
+    strength: strong
+    action: core
+  - skill_id: sk_airflow
+    priority_norm: 80
+    best_evidence_id: ev_001
+    strength: strong
+    action: core
+differentiators: []

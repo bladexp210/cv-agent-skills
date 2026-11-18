@@ -1,0 +1,33 @@
+generated_at: 2026-11-18T17:55Z
+application_id: acme-de-2026-01-01
+inputs:
+  draft_md:
+    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/draft.md
+    sha256: 46e907d9316144d2aaebcea06333496810711cb4a03e6fcc39ba6fc136bcf850
+  identity_yaml:
+    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/profile/identity.yaml
+    sha256: 360d6e91740974605b602346969eaba721d910097642c77d9d1f25f3bbe8d989
+  export_style:
+    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/profile/export-style.yaml
+    sha256: 27166811e282bd5f3fdf0ff925ed7b54bda59b03478bf1857acc45481030b4e7
+tool:
+  python: 3.15.2
+  python_docx: null
+  weasyprint: null
+requested_formats:
+- md
+- html
+produced_formats:
+- md
+- html
+skipped_formats: []
+outputs:
+- format: md
+  path: export/resume.md
+  sha256: edf99c4adf782a0937608beb4c2cec474d9df90de6bea1ba36aa87178504e2e8
+  bytes: 200
+- format: html
+  path: export/resume.html
+  sha256: 6becf58498e6b770edd0da530e1b3465b17c7a6546499d88202aeb31854d5836
+  bytes: 549
+warnings: []

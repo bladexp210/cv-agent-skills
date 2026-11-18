@@ -1,0 +1,23 @@
+section_plan:
+  - {id: header, order: 1, source: identity}
+  - {id: experience, order: 2, experiences: [exp_acme]}
+  - {id: skills, order: 3, source: matching}
+bullets:
+  - id: b_001
+    section: experience
+    experience_id: exp_acme
+    text: "Rebuilt nightly billing ETL (Python, Airflow); −40% runtime."
+    ev_ids: [ev_001]
+    skill_ids: [sk_python, sk_airflow]
+    voice: {verb: rebuilt, tense: past, len_words: 12}
+    differentiator_refs: []
+    user_pinned: false
+    flags: []
+skills_line:
+  - {group: Languages, items: [Python]}
+  - {group: Tools, items: [Airflow]}
+grounding:
+  uncovered: []
+  unconfirmed_differentiators_used: []
+  cited_ev_ids: [ev_001]
+buffered_flags: []

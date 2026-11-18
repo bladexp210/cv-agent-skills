@@ -1,0 +1,21 @@
+experiences:
+  - id: exp_acme_de
+    title: Data Engineer
+    org: Acme Corp
+    start: 2022-03
+    end: present
+    location: Paris, FR
+
+evidence:
+  - id: ev_bad_001
+    experience_id: exp_acme_de
+    fact: "Did cloud things"
+    actor: self
+    action: did
+    object: cloud things
+    status: unverified
+    source: ""
+    probe_history: []
+    revision_count: 0
+
+evidence_skills: []

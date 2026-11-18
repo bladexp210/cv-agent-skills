@@ -1,0 +1,11 @@
+application:
+  id: ""
+  company: ""
+  role: ""
+  jd_source: ""
+  language: en
+  created: ""
+  stage: jd_intake
+  stage_items: { total: 0, done: 0, awaiting_hitl: 0, pending: 0 }
+  open_flags: []
+  revision_counts: {}

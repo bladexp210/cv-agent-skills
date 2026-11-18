@@ -1,0 +1,17 @@
+version: 1
+regime: generic
+source: [baseline]
+last_verified: "2026-11-18"
+coverage_pass: 80
+coverage_warn: 65
+must_have_gap_blocks: true
+required_sections: [experience, skills]
+banned_layout:
+  tables: true
+  text_boxes: true
+  multi_column: true
+keyword_rules:
+  prefer_ats_forms: true
+  min_core_on_skills_line: true
+  title_keyword_in_summary: true
+enrichment_notes: []

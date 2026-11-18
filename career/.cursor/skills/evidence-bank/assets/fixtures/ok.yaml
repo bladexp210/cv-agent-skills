@@ -1,0 +1,35 @@
+experiences:
+  - id: exp_acme_de
+    title: Data Engineer
+    org: Acme Corp
+    start: 2022-03
+    end: 2024-08
+    location: Paris, FR
+
+evidence:
+  - id: ev_001
+    experience_id: exp_acme_de
+    fact: "Rebuilt nightly billing ETL with Python and Airflow on AWS; cut runtime 40% vs previous job"
+    actor: self
+    action: rebuilt
+    object: nightly billing ETL
+    scale: "~2M rows/night"
+    metric: "runtime -40%"
+    tool: [Python, Airflow, AWS, S3]
+    date: 2023
+    outcome: "production until migration"
+    status: fact
+    source: "master_resume_v7.pdf, p.2, bullet 3"
+    probe_history:
+      - ts: "2026-11-18T10:00:00Z"
+        kind: confirm
+        question: null
+        answer: null
+        decision: confirm
+    revision_count: 0
+
+evidence_skills:
+  - evidence_id: ev_001
+    skill_id: sk_python
+    strength: strong
+    recency: current

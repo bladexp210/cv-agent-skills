@@ -1,0 +1,9 @@
+generated_at: 2026-01-01T00:00:00Z
+coverage_pct: 100
+universe: [sk_python, sk_airflow]
+per_skill: []
+consistency: [{id: C1, ok: true}]
+warnings: []
+proposed_edges: []
+override: null
+gate: passed

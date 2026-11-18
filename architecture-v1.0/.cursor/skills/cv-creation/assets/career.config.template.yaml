@@ -1,0 +1,28 @@
+career_root: "."
+defaults:
+  country: FR
+  language: en
+  seniority: senior
+  industry: data-engineering
+ui:
+  chat_host: gui
+  tracker_fence: true
+  glyphs:
+    chat: auto
+    views: emoji
+checkpointing:
+  turn_floor: 10
+  flag_threshold: 5
+  retention_k: 20
+norms:
+  staleness_months: 12
+ats:
+  regime: generic
+  coverage_pass: 80
+  coverage_warn: 65
+  must_have_gap_blocks: true
+paths:
+  skills_dir: ".cursor/skills"
+  profile_dir: "profile"
+  applications_dir: "applications"
+  state_dir: "_skill_state"
