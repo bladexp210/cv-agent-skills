@@ -2,7 +2,7 @@
 
 Glyphs and envelope match cv-creation `ui-turn-types.md`. `ui.chat_host`: `gui` | `tui`. Glyph modes: unicode | ascii | emoji (chat `auto` → emoji on gui, unicode on tui).
 
-**Human labeling:** never bare `T1` / `T3` / `T6` — use `Turn N: <plain name>`; show `current of total` when the queue/stage total is known. See repo `COMMUNICATION_CONTRACT.md`.
+**Human labeling:** never bare `T1` / `T3` / `T6` — use `Turn N: <plain name>`; show `current of total` when the queue/stage total is known. See `COMMUNICATION_CONTRACT.md`.
 
 Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creation (see `SKILL.md`).
 

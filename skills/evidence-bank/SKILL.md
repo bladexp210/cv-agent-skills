@@ -12,7 +12,7 @@ description: >-
 
 Store **de-styled facts** only. Voice never enters this skill. Provenance is mandatory. No fabrication.
 
-Design SoT: repo `EVIDENCE-BANK-DECISIONS.md`. UI labeling: repo `COMMUNICATION_CONTRACT.md`.
+Design SoT: `docs/design/EVIDENCE-BANK-DECISIONS.md`. UI labeling: `COMMUNICATION_CONTRACT.md`.
 
 ## When to load
 

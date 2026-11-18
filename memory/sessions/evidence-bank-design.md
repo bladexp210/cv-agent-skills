@@ -3,8 +3,8 @@ schema_version: '0.3'
 key: evidence-bank-design
 namespace: sessions
 type: checkpoint
-version: 2
-updated_at: '2026-11-18T18:50:15Z'
+version: 3
+updated_at: '2026-11-18T18:56:13Z'
 updated_by: agent:mcp-memory
 status: active
 verified: false
@@ -14,14 +14,14 @@ tags:
 - session
 sources: []
 title: Session Checkpoint (evidence-bank-design)
-description: Evidence-bank design closed and built. Q1–Q11 locked in EVIDENCE-BANK-DECISIONS.md.
-  Skill at career/.cursor/skills/evidence-bank/ (mirrored architecture-v1.0). T3/T6
-  identical. Fixtures smoke OK/fail. Architecture banner design-locked.
+description: 'Repo layout A applied: skills/ SoT, docs/design + docs/architecture
+  thin inventory, docs/archive for fat embed and old specs. career/ and architecture-v1.0/
+  removed. Uncommitted.'
 ---
 
 ## summary
 
-Evidence-bank design closed and built. Q1–Q11 locked in EVIDENCE-BANK-DECISIONS.md. Skill at career/.cursor/skills/evidence-bank/ (mirrored architecture-v1.0). T3/T6 identical. Fixtures smoke OK/fail. Architecture banner design-locked.
+Repo layout A applied: skills/ SoT, docs/design + docs/architecture thin inventory, docs/archive for fat embed and old specs. career/ and architecture-v1.0/ removed. Uncommitted.
 
 ## active_keys
 
@@ -29,5 +29,4 @@ Evidence-bank design closed and built. Q1–Q11 locked in EVIDENCE-BANK-DECISION
 
 ## next_steps
 
-- Optional: commit when Mohamed asks
-- Optional: wire bank fixture commands into any repo CI script
+- Commit layout A when Mohamed asks

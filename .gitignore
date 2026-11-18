@@ -2,6 +2,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 .mcp_memory/
+.cursor/
+.claude/
 *.egg-info/
 .venv/
 venv/

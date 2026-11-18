@@ -2,10 +2,11 @@
 
 **Status:** design closed  
 **Closed:** 2026-11-18  
-**Parent:** `EVIDENCE-BANK-DESIGN-HANDOFF.md`  
-**Communication:** `COMMUNICATION_CONTRACT.md`
+**Parent (archived):** `docs/archive/EVIDENCE-BANK-DESIGN-HANDOFF.md`  
+**Communication:** `COMMUNICATION_CONTRACT.md`  
+**Skill SoT:** `skills/evidence-bank/`
 
-This record is the SoT for building/replacing `evidence-bank`. Provisional tree is not approved by silence — each path below is **rewrite** unless noted.
+This record is the design SoT for `evidence-bank`. Skill files live under `skills/evidence-bank/`.
 
 ---
 
@@ -71,18 +72,15 @@ pending → destyled → awaiting_hitl → fact | waived | ambiguous
 | `scripts/validate_evidence.py` | **Rewrite** (Q8 hard-fail vs warn) |
 | `PROVISIONAL.md` | **Delete** after build |
 
-Build roots (identical content):
-
-- `career/.cursor/skills/evidence-bank/` (install target)
-- `architecture-v1.0/.cursor/skills/evidence-bank/` (Architecture File tree mirror)
+**Repo skill root (2026-11-18 layout A):** `skills/evidence-bank/`  
+**Install target:** copy into a career project’s `.cursor/skills/evidence-bank/`.
 
 ---
 
 ## 5. Definition of done (session)
 
 - [x] This decision record on disk
-- [x] Skill tree built/replaced at both roots
+- [x] Skill tree built under `skills/evidence-bank/` (layout A: single SoT)
 - [x] Turn 3 / Turn 6 body+decisions identical to cv-creation
 - [x] `validate_evidence.py` matches Q8; smoke on fixtures documented
-- [x] Handoff status → design closed / built
-- [x] Architecture File evidence-bank sections updated; provisional banner cleared for bank
+- [x] Design closed; thin architecture inventory at `docs/architecture/CV-SYSTEM-ARCHITECTURE.md`
