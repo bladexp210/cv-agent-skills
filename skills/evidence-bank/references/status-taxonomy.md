@@ -13,6 +13,7 @@
 - Never silent promote to `fact`  
 - Every `waive` appends a `probe_history` entry  
 - Clean amend with clear source may skip a new probe **question**; still use Turn 1  
+- After amend: show skill delta (added / removed / rating changes, or “Skills unchanged”) before treating the item as confirmed  
 
 ## Defense in depth
 

@@ -54,8 +54,9 @@ Company URL fetch is **not** an ingest surface; only with explicit per-URL OK wh
 2. Extract candidates from the ingest surface → apply `destyling-rules.md` → pass `de-styling-checklist.md` → enqueue.  
 3. Process queue **one item at a time** with **Turn 1: Experience validation** (mandatory solo HITL; no batch confirm).  
 4. On each Turn 1, propose `sk_*` + strength + recency; user confirms or edits.  
-5. Persist after each decision; run `validate_evidence.py`.  
-6. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup).  
+5. On **amend**: re-propose skills and show a **skill delta** (added / removed / rating changes, or “Skills unchanged”) before persist — see `references/probe-ui.md`.  
+6. Persist after each decision; run `validate_evidence.py`.  
+7. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup).  
 
 ### Single-item mode
 
@@ -75,6 +76,7 @@ pending → destyled → awaiting_hitl → fact | waived | ambiguous
 - `waived` is terminal; reason in `probe_history`.  
 - `probe_history` entry: `{ts, kind, question?, answer?, decision}` (minimal).  
 - Clean amend with clear source may skip a new probe question; still needs Turn 1.  
+- After amend: always tell the user if skills were **added**, **removed**, or **rating-changed** (strength/recency); say **Skills unchanged** when the set is identical.  
 - `strength` and `recency` live on `evidence_skills` links, not the evidence row.  
 - Experiences: one `exp_*` per **role**; overlap allowed; `end: present` for current.  
 - Never invent facts. Never apply voice.  

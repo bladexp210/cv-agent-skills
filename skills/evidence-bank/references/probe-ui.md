@@ -55,6 +55,42 @@ Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creatio
 ──────────────────────────────────────────── checkpoint 2026-11-21T09:00Z
 ```
 
+## Turn 1 after amend — skill delta (required)
+
+When the user chooses **amend** (or edits the fact text), before persisting as `fact`:
+
+1. Show the **revised fact** (destyled).
+2. Re-propose `evidence_skills` for that item.
+3. Compare to the **previous proposal** (or last persisted links if already saved) and show a **skill delta**:
+   - **Added** — new `sk_*` (with strength, recency)
+   - **Removed** — dropped `sk_*`
+   - **Changed** — same `sk_*` but strength and/or recency changed (show old → new)
+   - If nothing changed: say **Skills unchanged** explicitly
+4. Ask them to confirm the revised fact **and** the skill set (same 1–4 options, or a short “confirm revised”).
+
+Do not silent-update skills on amend. Do not skip the delta when only ratings change.
+
+### Amend follow-up example (gui)
+
+```markdown
+**▸ Turn 1: Experience validation · ev_006 · 6 of 16 (after amend)**
+**Revised fact:** Improved adoption of updated documentation and requirements standards; worked with software engineers and implementation colleagues so the updates stuck and post-kickoff rework dropped.
+**Source:** … + user amend …
+**Skills (proposed):** sk_requirements_governance (strong, current), sk_change_adoption (moderate, current)
+
+**Skill changes vs previous proposal:**
+- Added: sk_change_adoption (moderate, current)
+- Removed: sk_stakeholder_mgmt
+- Changed: sk_requirements_governance strong → moderate
+(or: Skills unchanged)
+
+*Confirm revised fact and skill links?*
+1. confirm
+2. amend
+3. waive
+4. mark ambiguous
+```
+
 ## Turn 3: Gap probe — worked example (gui)
 
 ```markdown

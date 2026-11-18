@@ -74,3 +74,5 @@ evidence_skills:
 ```
 
 On Turn 1: Experience validation, the agent proposes `sk_*` + strength + recency; the user confirms or edits on the same turn.
+
+On **amend**, re-propose links and show a skill delta (added / removed / strength or recency changed, or “Skills unchanged”) before persist — see `probe-ui.md`.
