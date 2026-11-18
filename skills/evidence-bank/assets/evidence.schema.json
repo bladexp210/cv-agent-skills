@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence.schema.json",
+  "title": "Evidence bank (profile/evidence.yaml)",
+  "description": "Machine pin for evidence-bank YAML. Soft fields are optional here; probe_history/status hard-fails stay in validate_evidence.py.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "experiences": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/experience" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceRow" }
+    },
+    "evidence_skills": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceSkillLink" }
+    }
+  },
+  "$defs": {
+    "experience": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "org": { "type": "string" },
+        "start": { "type": "string" },
+        "end": {
+          "type": "string",
+          "description": "YYYY-MM or present"
+        },
+        "location": { "type": "string" }
+      }
+    },
+    "evidenceRow": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "experience_id", "status", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "experience_id": { "type": "string", "minLength": 1 },
+        "fact": { "type": "string" },
+        "actor": { "type": "string" },
+        "action": { "type": "string" },
+        "object": { "type": "string" },
+        "scale": { "type": "string" },
+        "metric": { "type": "string" },
+        "tool": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "date": {
+          "type": ["string", "integer"],
+          "description": "Year or free-form date span"
+        },
+        "outcome": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["fact", "ambiguous", "unverified", "waived"]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Provenance span; empty string is invalid"
+        },
+        "probe_history": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/probeHistoryEntry" }
+        },
+        "revision_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "probeHistoryEntry": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["ts", "kind", "decision"],
+      "properties": {
+        "ts": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "description": "probe | confirm | amend | waive | mark_ambiguous | …"
+        },
+        "question": { "type": ["string", "null"] },
+        "answer": { "type": ["string", "null"] },
+        "decision": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidenceSkillLink": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["evidence_id", "skill_id"],
+      "properties": {
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "skill_id": { "type": "string", "minLength": 1 },
+        "strength": {
+          "type": "string",
+          "enum": ["weak", "moderate", "strong"]
+        },
+        "recency": {
+          "type": "string",
+          "enum": ["current", "<3y", "stale"]
+        }
+      }
+    }
+  }
+}
