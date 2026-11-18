@@ -2,7 +2,7 @@
 
 A guided CV system in chat — better than a one-shot “write my resume” prompt. You keep a small reusable facts folder and update it as you go.
 
-![Web chat path mark](assets/visuals/mark-web-chat.jpeg)
+<img src="assets/visuals/mark-web-chat.jpeg" alt="Web chat path mark" width="96" height="96" />
 
 Use this page when your AI product **cannot install Agent Skills folders** (ChatGPT, Claude.ai, Gemini, and similar). Paste the mega-prompt below, work in short stages, and save work outside the chat.
 
