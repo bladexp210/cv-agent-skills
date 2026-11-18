@@ -8,6 +8,10 @@
 4. `skills/<skill>/SKILL.md` + referenced files under that skill
 5. `docs/architecture/CV-SYSTEM-ARCHITECTURE.md` — inventory / install only
 
+## Install (Agent Skills clients)
+
+Copy `skills/evidence-bank` and `skills/cv-creation` into the client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Do not invent files outside the architecture inventory.
+
 ## SoT rules
 
 | Kind | Path |

@@ -1,12 +1,44 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-.mcp_memory/
-.cursor/
-.claude/
 *.egg-info/
+.eggs/
+dist/
+build/
+*.egg
 .venv/
 venv/
+.env/
+.Python
+
+# Secrets / local env
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# Operator / MCP continuity (local only)
+memory/
+.mcp_memory/
+
+# IDE / agent client dirs
+.cursor/
+.claude/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Accidental exports at repo root only (skill fixtures stay tracked)
+/*.pdf
+/*.docx

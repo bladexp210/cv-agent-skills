@@ -6,7 +6,7 @@
 
 **Updated:** 2026-11-18 (repo layout option A)
 
-Install: copy `skills/evidence-bank` and `skills/cv-creation` into a career project’s `.cursor/skills/`. Do not invent files beyond this inventory.
+Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Do not invent files beyond this inventory.
 
 ## A. Build target
 
@@ -198,8 +198,9 @@ python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
   $SKILL_ROOT/evidence-bank/assets/fixtures/bad-missing-source.yaml
 # expect exit 1
 
-# Install into a career project (example)
+# Install into a career project (examples — use your client’s skills folder)
 # cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.cursor/skills/
+# cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.agents/skills/
 ```
 
 Turn 3 / Turn 6 body+decisions must stay identical across both `SKILL.md` files.
