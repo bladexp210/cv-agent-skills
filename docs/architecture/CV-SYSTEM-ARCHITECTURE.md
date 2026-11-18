@@ -56,6 +56,7 @@ skills/
   cv-creation/references/ats-check.md
   cv-creation/references/checkpoint-schema.md
   cv-creation/references/composition-rules.md
+  cv-creation/references/continuity.md
   cv-creation/references/differentiator-rules.md
   cv-creation/references/export-pipeline.md
   cv-creation/references/hitl-gate-catalogue.md
@@ -78,6 +79,7 @@ skills/
   evidence-bank/assets/probe-checklist.md
   evidence-bank/assets/fixtures/ok.yaml
   evidence-bank/assets/fixtures/bad-missing-source.yaml
+  evidence-bank/references/continuity.md
   evidence-bank/references/destyling-rules.md
   evidence-bank/references/evidence-schema.md
   evidence-bank/references/probe-question-bank.md
@@ -131,6 +133,8 @@ skills/
 | `cv-creation/references/ats-baseline-rules.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/ats-check.md` | Stage [7] coverage and consistency rules. |
 | `cv-creation/references/checkpoint-schema.md` | On-demand reference loaded by the skill. |
+| `cv-creation/references/continuity.md` | LIVE/STATUS progress SoT + memory mirror (identical to evidence-bank). |
+| `evidence-bank/references/continuity.md` | LIVE/STATUS progress SoT + memory mirror (identical to cv-creation). |
 | `cv-creation/references/composition-rules.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/differentiator-rules.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/export-pipeline.md` | On-demand reference loaded by the skill. |
@@ -180,7 +184,7 @@ Added across design sessions:
 - `cv-creation/assets/fixtures/mini-app/`
 - `cv-creation/scripts/export_resume.py`
 
-Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
+Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `_skill_state/LIVE.yaml`, `_skill_state/STATUS.md`, `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
 
 Stage outputs: [6] → composition.yaml + draft.md; [7] → ats-check.yaml + audit.md; [8] reads draft.md + identity + export-style only.
 

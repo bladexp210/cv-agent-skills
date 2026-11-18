@@ -24,22 +24,26 @@ One application end-to-end: JD → requirements → keywords → scoring → mat
 | `references/hitl-gate-catalogue.md` | Any gate G1–G5 |
 | `references/state-machine.md` | Item/stage/global loops |
 | `references/checkpoint-schema.md` | Writing checkpoints |
+| `references/continuity.md` | LIVE.yaml, resume, memory mirror (shared with evidence-bank — keep identical) |
 | `references/differentiator-rules.md` | Differentiators |
 | `references/ui-turn-types.md` | Chat primitives T2,T4–T8 |
 | `references/export-pipeline.md` | Stage [8] |
 | `references/ats-baseline-rules.md` | Human ATS baseline |
 | `references/ats-check.md` | Stage [7] |
 | `references/taxonomy-mechanics.md` | New/merge skills |
-| `references/invocation.md` | Verb list / script CLIs |
+| `references/invocation.md` | Obligations vs user-intent aliases / script CLIs |
 | `references/probe-ui.md` via evidence-bank | When rendering shared T3/T6 |
 | assets listed below | Templates on create/copy |
 | scripts listed below | Validate, views, export, bootstrap |
 
 ## Invocation
 
-See `references/invocation.md`. Verbs: `run`/`continue`, `status`, `show`, `probe`, `gate`, `export`, `check-env`, `regen-views`, `override-ats`.
+See `references/invocation.md` and `references/continuity.md`.
 
-Always read `career.config.yaml` first. Absent → onboarding (`scripts/bootstrap_career.py` flow).
+- **Obligations:** LIVE + STATUS after each meaningful step; memory mirror if tools exist; disk-first resume.  
+- **User intent:** plain language (`continue`, `status`, `export`, …) with optional aliases — not housekeeping commands.
+
+Always read `career.config.yaml` first. Absent → onboarding (`scripts/bootstrap_career.py` flow). On resume, recompute from disk per `continuity.md`.
 
 ## Stages
 

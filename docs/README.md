@@ -9,5 +9,6 @@ For forkers and agents who need how this repo thinks — not end-user install (s
 | [`archive/`](archive/) | Historical snapshots. Read-only unless resurrecting. |
 | [`../COMMUNICATION_CONTRACT.md`](../COMMUNICATION_CONTRACT.md) | Project language: turn labels, glossary, HITL rules. |
 | [`../AGENTS.md`](../AGENTS.md) | Load order and source-of-truth rules for every session. |
+| Skill `references/continuity.md` (both skills) | LIVE.yaml + disk-first resume; memory is write-through only. |
 
 **Install target (Agent Skills clients):** copy `skills/evidence-bank` and `skills/cv-creation` into the client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Career data stays outside this repo.

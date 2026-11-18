@@ -70,6 +70,8 @@ When the user chooses **amend** (or edits the fact text), before persisting as `
 
 Do not silent-update skills on amend. Do not skip the delta when only ratings change.
 
+After any Turn 1 decision is persisted: validate, update queue cursor/item status, write `_skill_state/LIVE.yaml` + `STATUS.md`, and mirror memory if tools exist — see `continuity.md`.
+
 ### Amend follow-up example (gui)
 
 ```markdown

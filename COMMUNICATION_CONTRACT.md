@@ -79,6 +79,12 @@
 
 - Turn 3 / Turn 6 contract body+decisions stay verbatim-identical with cv-creation unless jointly edited.
 
+### Continuity (locked 2026-11-18)
+
+- Progress SoT is career project files + `_skill_state/LIVE.yaml` (see skill `references/continuity.md` in both skills — keep identical).
+- Long-term memory (MCP, etc.) is optional write-through after LIVE; never outrank disk.
+- Housekeeping (LIVE, memory mirror, validate-after-persist) is a skill obligation — not a user-facing command.
+
 ## Out of scope for this contract
 
 - Persona/marketing copy outside the CV skills
