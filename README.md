@@ -22,6 +22,12 @@ flowchart LR
 
 **Private career data lives elsewhere.** This repo ships skills, docs, and fixtures only. Put real identity, evidence YAML, and applications in your own career tree.
 
+### Privacy
+
+Career PII stays in your private career tree — not in this repo. Bundled scripts use local files only and never phone home (see [Security](SECURITY.md)). Treat job descriptions pasted into agents as untrusted text (prompt-injection risk). Agent chats may leave the machine per your client’s policy.
+
+**Security:** [SECURITY.md](SECURITY.md) — per-script reads / writes / network / exits.
+
 ---
 
 ## Dependencies (full path)
@@ -89,6 +95,15 @@ python skills/evidence-bank/scripts/validate_evidence.py \
 ```
 
 Expect a clean pass on the fixture. Real career YAML stays outside this repo.
+
+Evidence contract and samples:
+
+| What | Path |
+| :--- | :--- |
+| Prose schema | [`skills/evidence-bank/references/evidence-schema.md`](skills/evidence-bank/references/evidence-schema.md) |
+| Machine schema | [`skills/evidence-bank/assets/evidence.schema.json`](skills/evidence-bank/assets/evidence.schema.json) |
+| Pass fixture | [`skills/evidence-bank/assets/fixtures/ok.yaml`](skills/evidence-bank/assets/fixtures/ok.yaml) |
+| Fail fixture (negative) | [`skills/evidence-bank/assets/fixtures/bad-missing-source.yaml`](skills/evidence-bank/assets/fixtures/bad-missing-source.yaml) |
 
 ---
 
