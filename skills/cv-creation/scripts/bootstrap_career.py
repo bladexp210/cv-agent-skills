@@ -56,10 +56,17 @@ def bootstrap(root: Path, force: bool = False) -> None:
         copy_template("ats-rules.template.yaml", ats)
     (root / "applications").mkdir(exist_ok=True)
     (root / "_skill_state").mkdir(exist_ok=True)
+    inbox = root / "inbox"
+    for sub in ("resumes", "linkedin", "from-links"):
+        (inbox / sub).mkdir(parents=True, exist_ok=True)
+    inbox_readme = inbox / "README.md"
+    if not inbox_readme.exists() or force:
+        copy_template("inbox.README.md", inbox_readme)
     gi = root / ".gitignore"
     if not gi.exists() or force:
         copy_template("gitignore.template", gi)
     print(f"Bootstrapped career root: {root}")
+    print("Inbox ready: drop CVs → inbox/resumes/; LinkedIn dumps → inbox/linkedin/; URL saves → inbox/from-links/")
     print("Empty-and-when: evidence empty→prompt at bank/composition; norms lazy; voice elicit at [6] (skippable).")
 
 

@@ -25,4 +25,5 @@ paths:
   skills_dir: ".cursor/skills"
   profile_dir: "profile"
   applications_dir: "applications"
+  inbox_dir: "inbox"
   state_dir: "_skill_state"

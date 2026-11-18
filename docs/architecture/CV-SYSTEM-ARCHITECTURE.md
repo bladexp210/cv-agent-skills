@@ -46,6 +46,7 @@ skills/
   cv-creation/assets/fixtures/mini-app/profile/skills.yaml
   cv-creation/assets/gitignore.template
   cv-creation/assets/identity.template.yaml
+  cv-creation/assets/inbox.README.md
   cv-creation/assets/jd.template.md
   cv-creation/assets/norms.template.md
   cv-creation/assets/onboarding-checklist.md
@@ -121,6 +122,7 @@ skills/
 | `cv-creation/assets/fixtures/mini-app/profile/skills.yaml` | Deterministic CI fixture data. |
 | `cv-creation/assets/gitignore.template` | Career .gitignore defaults. |
 | `cv-creation/assets/identity.template.yaml` | Copy-ready template or checklist asset. |
+| `cv-creation/assets/inbox.README.md` | Drop-zone guide for resumes / LinkedIn / URL saves. |
 | `cv-creation/assets/jd.template.md` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/norms.template.md` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/onboarding-checklist.md` | Copy-ready template or checklist asset. |
@@ -174,10 +176,11 @@ Added across design sessions:
 - `cv-creation/assets/ats-rules.template.yaml`
 - `cv-creation/assets/composition.template.yaml`
 - `cv-creation/assets/gitignore.template`
+- `cv-creation/assets/inbox.README.md`
 - `cv-creation/assets/fixtures/mini-app/`
 - `cv-creation/scripts/export_resume.py`
 
-Runtime-created under `career/` (not in this tree): `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
+Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
 
 Stage outputs: [6] → composition.yaml + draft.md; [7] → ats-check.yaml + audit.md; [8] reads draft.md + identity + export-style only.
 
@@ -207,5 +210,5 @@ Turn 3 / Turn 6 body+decisions must stay identical across both `SKILL.md` files.
 
 ## D. Out of scope here
 
-- Career **data** (`profile/`, `applications/`) lives in the career project, not this repo.
+- Career **data** (`profile/`, `applications/`, `inbox/`) lives in the career project, not this repo.
 - Do not regenerate full file-body embeds; edit files under `skills/` directly.

@@ -36,12 +36,15 @@ Config: read `career.config.yaml` at start. Paths are never hardcoded.
 
 ## Ingest surfaces (allowed)
 
-1. Master resume — PDF and/or Markdown  
-2. LinkedIn — **paste** (text dump only; no live scrape)  
+1. Master resume — PDF and/or Markdown (prefer files under `inbox/resumes/`)  
+2. LinkedIn — **paste** or a saved text dump under `inbox/linkedin/` (no live scrape)  
 3. Manual entry  
-4. cv-creation **route-to-bank** (gap / differentiator / buffered flag)
+4. cv-creation **route-to-bank** (gap / differentiator / buffered flag)  
+5. Approved URL saves — files the user (or agent, with OK) placed under `inbox/from-links/`
 
-Company URL fetch is **not** an ingest surface; only with explicit per-URL OK when routed for differentiators.
+Preferred drop zone: career `inbox/` (see `paths.inbox_dir` in `career.config.yaml`). Tell the user where to put files; do not ask them to invent a folder layout.
+
+Company URL fetch is **not** an ingest surface; only with explicit per-URL OK when routed for differentiators. Save approved downloads into `inbox/from-links/`.
 
 ## Pipeline
 

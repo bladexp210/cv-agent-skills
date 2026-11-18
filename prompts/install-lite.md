@@ -61,8 +61,17 @@ Smoke (optional, no new installs)
 - If validate_evidence.py already runs with the fixture under the installed evidence-bank assets/fixtures/, run that smoke and report the result.
 - If it does not run, say so. Do not install PyYAML unless I agree.
 
+Bootstrap the career project (you do this — do not ask me to DIY)
+- After skills are in place, run bootstrap yourself (no new pip installs):
+  `python <skill-root>/cv-creation/scripts/bootstrap_career.py .`
+- If Python/script fails, create the layout yourself: `profile/`, `applications/`, `_skill_state/`, `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`, and copy `inbox/README.md` from the skill assets when available.
+- If the tree already exists, still ensure `inbox/` and subfolders exist.
+- Tell me briefly what you created. Do not stop at “you should create folders.”
+
 When you finish
 1. Confirm both skills are installed (or what failed) and the source used.
-2. Show the strong vs weak inventory.
-3. Ask me whether to install any missing deps, stay lite, or adapt another way.
+2. Confirm career bootstrap / inbox paths.
+3. Show the strong vs weak inventory.
+4. Tell me where to drop CV / LinkedIn / URL saves (`inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`).
+5. Ask me whether to install any missing deps, stay lite, ingest from inbox, or adapt another way — offer to do the next step yourself when I agree.
 ```

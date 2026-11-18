@@ -65,16 +65,24 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
 - If that fails for missing PyYAML, install deps (step 5), then retry.
 - Do not rewrite the validator unless the script is broken.
 
-### 7) Hand off
+### 7) Bootstrap the career project (you do this — do not ask me to DIY)
+- Run the installed skill script yourself (do not tell me to run mkdir/bootstrap by hand):
+  `python <skill-root>/cv-creation/scripts/bootstrap_career.py .`
+  (use this project root; adjust if I named another career root).
+- If the tree already exists, still run bootstrap so missing pieces (especially `inbox/`) are created; it skips existing files safely.
+- If the script cannot run, create the same layout yourself: `profile/`, `applications/`, `_skill_state/`, and `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/` plus `inbox/README.md` from the skill asset `inbox.README.md`.
+- After it finishes, tell me briefly what was created or already present. Do not stop at “you should create folders.”
+
+### 8) Hand off
 Tell me in short bullets:
 - Source used (GitHub vs explicit local path)
 - Skill install path used
 - Both skills load? (yes/no)
 - Python packages installed (names)
 - Smoke validate result
-- Next suggested command (e.g. bootstrap career tree, or start evidence-bank / cv-creation)
-
-Stop after the handoff unless I ask to continue.
+- Career bootstrap / inbox paths ready
+- Where to drop files: `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`
+- Offer next step YOU can do: e.g. “Drop your CV/LinkedIn into inbox, or say ingest if files are already there” — then wait for my reply (do not invent career facts).
 ```
 
 ---

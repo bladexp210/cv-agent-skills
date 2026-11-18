@@ -4,3 +4,10 @@ _skill_state/**/tmp-*
 *.pyc
 __pycache__/
 .DS_Store
+
+# Keep inbox layout; ignore dropped personal files
+inbox/resumes/**
+inbox/linkedin/**
+inbox/from-links/**
+!inbox/**/.gitkeep
+!inbox/README.md
