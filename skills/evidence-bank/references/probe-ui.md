@@ -4,6 +4,11 @@ Glyphs and envelope match cv-creation `ui-turn-types.md`. `ui.chat_host`: `gui` 
 
 **Human labeling:** never bare `T1` / `T3` / `T6` — use `Turn N: <plain name>`; show `current of total` when the queue/stage total is known. See `COMMUNICATION_CONTRACT.md`.
 
+**Progress strip (when total known):** directly under the Turn header (gui and tui), show a monospace-friendly bar + counts, e.g. `Ingest  [##########------] 10/16`. Use `#`/`-` or unicode blocks (`█`/`░`); one cell per item or a fixed-width scale that still reads as current/total. Omit the strip only when total is unknown.
+
+**Journey (bank ingest):** one short line under the strip (or under the header when no strip):  
+`Journey: Facts bank (now) → later: match a job → draft CV → export`
+
 Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creation (see `SKILL.md`).
 
 ## Envelope
@@ -12,6 +17,8 @@ Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creatio
 
 ```markdown
 **▸ Turn N: <plain name> · item-id · k of n**
+`Ingest  [##########------] 10/16`
+`Journey: Facts bank (now) → later: match a job → draft CV → export`
 **Field:** value
 *One question.*
 1. Option A
@@ -24,6 +31,8 @@ Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creatio
 
 ```
 ▸ Turn N: <plain name> · item-id · k of n
+  Ingest  [##########------] 10/16
+  Journey: Facts bank (now) → later: match a job → draft CV → export
   ⟨body ≤12 lines, aligned⟩
   [1] Option A  [2] Option B  [other: …]
 ──────────────────────────────────────────── checkpoint ⟨ts⟩
@@ -33,6 +42,8 @@ Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creatio
 
 ```markdown
 **▸ Turn 1: Experience validation · ev_001 · 1 of 3**
+`Ingest  [#--] 1/3`
+`Journey: Facts bank (now) → later: match a job → draft CV → export`
 **Fact:** Rebuilt nightly billing ETL with Python and Airflow on AWS; cut runtime 40%.
 **Source:** master_resume_v7.pdf, p.2, bullet 3
 **Skills (proposed):** sk_python (strong, current), sk_airflow (strong, current)
@@ -48,6 +59,8 @@ Turn 3 / Turn 6 **body fields and decision labels** are verbatim with cv-creatio
 
 ```
 ▸ Turn 1: Experience validation · ev_001 · 1 of 3
+  Ingest  [#--] 1/3
+  Journey: Facts bank (now) → later: match a job → draft CV → export
   Fact: Rebuilt nightly billing ETL with Python and Airflow on AWS; cut runtime 40%.
   Source: master_resume_v7.pdf, p.2, bullet 3
   Skills: sk_python (strong, current), sk_airflow (strong, current)

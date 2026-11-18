@@ -23,6 +23,7 @@ Design SoT: `docs/design/EVIDENCE-BANK-DECISIONS.md`. UI labeling: `COMMUNICATIO
 | `references/probe-question-bank.md` | Running a gap or ambiguity probe |
 | `references/status-taxonomy.md` | Setting `status` / waiver reasons |
 | `references/probe-ui.md` | Rendering Turn 1 / Turn 3 / Turn 6 |
+| `references/first-run-briefing.md` | Session start / bulk ingest before first Turn 1 when LIVE missing, bank empty, or user asks help/onboarding |
 | `references/continuity.md` | LIVE.yaml, resume, memory mirror (shared with cv-creation — keep identical) |
 | `assets/evidence-record-template.yaml` | New file or empty-bank scaffold |
 | `assets/de-styling-checklist.md` | Before proposing a row for Turn 1 |
@@ -36,6 +37,8 @@ Design SoT: `docs/design/EVIDENCE-BANK-DECISIONS.md`. UI labeling: `COMMUNICATIO
 **User intent** (plain language + optional aliases): shared with cv-creation `references/invocation.md` — `continue`, `status`, `show`, `probe`, `gate` (no user `validate` / `sync-memory` commands).
 
 Config: read `career.config.yaml` at start. Paths are never hardcoded. On session start or “resume”, recompute progress from disk per `continuity.md`.
+
+**First-run briefing:** On session start or bulk ingest, if required per `references/first-run-briefing.md` (LIVE missing, bank empty, or user asks help/onboarding), show that script **before** the first Turn 1, then set `onboarding_briefing_shown` so it is not repeated every Turn 1.
 
 ## Ingest surfaces (allowed)
 
@@ -54,12 +57,13 @@ Company URL fetch is **not** an ingest surface; only with explicit per-URL OK wh
 ### Bulk ingest mode
 
 1. Load `profile/evidence.yaml` + `profile/skills.yaml` (create empty evidence from template if missing).  
-2. Extract candidates from the ingest surface → apply `destyling-rules.md` → pass `de-styling-checklist.md` → enqueue.  
-3. Process queue **one item at a time** with **Turn 1: Experience validation** (mandatory solo HITL; no batch confirm).  
-4. On each Turn 1, propose `sk_*` + strength + recency; user confirms or edits.  
-5. On **amend**: re-propose skills and show a **skill delta** (added / removed / rating changes, or “Skills unchanged”) before persist — see `references/probe-ui.md`.  
-6. Persist after each decision; run `validate_evidence.py`; update queue cursor/item status; write `_skill_state/LIVE.yaml` + `STATUS.md`; mirror memory if tools exist (`continuity.md`).  
-7. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup); refresh LIVE.  
+2. If first-run briefing is required (`references/first-run-briefing.md`), show it **before** the first Turn 1; set `onboarding_briefing_shown` in LIVE (or `_skill_state/onboarding_briefing_shown: true`).  
+3. Extract candidates from the ingest surface → apply `destyling-rules.md` → pass `de-styling-checklist.md` → enqueue.  
+4. Process queue **one item at a time** with **Turn 1: Experience validation** (mandatory solo HITL; no batch confirm).  
+5. On each Turn 1, propose `sk_*` + strength + recency; user confirms or edits.  
+6. On **amend**: re-propose skills and show a **skill delta** (added / removed / rating changes, or “Skills unchanged”) before persist — see `references/probe-ui.md`.  
+7. Persist after each decision; run `validate_evidence.py`; update queue cursor/item status; write `_skill_state/LIVE.yaml` + `STATUS.md`; mirror memory if tools exist (`continuity.md`).  
+8. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup); refresh LIVE.  
 
 ### Single-item mode
 

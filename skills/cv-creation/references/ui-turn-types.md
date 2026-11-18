@@ -19,6 +19,11 @@
 
 gui: bold header lines, numbered options, italic checkpoint. tui: aligned box with `[n]` options and rule before checkpoint. Error verb uses same envelope with ≥2 recoveries.
 
+**Progress strip (when total known):** directly under the Turn header (gui and tui), show a monospace-friendly bar + counts, e.g. `Matching  [###########---] 11/14`. Use `#`/`-` or unicode blocks (`█`/`░`). Omit only when total is unknown.
+
+**Journey (application pipeline):** one short ESL line under the strip (or under the header when no strip). Mark the active stage with `(now)`; keep later stages brief, e.g.  
+`Journey: Match job (now) → close gaps → draft CV → export`
+
 ## Human labeling (locked 2026-11-18)
 
 - Never show bare `T1`…`T8` to the user. Required: **`Turn N: <plain name>`** (e.g. `Turn 2: Keyword validation`). Optional builder cue `(T2)` only after the plain label.
@@ -41,6 +46,8 @@ gui: bold header lines, numbered options, italic checkpoint. tui: aligned box wi
 
 ```markdown
 **▸ Turn 2: Keyword validation · kw_1 · 1 of 6**
+`Matching  [#-----] 1/6`
+`Journey: Match job (now) → close gaps → draft CV → export`
 **Raw:** k8s → **Normalized:** Kubernetes → **sk_kubernetes**
 **Occurrences:** 1 · **Placement:** body
 1. approve

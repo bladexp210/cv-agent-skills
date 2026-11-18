@@ -37,6 +37,8 @@ Do **not** ask the user to run `sync-memory`, `validate`, or “update status fi
 
 Never resume from memory or another chat’s transcript alone.
 
+**First-run briefing (evidence-bank):** If LIVE is missing, the bank is empty, or the user asks help/onboarding — and `onboarding_briefing_shown` is not set — show `evidence-bank/references/first-run-briefing.md` **before** the first Turn 1, then set the flag (LIVE field or `_skill_state/onboarding_briefing_shown: true`). Preserve the flag when recomputing LIVE. See that file for the script.
+
 ## LIVE.yaml schema (`cv-skills-live/v1`)
 
 Path: `_skill_state/LIVE.yaml`  
@@ -48,6 +50,7 @@ updated_at: "2026-11-18T22:00:00Z"
 skill: evidence-bank          # or cv-creation
 mode: bulk_ingest             # e.g. bulk_ingest | single_probe | application
 app_id: null                  # applications/<id> when cv-creation
+onboarding_briefing_shown: true   # evidence-bank: set after first-run briefing; omit/false until shown
 progress:
   current: 10
   total: 16

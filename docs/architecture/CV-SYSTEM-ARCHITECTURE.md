@@ -82,6 +82,7 @@ skills/
   evidence-bank/references/continuity.md
   evidence-bank/references/destyling-rules.md
   evidence-bank/references/evidence-schema.md
+  evidence-bank/references/first-run-briefing.md
   evidence-bank/references/probe-question-bank.md
   evidence-bank/references/probe-ui.md
   evidence-bank/references/status-taxonomy.md
@@ -160,6 +161,7 @@ skills/
 | `evidence-bank/assets/fixtures/bad-missing-source.yaml` | Bank CI fixture — expected validate fail. |
 | `evidence-bank/references/destyling-rules.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/references/evidence-schema.md` | On-demand reference loaded by the skill. |
+| `evidence-bank/references/first-run-briefing.md` | One-shot onboarding briefing before first Turn 1 (flagged so it does not repeat). |
 | `evidence-bank/references/probe-question-bank.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/references/probe-ui.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/references/status-taxonomy.md` | On-demand reference loaded by the skill. |
@@ -169,6 +171,7 @@ skills/
 
 Added across design sessions:
 
+- `evidence-bank/references/first-run-briefing.md`
 - `evidence-bank/references/probe-ui.md`
 - `cv-creation/references/ui-turn-types.md`
 - `cv-creation/references/export-pipeline.md`
