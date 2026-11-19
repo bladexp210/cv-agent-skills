@@ -49,10 +49,14 @@ Use these when you want reliable scripts (validate, export).
 
 | | Full | Lite |
 | :--- | :--- | :--- |
+| Situation | Agent Skills client **and** you will install Python, Python libraries, and related developer tools on this machine | Agent Skills client **but** you cannot or will not install that Python stack |
+| End result | Skills installed + **repeatable** validate/export via local scripts | Skills still load in the agent; artifacts come mainly from the agent (you may polish Markdown in Word / Google Docs / LibreOffice before exporting). Weaker script guarantees — honest gaps |
 | Install skill folders | Yes | Yes |
 | Install Python packages | When a step needs them; ask before heavy or surprising installs | Only if you say yes |
 | Scripts | Prefer bundled scripts; install deps so they run | Use scripts only if they already run; otherwise adapt |
 | Promise | Stronger integrity via validators and export scripts | Honest gaps; quality tracks what already works on your machine |
+
+**Recommendation:** prefer **Full** when you have a skills client and can install Python; prefer **Lite** when you have a client but refuse or cannot install that stack.
 
 ---
 
@@ -73,12 +77,12 @@ flowchart TD
   q -->|no| web[Web chat page]
 ```
 
-| You want… | Open |
-| :--- | :--- |
-| Skills + reliable Python deps (first time) | [`prompts/install-full.md`](prompts/install-full.md) |
-| Skills only; ask before any package install (first time) | [`prompts/install-lite.md`](prompts/install-lite.md) |
-| Refresh skills already installed (keep career data) | [`prompts/update.md`](prompts/update.md) |
-| Multi-client matrix + smoke checklist | [`docs/portability.md`](docs/portability.md) |
+| Situation | End result | Open | Recommendation |
+| :--- | :--- | :--- | :--- |
+| Agent Skills client **and** willing to install Python + libraries + related tools (first time) | Skills installed + **repeatable** validate/export via local scripts | [`prompts/install-full.md`](prompts/install-full.md) | **Prefer Full** when the client and Python stack are both available. |
+| Agent Skills client **but** cannot or will not install that Python stack (first time) | Skills load in the agent; artifacts mainly from the agent (optional polish in Word / Docs / LibreOffice). Weaker script guarantees | [`prompts/install-lite.md`](prompts/install-lite.md) | **Prefer Lite** when you have a client but refuse or cannot install Python. |
+| Skills already installed; keep career data | Refreshed skill folders without wiping facts | [`prompts/update.md`](prompts/update.md) | Use Update for routine refreshes; Full/Lite only for first install. |
+| Multi-client matrix + smoke checklist | Portability results and copyable smoke steps | [`docs/portability.md`](docs/portability.md) | After install, walk the checklist for your client. |
 
 The agent should use **its own** skill-install location (see that product’s docs). Do not assume one vendor path. Portability smoke clients: Cursor and DeepSeek Harness (`dsh`) — see [`docs/portability.md`](docs/portability.md).
 
@@ -86,9 +90,12 @@ The agent should use **its own** skill-install location (see that product’s do
 
 ## Web chat (no skills client)
 
-Normal web chat cannot install Agent Skills folders from disk. If you use ChatGPT, Claude.ai, Gemini, or similar, follow the guided path in [`docs/web-chat.md`](docs/web-chat.md).
+**Situation:** you have **no** Agent Skills client — “AI” for you means a browser chatbot (ChatGPT, Claude.ai, Gemini, …).  
+**End result:** a **structured** mega-prompt + discipline to save files outside the chat — better than ad-hoc social-media prompt tricks.
 
-When an Agent Skills client is available, prefer **Full** or **Lite** above — those paths load the skills and scripts for you.
+Normal web chat cannot install Agent Skills folders from disk. Follow the guided path in [`docs/web-chat.md`](docs/web-chat.md).
+
+**Recommendation:** use Web chat **only** when you have no skills client. When a client exists, prefer **Full** (if you can install Python) or **Lite** (if you cannot).
 
 ---
 

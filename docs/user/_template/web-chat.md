@@ -4,13 +4,14 @@
 
 A guided CV system in chat — better than a one-shot “write my resume” prompt. You keep a small reusable facts folder and update it as you go.
 
-Use this page when your AI product **cannot install Agent Skills folders** (ChatGPT, Claude.ai, Gemini, and similar).
+**Situation:** you have **no** Agent Skills client — “AI” for you means a browser chatbot (ChatGPT, Claude.ai, Gemini, …).  
+**End result:** a **structured** mega-prompt + discipline to save files outside the chat — better than ad-hoc social-media prompt tricks.
 
-| You… | Use | Recommendation |
-| :--- | :--- | :--- |
-| Have an Agent Skills client and want reliable scripts | `prompts/<lang>/install-full.md` | **Prefer Full** when a skills client exists. |
-| Have an Agent Skills client; ask before deps | `prompts/<lang>/install-lite.md` | Lite when you gate every package install. |
-| Only have a normal web chat | **This page** | Use web chat only if skill install is impossible. |
+| Situation | End result | Use | Recommendation |
+| :--- | :--- | :--- | :--- |
+| Agent Skills client **and** willing to install Python + libraries + related tools | Skills installed + **repeatable** validate/export via local scripts | `prompts/<lang>/install-full.md` | **Prefer Full** when the client and Python stack are both available. |
+| Agent Skills client **but** cannot or will not install that Python stack | Skills load in the agent; artifacts mainly from the agent. Weaker script guarantees | `prompts/<lang>/install-lite.md` | **Prefer Lite** when you have a client but refuse or cannot install Python. |
+| **No** Agent Skills client — browser chatbot only | Structured mega-prompt + save files outside the chat | **This page** | Use Web chat **only** when skill install is impossible. |
 
 ## Keep a `career/` folder
 

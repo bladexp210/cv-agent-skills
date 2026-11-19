@@ -1,11 +1,15 @@
 # Full install prompt (Agent Skills + Python deps)
 
-**Who this is for:** You use an Agent Skills client and want reliable scripts (validate, export, views).
+**Who this is for (situation):** You have an Agent Skills client **and** you are willing to install Python, Python libraries, and related developer tools on your machine.
+
+**End result:** Skills installed + **repeatable** validate/export via local scripts (validate, export, views).
 
 **How to use:** Copy everything inside the box below. Paste it into a new chat in your **career** project (or wherever skills should be installed). You do not need the skills repo open in the workspace.
 
 **Default source:** public GitHub repo  
 `https://github.com/bladexp210/cv-agent-skills`
+
+**Recommendation:** prefer **Full** when you have a skills client and can install the Python stack; use Lite instead if you refuse or cannot install those deps.
 
 ---
 

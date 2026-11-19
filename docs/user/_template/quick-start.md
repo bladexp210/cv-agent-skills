@@ -13,11 +13,11 @@ Career facts stay in a separate career project. This repo ships skills and fixtu
 
 ## Pick a path
 
-| Path | When | Open | Recommendation |
-| :--- | :--- | :--- | :--- |
-| **Full** | Agent Skills client; want reliable Python deps | `prompts/<lang>/install-full.md` | **Recommended** for first install when you want `make smoke` / validators. |
-| **Lite** | Same client; ask before package installs | `prompts/<lang>/install-lite.md` | Use when package installs must wait for your OK. |
-| **Web chat** | No Agent Skills client | [`web-chat.md`](web-chat.md) | Only when you cannot install skill folders. |
+| Path | Situation | End result | Open | Recommendation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Full** | Agent Skills client **and** willing to install Python, libraries, and related developer tools | Skills installed + **repeatable** validate/export via local scripts | `prompts/<lang>/install-full.md` | **Prefer Full** when you have a client and can install Python. |
+| **Lite** | Agent Skills client **but** cannot or will not install that Python stack | Skills load in the agent; artifacts mainly from the agent (optional polish in Word / Docs / LibreOffice). Weaker script guarantees | `prompts/<lang>/install-lite.md` | **Prefer Lite** when you have a client but refuse or cannot install Python. |
+| **Web chat** | **No** Agent Skills client — browser chatbot only | Structured mega-prompt + save files outside the chat | [`web-chat.md`](web-chat.md) | Use Web **only** when you have no skills client. |
 
 Refresh already-installed skills: `prompts/<lang>/update.md`.
 

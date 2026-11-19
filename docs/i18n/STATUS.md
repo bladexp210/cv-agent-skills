@@ -4,9 +4,9 @@ English install/use docs at repo root (`README.md`, `docs/quick-start.md`, `docs
 
 | Locale | Status | EN pin | Checked | Owner | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `en` | SoT (pin) | `b91cc6bb92073367e43c77253b6f64f62cad1813` | 2026-11-19 | foundation | Canonical EN corpus + `locales/en.yaml` |
-| `fr` | current | `b91cc6bb92073367e43c77253b6f64f62cad1813` | 2026-11-19 | french | Full corpus + `fr.yaml` HITL packs; S1–S4 green |
-| `ar` | current | `b91cc6bb92073367e43c77253b6f64f62cad1813` | 2026-11-19 | arabic | Full corpus + `ar.yaml` HITL packs; RTL notes; S1–S4 green |
+| `en` | SoT (pin) | `v0.10.1` | 2026-11-19 | foundation | Canonical EN corpus + `locales/en.yaml`; path-copy situation/end-result refresh |
+| `fr` | current | `v0.10.1` | 2026-11-19 | french | Full corpus + `fr.yaml`; path-copy refresh synced with EN |
+| `ar` | current | `v0.10.1` | 2026-11-19 | arabic | Full corpus + `ar.yaml`; RTL notes; path-copy refresh synced with EN |
 
 ## Sync rule
 
