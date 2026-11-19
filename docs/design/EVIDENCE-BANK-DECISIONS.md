@@ -1,7 +1,8 @@
 # Evidence-Bank — Decision Record
 
-**Status:** design closed  
+**Status:** design closed (amended 2026-11-19 — Q12/Q13)  
 **Closed:** 2026-11-18  
+**Amended:** 2026-11-19 (ingest scope gate: Turn 0 + Turn 6 Coverage)  
 **Parent (archived):** `docs/archive/EVIDENCE-BANK-DESIGN-HANDOFF.md`  
 **Communication:** `COMMUNICATION_CONTRACT.md`  
 **Skill SoT:** `skills/evidence-bank/`
@@ -34,6 +35,13 @@ This record is the design SoT for `evidence-bank`. Skill files live under `skill
 | Stage progress | Show `current of total` when total known |
 | Options to the operator | Always include recommendation + short reasoning |
 
+### Mid-session ingest-scope locks (2026-11-19 — do not reopen Q1–Q11)
+
+| Q | Topic | Decision |
+|---|---|---|
+| Q12 | Ingest scope (Turn 0) | Before any **bulk** enqueue (first pass or later pass), run **Turn 0: Ingest scope**. Hard-fail for agents: do not write `queue.yaml` / start Turn 1 until Turn 0 is decided for that pass. **Body must include:** ingest surfaces used; proposed mode (`full` \| `curated`); roles/experiences **in** with candidate counts; roles/items **deferred** with one-line reasons; recommendation + short reasoning. **Decisions (exact labels):** `approve full` / `approve curated` / `revise` / `defer pass`. **Grain:** G1 always. If operator chooses `approve curated` or `revise`, show G2 candidate short-list (one line per proposed fact: role · fact stub · source id) and require **`approve queue`** / **`revise queue`** before enqueue. **Default recommendation:** `approve full` for remaining destyled candidates from the named surfaces (unless operator already scoped otherwise). Single-item / route-to-bank / Turn 3 probes: **no** Turn 0. |
+| Q13 | Turn 6 coverage rollup | Extend the shared Turn 6 body (both skills, verbatim) with a **Coverage** block: (1) Bulk ingest / ingest revise — included roles+counts vs deferred/left-out vs source inventory (so `n/n` never means “whole warehouse done”); (2) Application stage gates — `Coverage: N/A (not bulk ingest)`. Decisions stay: `approve` / `revise` / `resolve` / `accept`. |
+
 ---
 
 ## 2. Already settled (inherited — not reopened)
@@ -48,8 +56,8 @@ Two skills; voice never in bank; taxonomy at `profile/skills.yaml`; YAML structu
 pending → destyled → awaiting_hitl → fact | waived | ambiguous
 ```
 
-- Bulk mode: extractions enter a queue; process one Turn 1 at a time; optional Turn 6 when queue empty.
-- Single-item mode: no bulk queue; same item states.
+- Bulk mode: destyle → **Turn 0: Ingest scope** (Q12) → enqueue approved set → process one Turn 1 at a time; optional Turn 6 when queue empty (Coverage per Q13).
+- Single-item mode: no bulk queue; same item states; **no** Turn 0.
 - Persist after each approved decision; run `validate_evidence.py` before write.
 
 ---

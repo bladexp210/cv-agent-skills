@@ -121,6 +121,9 @@ Backward edges (flag-triggered only): [4]→[2] noise; [5]→bank probe; [6]→[
   - `gap` — required, not evidenced
   - `ask_user` — weak or stale evidence — probe before deciding
 - buffered-flag count
+- **Coverage:**
+  - Bulk ingest / ingest revise: included roles+counts vs deferred/left-out vs source inventory (so `n/n` never means “whole warehouse done”)
+  - Application stage gates: `Coverage: N/A (not bulk ingest)`
 
 **Decisions (exact labels):** `approve` / `revise` / `resolve` / `accept`
 

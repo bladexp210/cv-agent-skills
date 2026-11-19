@@ -37,7 +37,9 @@ Do **not** ask the user to run `sync-memory`, `validate`, or “update status fi
 
 Never resume from memory or another chat’s transcript alone.
 
-**First-run briefing (evidence-bank):** If LIVE is missing, the bank is empty, or the user asks help/onboarding — and `onboarding_briefing_shown` is not set — show `evidence-bank/references/first-run-briefing.md` **before** the first Turn 1, then set the flag (LIVE field or `_skill_state/onboarding_briefing_shown: true`). Preserve the flag when recomputing LIVE. See that file for the script.
+**First-run briefing (evidence-bank):** If LIVE is missing, the bank is empty, or the user asks help/onboarding — and `onboarding_briefing_shown` is not set — show `evidence-bank/references/first-run-briefing.md` **before** Turn 0 (then Turn 1), then set the flag (LIVE field or `_skill_state/onboarding_briefing_shown: true`). Preserve the flag when recomputing LIVE. See that file for the script.
+
+**Ingest scope (evidence-bank bulk):** Do **not** write `queue.yaml` or advance past Turn 0 without a recorded scope decision for that pass. While awaiting scope, LIVE uses `progress.label: "Turn 0: Ingest scope"` and `awaiting.kind: turn0_scope` (G1) or `turn0_queue` (G2 short-list). Only after `approve full` / `approve queue` (or equivalent enqueue approval) may the queue cursor advance into Turn 1.
 
 ## LIVE.yaml schema (`cv-skills-live/v1`)
 
@@ -54,10 +56,10 @@ onboarding_briefing_shown: true   # evidence-bank: set after first-run briefing;
 progress:
   current: 10
   total: 16
-  label: "Turn 1: Experience validation"
+  label: "Turn 1: Experience validation"   # or "Turn 0: Ingest scope" while awaiting scope
 awaiting:
-  id: ev_010
-  kind: turn1_confirm         # short machine hint
+  id: ev_010                  # or pass id / null during Turn 0
+  kind: turn1_confirm         # turn0_scope | turn0_queue | turn1_confirm | …
 pointers:
   evidence: profile/evidence.yaml
   queue: _skill_state/ingest/queue.yaml

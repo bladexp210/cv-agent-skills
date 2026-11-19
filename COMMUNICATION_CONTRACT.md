@@ -31,10 +31,11 @@
 
 | Term | Meaning | Do not say (alone) |
 | :--- | :---- | :---- |
-| Turn N: \<Name\> | Human-facing HITL primitive | Bare `T1`…`T8` |
+| Turn N: \<Name\> | Human-facing HITL primitive | Bare `T0`…`T8` |
+| Ingest scope | Turn 0 — bank bulk pass; operator approves queue composition before enqueue (G1; G2 if curated/revise) | “T0” without the name |
 | Experience validation | Turn 1 — bank fact confirm/amend/waive/ambiguous | “T1” without the name |
 | Gap probe | Turn 3 — shared bank ↔ cv-creation | “T3” alone |
-| Gate summary | Turn 6 — stage rollup | “T6” alone |
+| Gate summary | Turn 6 — stage rollup; bulk ingest includes Coverage (included vs deferred vs source) | “T6” alone |
 | evidence-bank | Skill that owns de-styled facts | “the bank” without path on first use in a scene |
 
 ## Default modes
@@ -82,7 +83,8 @@
 
 ### Evidence-bank
 
-- Turn 3 / Turn 6 contract body+decisions stay verbatim-identical with cv-creation unless jointly edited.
+- Turn 0: Ingest scope is **bank-only** (not in cv-creation catalogue); required before every bulk enqueue.
+- Turn 3 / Turn 6 contract body+decisions stay verbatim-identical with cv-creation unless jointly edited (Turn 6 includes Coverage).
 
 ### Continuity (locked 2026-11-18)
 
