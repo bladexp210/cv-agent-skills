@@ -37,11 +37,18 @@ SKILLS_LINE_ACTIONS = frozenset({"core", "use", "mention"})
 _WS = re.compile(r"\s+")
 
 
-def load_yaml(path: Path):
+def load_yaml(path: Path) -> dict:
     if yaml is None:
         raise SystemExit("PyYAML required: pip install pyyaml")
     with path.open(encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+        data = yaml.safe_load(f)
+    if data is None:
+        return {}
+    if not isinstance(data, dict):
+        raise TypeError(
+            f"expected mapping at root of {path}, got {type(data).__name__}"
+        )
+    return data
 
 
 def check_style(style: dict) -> list[str]:
@@ -362,6 +369,20 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--matching", type=Path, help="matching.yaml (skills-line + strength floors)")
     p.add_argument("--identity", type=Path, help="identity.yaml (edu/cert identity exemption)")
     args = p.parse_args(argv)
+    try:
+        return _run(args)
+    except SystemExit:
+        raise
+    except Exception as exc:  # noqa: BLE001 — mirror validate_evidence; no traceback
+        print(f"ERROR: {exc}", file=sys.stderr)
+        print(
+            "Recovery: 1) fix YAML syntax, permissions, or encoding  2) re-run validator",
+            file=sys.stderr,
+        )
+        return 2
+
+
+def _run(args: argparse.Namespace) -> int:
     errors: list[str] = []
     if args.style:
         if not args.style.is_file():
@@ -405,21 +426,11 @@ def main(argv: list[str] | None = None) -> int:
                 if not args.identity.is_file():
                     errors.append(f"identity missing: {args.identity}")
                 else:
-                    try:
-                        identity_doc = load_yaml(args.identity)
-                    except SystemExit:
-                        raise
-                    except Exception as exc:
-                        if yaml is not None and isinstance(exc, yaml.YAMLError):
-                            errors.append("identity empty or unreadable")
-                            identity_doc = None
-                        else:
-                            raise
+                    identity_doc = load_yaml(args.identity)
+                    if not identity_doc:
+                        errors.append("identity empty or unreadable")
                     else:
-                        if not identity_doc:
-                            errors.append("identity empty or unreadable")
-                        else:
-                            identity_enabled = True
+                        identity_enabled = True
             draft_text = None
             if args.draft:
                 if not args.draft.is_file():

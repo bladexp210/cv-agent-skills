@@ -7,6 +7,8 @@ import shutil
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "skills" / "cv-creation" / "scripts" / "export_resume.py"
 MINI = ROOT / "skills" / "cv-creation" / "assets" / "fixtures" / "mini-app"
@@ -122,3 +124,158 @@ def test_symlink_export_dir_outside_refused(tmp_path: Path):
     )
     assert rc == 5
     assert list(outside.iterdir()) == []
+
+
+def test_corrupt_identity_yaml_exits_2_no_traceback(tmp_path: Path, capfd):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    (career / "profile" / "identity.yaml").write_text("name: [unclosed\n", encoding="utf-8")
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "md", "--career-root", str(career), str(app_dir)])
+    assert rc == 2
+    err = capfd.readouterr().err
+    assert "ERROR:" in err
+    assert "Recovery:" in err
+    assert "Traceback" not in err
+
+
+def test_list_root_style_exits_2_no_traceback(tmp_path: Path, capfd):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    (career / "profile" / "export-style.yaml").write_text("- just\n- a\n- list\n", encoding="utf-8")
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "md", "--career-root", str(career), str(app_dir)])
+    assert rc == 2
+    err = capfd.readouterr().err
+    assert "ERROR:" in err
+    assert "Recovery:" in err
+    assert "Traceback" not in err
+
+
+def test_control_chars_stripped_from_md(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    real_load = er.load_yaml
+
+    def load_with_nul(path: Path):
+        data = real_load(path)
+        if path.name == "identity.yaml":
+            data = dict(data)
+            data["name"] = "Ada\x00Example"
+        return data
+
+    monkeypatch.setattr(er, "load_yaml", load_with_nul)
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "md", "--career-root", str(career), str(app_dir)])
+    assert rc == 0
+    text = (app_dir / "export" / "resume.md").read_text(encoding="utf-8")
+    assert "\x00" not in text
+    assert "AdaExample" in text
+
+
+def test_control_chars_stripped_from_docx(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    pytest.importorskip("docx")
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    real_load = er.load_yaml
+
+    def load_with_nul(path: Path):
+        data = real_load(path)
+        if path.name == "identity.yaml":
+            data = dict(data)
+            data["name"] = "Ada\x00Example"
+        return data
+
+    monkeypatch.setattr(er, "load_yaml", load_with_nul)
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "docx", "--career-root", str(career), str(app_dir)])
+    assert rc == 0
+    from docx import Document
+
+    doc = Document(app_dir / "export" / "resume.docx")
+    joined = "\n".join(p.text for p in doc.paragraphs)
+    assert "\x00" not in joined
+    assert "AdaExample" in joined
+
+
+def test_atomic_export_leaves_prior_intact_on_failure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    app_dir = career / APP_REL
+    export_dir = app_dir / "export"
+    export_dir.mkdir(parents=True, exist_ok=True)
+    prior = export_dir / "resume.md"
+    prior.write_text("PRIOR_EXPORT\n", encoding="utf-8")
+
+    real_render_md = er.render_md
+    calls = {"n": 0}
+
+    def boom_md(*args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("simulated render failure")
+        return real_render_md(*args, **kwargs)
+
+    monkeypatch.setattr(er, "render_md", boom_md)
+    rc = er.main(["--formats", "md", "--career-root", str(career), str(app_dir)])
+    assert rc == 2
+    assert prior.read_text(encoding="utf-8") == "PRIOR_EXPORT\n"
+    assert not any(app_dir.glob(".export_staging_*"))
+
+
+def test_esc_apostrophe_and_bidi(tmp_path: Path):
+    assert "&#39;" in er._esc("O'Brien")
+    assert "\u202e" not in er._esc("ab\u202ecd")
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    (career / "profile" / "identity.yaml").write_text(
+        "name: \"O'Brien\"\n"
+        "contact:\n  email: ada@example.com\n  phone: ''\n"
+        "  location: Paris\n  links: []\n"
+        "education: []\n",
+        encoding="utf-8",
+    )
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "html", "--career-root", str(career), str(app_dir)])
+    assert rc == 0
+    html = (app_dir / "export" / "resume.html").read_text(encoding="utf-8")
+    assert "&#39;" in html
+    assert "O'Brien" not in html or "O&#39;Brien" in html
+
+
+def test_scalar_links_warns_and_skips(tmp_path: Path, capfd):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    (career / "profile" / "identity.yaml").write_text(
+        "name: Ada Example\n"
+        "contact:\n  email: ada@example.com\n  phone: ''\n"
+        "  location: Paris\n"
+        "  links: https://example.com/me\n"
+        "education: []\n",
+        encoding="utf-8",
+    )
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "md", "--career-root", str(career), str(app_dir)])
+    assert rc == 0
+    err = capfd.readouterr().err
+    assert "WARN:" in err
+    assert "contact.links" in err
+    md = (app_dir / "export" / "resume.md").read_text(encoding="utf-8")
+    # Must not explode into one line per character of the URL.
+    assert md.count("https://example.com/me") == 0
+    assert "h\nt\nt\np" not in md
+
+
+def test_fonts_warn_on_docx(tmp_path: Path, capfd):
+    pytest.importorskip("docx")
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    app_dir = career / APP_REL
+    rc = er.main(["--formats", "docx", "--career-root", str(career), str(app_dir)])
+    assert rc == 0
+    err = capfd.readouterr().err
+    assert "WARN:" in err
+    assert "fonts" in err.lower()
+    assert "DOCX" in err or "docx" in err

@@ -277,13 +277,17 @@ def test_duplicate_evidence_skills_link_fails(tmp_path: Path):
     assert va.main(argv) == 1
 
 
-def test_corrupt_identity_fails(tmp_path: Path):
+def test_corrupt_identity_fails(tmp_path: Path, capfd):
     bad_identity = _write(tmp_path / "identity.yaml", "name: [unclosed\n")
     argv = _mini_full_argv()
     # replace --identity path
     idx = argv.index("--identity")
     argv = argv[: idx + 1] + [str(bad_identity)] + argv[idx + 2 :]
-    assert va.main(argv) == 1
+    assert va.main(argv) == 2
+    err = capfd.readouterr().err
+    assert "ERROR:" in err
+    assert "Recovery:" in err
+    assert "Traceback" not in err
 
 
 def test_bullets_null_fails(tmp_path: Path):
