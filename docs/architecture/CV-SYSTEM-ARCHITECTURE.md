@@ -4,7 +4,7 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-19 (quick-start / Makefile / adversarial brief)
+**Updated:** 2026-11-19 (quick-start / Makefile / adversarial brief; dsh web-mode smoke report)
 
 Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`; discover per client — see `docs/portability.md`). Do not invent files beyond this inventory.
 
@@ -20,6 +20,7 @@ Makefile
 requirements-dev.txt
 .github/workflows/ci.yml
 docs/portability.md
+docs/portability-smoke-dsh-web.md
 docs/quick-start.md
 prompts/adversarial-scripts-pass.md
 tests/test_validate_evidence.py
@@ -123,7 +124,8 @@ skills/
 | `Makefile` | Solo-operator targets: deps, pytest, architecture smoke (`make smoke` / `make check`). |
 | `requirements-dev.txt` | Dev-only pytest and jsonschema pins for local tests and CI. |
 | `.github/workflows/ci.yml` | GitHub Actions workflow: pytest plus architecture smoke. |
-| `docs/portability.md` | Multi-client matrix, copyable smoke checklist, Results for Cursor and DeepSeek Harness (`dsh`). |
+| `docs/portability.md` | Multi-client matrix, copyable smoke checklist, Results for Cursor and DeepSeek Harness (`dsh`, headless + web). |
+| `docs/portability-smoke-dsh-web.md` | Point-in-time record of the `dsh` **web-mode** portability smoke at `v0.8.0`: resolved skills path, checklist 1–7 evidence, web-mode notes, cleanup confirmation. |
 | `docs/quick-start.md` | Five-minute human overview: paths, smoke, known limitations. |
 | `prompts/adversarial-scripts-pass.md` | Paste-ready scoped red-team brief for a different model (export / validate scripts). |
 | `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
@@ -252,9 +254,10 @@ Option C trust pack (shipped):
 - `tests/test_evidence_schema_json.py`
 - `evidence-bank/assets/evidence.schema.json` (repo path: `skills/evidence-bank/assets/evidence.schema.json`)
 
-Portability (docs + Wave 2 Results filled 2026-11-19 — Cursor script PASS, dsh PARTIAL):
+Portability (docs + Wave 2 Results filled 2026-11-19 — Cursor script PASS, dsh headless PARTIAL):
 
 - `docs/portability.md`
+- `docs/portability-smoke-dsh-web.md` (dsh **web-mode** smoke at `v0.8.0`: checklist 1 partial / 2–7 pass, resolved `.agents/skills` root, web-mode notes, cleanup confirmed)
 
 Operator convenience + adversarial brief (2026-11-19):
 
