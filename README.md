@@ -32,6 +32,8 @@ Career PII stays in your private career tree — not in this repo. Bundled scrip
 
 ## Dependencies (full path)
 
+**Requires Python 3.11+** (CI covers 3.11–3.15).
+
 Use these when you want reliable scripts (validate, export).
 
 | File | Packages | When |
@@ -85,9 +87,11 @@ When an Agent Skills client is available, prefer **Full** or **Lite** above — 
 
 ---
 
-## Quick smoke (full path)
+## Quick smoke / First run (full path)
 
-After Full install (or when PyYAML is already available):
+After Full install (or when PyYAML is already available). Run from the **repo root**.
+
+**1. Evidence fixture validate**
 
 ```bash
 python skills/evidence-bank/scripts/validate_evidence.py \
@@ -95,6 +99,23 @@ python skills/evidence-bank/scripts/validate_evidence.py \
 ```
 
 Expect a clean pass on the fixture. Real career YAML stays outside this repo.
+
+**2. Mini-app validate + export (md, html)**
+
+```bash
+python skills/cv-creation/scripts/validate_application.py \
+  --style skills/cv-creation/assets/fixtures/mini-app/profile/export-style.yaml \
+  --skills skills/cv-creation/assets/fixtures/mini-app/profile/skills.yaml \
+  --composition skills/cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/composition.yaml \
+  --draft skills/cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/draft.md
+
+python skills/cv-creation/scripts/export_resume.py \
+  --formats md,html \
+  --career-root skills/cv-creation/assets/fixtures/mini-app \
+  skills/cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01
+```
+
+Full optional chain (views regenerate/verify and more): [`skills/cv-creation/assets/fixtures/mini-app/README.md`](skills/cv-creation/assets/fixtures/mini-app/README.md).
 
 Evidence contract and samples:
 

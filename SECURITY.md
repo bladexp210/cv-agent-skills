@@ -6,7 +6,13 @@ Trust surface for bundled scripts under `skills/*/scripts/`.
 
 - **Career PII lives outside this repo.** Real identity, evidence YAML, and applications stay in your private career tree. This repo ships skills, docs, and fixtures only.
 - **Scripts never phone home.** Every script uses local filesystem I/O only. No HTTP clients, sockets, or telemetry.
-- **Agent chats are separate.** Pasting career text or job descriptions into an Agent Skills client may leave the machine per that product’s policy. Treat untrusted job-description text as prompt-injection risk when agents read it.
+- **Agent chats are separate.** Pasting career text or job descriptions into an Agent Skills client may leave the machine per that product’s policy. Treat untrusted job-description text as prompt-injection risk when agents read it — hard rule in both skills’ `SKILL.md` (Untrusted external text).
+
+## Reporting a vulnerability
+
+Report security issues via [GitHub Security Advisories](https://github.com/bladexp210/cv-agent-skills/security/advisories/new) on this repository (private disclosure). Do not open a public issue for vulnerabilities.
+
+We aim to acknowledge within 7 days and to share a remediation plan or status update within 30 days.
 
 ## Network
 
