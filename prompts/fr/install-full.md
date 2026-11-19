@@ -1,13 +1,15 @@
 # Installation (complète) — copier-coller
 
-Utilisez ceci quand vous voulez les dossiers **Agent Skills** installés **et** des dépendances Python fiables pour validateurs / export.
+**Pour qui (situation) :** Vous avez un client Agent Skills **et** vous êtes disposé à installer Python, les bibliothèques Python et les outils développeur associés sur votre machine.
+
+**Résultat :** Skills installés + validate/export **répétable** via scripts locaux (validate, export, views).
 
 **Comment faire :** Copiez tout le contenu de la boîte ci-dessous. Collez-le dans un nouveau chat de votre projet **carrière**.
 
 **Source par défaut :** dépôt GitHub public  
 `https://github.com/bladexp210/cv-agent-skills`
 
-**Recommandation :** choisir Full pour une première install quand vous voulez que `validate_*` / export tournent après les deps.
+**Recommandation :** préférer **Full** quand vous avez un client skills et pouvez installer la pile Python ; utiliser Lite si vous refusez ou ne pouvez pas installer ces deps.
 
 ---
 

@@ -1,13 +1,15 @@
 # Installation (lite) — copier-coller
 
-Utilisez ceci quand vous voulez les dossiers **Agent Skills** installés, mais que vous **ne voulez pas** que l’agent installe des paquets Python sans votre accord.
+**Utilisez ceci quand (situation) :** Vous avez un client Agent Skills **mais** vous ne pouvez pas ou ne voulez pas installer la pile Python (Python, bibliothèques, outils développeur associés) sur votre machine.
+
+**Résultat :** Les skills se chargent toujours dans l’agent ; les artefacts viennent surtout de l’agent (vous pouvez polir le Markdown dans Word / Google Docs / LibreOffice avant l’export). Garanties scripts plus faibles — écarts assumés.
 
 **Comment faire :** Copiez tout le contenu de la boîte ci-dessous. Collez-le dans un nouveau chat de votre projet **carrière**.
 
 **Source par défaut :** dépôt GitHub public  
 `https://github.com/bladexp210/cv-agent-skills`
 
-**Recommandation :** choisir Lite quand chaque install de paquet doit attendre votre OK ; sinon préférez Full.
+**Recommandation :** préférer **Lite** quand vous avez un client skills mais refusez ou ne pouvez pas installer Python ; préférer **Full** quand vous pouvez installer cette pile.
 
 ---
 

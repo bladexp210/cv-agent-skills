@@ -2,14 +2,16 @@
 
 > **Translator:** EN SoT [`prompts/install-full.md`](../install-full.md). Translate surrounding prose; keep the fenced paste-prompt, URLs, paths, and skill ids literal.
 
-Use this when you want the **Agent Skills** folders installed **and** reliable Python deps for validators/export.
+**Who this is for (situation):** You have an Agent Skills client **and** you are willing to install Python, Python libraries, and related developer tools on your machine.
+
+**End result:** Skills installed + **repeatable** validate/export via local scripts (validators/export).
 
 **How to use:** Copy everything inside the box below. Paste it into a new chat in your **career** project.
 
 **Default source:** public GitHub repo  
 `https://github.com/bladexp210/cv-agent-skills`
 
-**Recommendation:** choose Full for a first install when you want `validate_*` / export scripts to run after deps.
+**Recommendation:** prefer **Full** when you have a skills client and can install the Python stack; use Lite instead if you refuse or cannot install those deps.
 
 ---
 

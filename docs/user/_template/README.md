@@ -6,11 +6,11 @@
 
 **Next:** open [`quick-start.md`](quick-start.md) (≈5 minutes), or pick an install prompt below.
 
-| You want… | Open | Recommendation |
-| :--- | :--- | :--- |
-| Skills + reliable Python deps (first time) | [`../../../prompts/_template/install-full.md`](../../../prompts/_template/install-full.md) → after copy: `prompts/<lang>/install-full.md` | **Start here** if you have an Agent Skills client and want validators/export to work. |
-| Skills only; ask before package install | `prompts/<lang>/install-lite.md` | Use when you want control over every `pip` install. |
-| No Agent Skills client | [`web-chat.md`](web-chat.md) | Guided chat path; save files outside the thread. |
+| Situation | End result | Open | Recommendation |
+| :--- | :--- | :--- | :--- |
+| Agent Skills client **and** willing to install Python + libraries + related tools (first time) | Skills installed + **repeatable** validate/export via local scripts | [`../../../prompts/_template/install-full.md`](../../../prompts/_template/install-full.md) → after copy: `prompts/<lang>/install-full.md` | **Prefer Full** when the client and Python stack are both available. |
+| Agent Skills client **but** cannot or will not install that Python stack (first time) | Skills load in the agent; artifacts mainly from the agent (optional polish in Word / Docs / LibreOffice). Weaker script guarantees | `prompts/<lang>/install-lite.md` | **Prefer Lite** when you have a client but refuse or cannot install Python. |
+| **No** Agent Skills client — browser chatbot only | Structured mega-prompt + save files outside the chat | [`web-chat.md`](web-chat.md) | Use Web chat **only** when you have no skills client. |
 
 **Languages:** [English (SoT)](../../../README.md) · [Français](../fr/README.md) · [العربية](../ar/README.md)
 

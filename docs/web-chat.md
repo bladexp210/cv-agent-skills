@@ -4,15 +4,18 @@ A guided CV system in chat — better than a one-shot “write my resume” prom
 
 <img src="assets/visuals/mark-web-chat.jpeg" alt="Web chat path mark" width="96" height="96" />
 
-Use this page when your AI product **cannot install Agent Skills folders** (ChatGPT, Claude.ai, Gemini, and similar). Paste the mega-prompt below, work in short stages, and save work outside the chat.
+**Situation:** you have **no** Agent Skills client — “AI” for you means a browser chatbot (ChatGPT, Claude.ai, Gemini, …).  
+**End result:** a **structured** mega-prompt + discipline to save files outside the chat — better than ad-hoc social-media prompt tricks.
+
+Paste the mega-prompt below, work in short stages, and save work outside the chat.
 
 If you *can* install skills, prefer Full or Lite — they automate more of the same discipline:
 
-| You… | Use |
-| :--- | :--- |
-| Have an Agent Skills client and want reliable scripts (validate, export) | [`prompts/install-full.md`](../prompts/install-full.md) |
-| Have an Agent Skills client and do not want forced dependency installs | [`prompts/install-lite.md`](../prompts/install-lite.md) |
-| Only have a normal web chat | **This page** |
+| Situation | End result | Use | Recommendation |
+| :--- | :--- | :--- | :--- |
+| Agent Skills client **and** willing to install Python + libraries + related tools | Skills installed + **repeatable** validate/export via local scripts | [`prompts/install-full.md`](../prompts/install-full.md) | **Prefer Full** when the client and Python stack are both available. |
+| Agent Skills client **but** cannot or will not install that Python stack | Skills load in the agent; artifacts mainly from the agent. Weaker script guarantees | [`prompts/install-lite.md`](../prompts/install-lite.md) | **Prefer Lite** when you have a client but refuse or cannot install Python. |
+| **No** Agent Skills client — browser chatbot only | Structured mega-prompt + save files outside the chat | **This page** | Use Web chat **only** when skill install is impossible. |
 
 ---
 

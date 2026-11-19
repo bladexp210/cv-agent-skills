@@ -4,15 +4,18 @@ Un système CV guidé dans le chat — mieux qu’une invite unique « écris mo
 
 <img src="../../assets/visuals/mark-web-chat.jpeg" alt="Marque parcours web chat" width="96" height="96" />
 
-Utilisez cette page quand votre produit IA **ne peut pas installer de dossiers Agent Skills** (ChatGPT, Claude.ai, Gemini, et similaires). Collez le méga-prompt ci-dessous, travaillez par étapes courtes, et enregistrez hors du chat.
+**Situation :** vous n’avez **pas** de client Agent Skills — « l’IA » pour vous, c’est un chatbot navigateur (ChatGPT, Claude.ai, Gemini, …).  
+**Résultat :** un méga-prompt **structuré** + la discipline d’enregistrer les fichiers hors du chat — mieux que les astuces de prompts ad hoc sur les réseaux.
+
+Collez le méga-prompt ci-dessous, travaillez par étapes courtes, et enregistrez hors du chat.
 
 Si vous *pouvez* installer les skills, préférez Full ou Lite — ils automatisent davantage la même discipline :
 
-| Vous… | Utiliser | Recommandation |
-| :--- | :--- | :--- |
-| Avez un client Agent Skills et voulez des scripts fiables (validate, export) | [`../../../prompts/fr/install-full.md`](../../../prompts/fr/install-full.md) | **Préférer Full** quand un client skills existe. |
-| Avez un client Agent Skills ; demander avant les deps | [`../../../prompts/fr/install-lite.md`](../../../prompts/fr/install-lite.md) | Lite quand vous validez chaque install de paquet. |
-| N’avez qu’un chat web normal | **Cette page** | Utiliser le web chat seulement si l’install de skills est impossible. |
+| Situation | Résultat | Utiliser | Recommandation |
+| :--- | :--- | :--- | :--- |
+| Client Agent Skills **et** disposition à installer Python + bibliothèques + outils associés | Skills installés + validate/export **répétable** via scripts locaux | [`../../../prompts/fr/install-full.md`](../../../prompts/fr/install-full.md) | **Préférer Full** quand le client et la pile Python sont tous deux disponibles. |
+| Client Agent Skills **mais** impossibilité ou refus d’installer cette pile Python | Skills chargés dans l’agent ; artefacts surtout via l’agent. Garanties scripts plus faibles | [`../../../prompts/fr/install-lite.md`](../../../prompts/fr/install-lite.md) | **Préférer Lite** quand vous avez un client mais refusez ou ne pouvez pas installer Python. |
+| **Pas** de client Agent Skills — chatbot navigateur seulement | Méga-prompt structuré + enregistrer les fichiers hors du chat | **Cette page** | Utiliser le web chat **seulement** si l’install de skills est impossible. |
 
 ---
 

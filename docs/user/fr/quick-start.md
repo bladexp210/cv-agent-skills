@@ -11,11 +11,11 @@ Les faits de carrière restent dans un projet carrière séparé. Ce dépôt liv
 
 ## Choisir un parcours
 
-| Parcours | Quand | Ouvrir | Recommandation |
-| :--- | :--- | :--- | :--- |
-| **Full** | Client Agent Skills ; dépendances Python fiables | [`../../../prompts/fr/install-full.md`](../../../prompts/fr/install-full.md) | **Recommandé** pour une première install si vous voulez `make smoke` / validateurs. |
-| **Lite** | Même client ; demander avant les installs de paquets | [`../../../prompts/fr/install-lite.md`](../../../prompts/fr/install-lite.md) | Quand chaque install de paquet doit attendre votre OK. |
-| **Web chat** | Pas de client Agent Skills | [`web-chat.md`](web-chat.md) | Seulement si vous ne pouvez pas installer les dossiers de skills. |
+| Parcours | Situation | Résultat | Ouvrir | Recommandation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Full** | Client Agent Skills **et** disposition à installer Python, bibliothèques et outils développeur associés | Skills installés + validate/export **répétable** via scripts locaux | [`../../../prompts/fr/install-full.md`](../../../prompts/fr/install-full.md) | **Préférer Full** quand vous avez un client et pouvez installer Python. |
+| **Lite** | Client Agent Skills **mais** impossibilité ou refus d’installer cette pile Python | Skills chargés dans l’agent ; artefacts surtout via l’agent (polissage possible dans Word / Docs / LibreOffice). Garanties scripts plus faibles | [`../../../prompts/fr/install-lite.md`](../../../prompts/fr/install-lite.md) | **Préférer Lite** quand vous avez un client mais refusez ou ne pouvez pas installer Python. |
+| **Web chat** | **Pas** de client Agent Skills — chatbot navigateur seulement (ChatGPT / Claude.ai / Gemini / …) | Méga-prompt structuré + enregistrer les fichiers hors du chat | [`web-chat.md`](web-chat.md) | Utiliser le Web **seulement** si vous n’avez pas de client skills. |
 
 Rafraîchir des skills déjà installés : [`../../../prompts/fr/update.md`](../../../prompts/fr/update.md).
 
