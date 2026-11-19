@@ -3,6 +3,8 @@
 Open [Agent Skills](https://agentskills.io/home) for building and tailoring a CV.  
 **Agent Skills** = installable skill folders that an AI client can load (not a normal web chat paste).
 
+**Languages:** English (this page) · [Français](docs/user/fr/) · [العربية](docs/user/ar/)
+
 **Who this is for:** people who use an Agent Skills client and keep career facts in their own private project.
 
 ![Evidence bank to CV pipeline](docs/assets/visuals/hero-readme.jpeg)

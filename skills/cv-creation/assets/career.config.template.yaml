@@ -6,6 +6,7 @@ defaults:
   industry: data-engineering
 ui:
   interaction_mode: standard   # standard | strict — missing key ⇒ treat as strict
+  locale: en                   # en | fr | ar — missing key ⇒ en; HITL display pack only
   chat_host: gui
   tracker_fence: true
   glyphs:

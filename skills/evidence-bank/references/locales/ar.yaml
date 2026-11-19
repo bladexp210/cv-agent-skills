@@ -1,0 +1,94 @@
+# HITL display pack (Arabic MSA). Machine decision keys never change by locale.
+# Shared turn keys (t3, t6, decisions.turn3, decisions.turn6, meta.acceptance,
+# journey fragments used on shared turns) MUST match cv-creation locales/<lang>.yaml.
+# Worked example header form: "الجولة 3: فحص الفجوة" — never bare T3 / G4 alone.
+meta:
+  locale: ar
+  acceptance: >-
+    يجوز للمستخدم الرد بتسمية العرض المحلية، أو بالرمز الآلي الإنجليزي،
+    أو برقم الخيار. تبقى الرموز الإنجليزية صالحة في كل لغة.
+  plain_label_form: "الجولة {n}: {plain_name}"
+  progress_form: "{current} من {total}"
+
+journey:
+  bank_ingest: "بنك الحقائق (الآن) → لاحقاً: مطابقة وظيفة → مسودة سيرة → تصدير"
+  application: "مطابقة وظيفة (الآن) → سد الفجوات → مسودة سيرة → تصدير"
+
+turns:
+  t0:
+    plain_name: نطاق الإدخال
+    header: "الجولة 0: نطاق الإدخال"
+  t1:
+    plain_name: التحقق من التجربة
+    header: "الجولة 1: التحقق من التجربة"
+  t2:
+    plain_name: التحقق من الكلمات المفتاحية
+    header: "الجولة 2: التحقق من الكلمات المفتاحية"
+  t3:
+    plain_name: فحص الفجوة
+    header: "الجولة 3: فحص الفجوة"
+  t4:
+    plain_name: تأكيد عوامل التميّز
+    header: "الجولة 4: تأكيد عوامل التميّز"
+  t5:
+    plain_name: كسر التعادل في المعايير
+    header: "الجولة 5: كسر التعادل في المعايير"
+  t6:
+    plain_name: ملخص البوابة
+    header: "الجولة 6: ملخص البوابة"
+  t7:
+    plain_name: مراجعة المسودة
+    header: "الجولة 7: مراجعة المسودة"
+  t8:
+    plain_name: تقرير جاهزية ATS
+    header: "الجولة 8: تقرير جاهزية ATS"
+
+# Map: English machine token → Arabic display string.
+decisions:
+  turn0:
+    "approve full": "الموافقة على الكل"
+    "approve curated": "الموافقة على الانتقاء"
+    revise: مراجعة
+    "defer pass": "تأجيل هذه الجولة"
+    "approve queue": "الموافقة على الطابور"
+    "revise queue": "مراجعة الطابور"
+  turn1:
+    confirm: تأكيد
+    amend: تعديل
+    waive: التنازل
+    "mark ambiguous": "وسم كغامض"
+  turn2:
+    approve: موافقة
+    remap: إعادة الربط
+    drop: إسقاط
+    add: إضافة
+  turn3:
+    "has evidence": "توجد أدلة"
+    "no evidence": "لا توجد أدلة"
+    waive: التنازل
+  turn4:
+    confirm: تأكيد
+    reject: رفض
+    "route-to-bank": "تحويل إلى البنك"
+  turn5:
+    once: مرة واحدة
+    "scoped rule": "قاعدة محدودة النطاق"
+    "wider rule": "قاعدة أوسع"
+  turn6:
+    approve: موافقة
+    revise: مراجعة
+    resolve: حل
+    accept: قبول
+  turn7:
+    approve: موافقة
+    revise: مراجعة
+    "resolve-flag": "حل التنبيه"
+    drop: إسقاط
+    rephrase: إعادة صياغة
+    "route-to-bank": "تحويل إلى البنك"
+    waive: التنازل
+  turn8:
+    approve: موافقة
+    "accept-edge": "قبول الحالة الحدّية"
+    export: تصدير
+    override: تجاوز

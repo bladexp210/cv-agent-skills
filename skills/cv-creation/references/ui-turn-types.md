@@ -2,6 +2,8 @@
 
 HITL **density** (Standard vs Strict) is governed by `ui.interaction_mode` — see `references/interaction-mode.md`. Turn envelopes and labels below apply in both modes; Standard may batch or skip surfaces per that table.
 
+**Locale packs:** load `references/locales/<lang>.yaml` from `ui.locale` in `career.config.yaml` (`en` \| `fr` \| `ar`; missing ⇒ `en`). Use the pack for HITL **display** (headers, option labels, journey line). Machine decision tokens stay English; accept localized label **or** English token **or** option number. Shared turn keys with evidence-bank must stay identical (see `docs/i18n/PLAYBOOK.md`).
+
 ## Hosts
 
 `ui.chat_host`: `gui` (markdown-native) | `tui` (monospace). Glyphs: chat `auto` → emoji on gui, unicode on tui; `views` default emoji. `ascii` overrides both.

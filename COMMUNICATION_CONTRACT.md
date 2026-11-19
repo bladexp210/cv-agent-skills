@@ -51,7 +51,9 @@
 
 | Surface | Language |
 | :--- | :---- |
-| Agent / harness / ADRs / skills | English — Adaptive Clarity |
+| Agent / harness / ADRs / skill **logic** (schemas, validators, machine decision tokens) | English — Adaptive Clarity |
+| HITL **display** (turn headers, option labels) | Follows `ui.locale` (`en` \| `fr` \| `ar`; missing ⇒ `en`). User may still reply with the English machine token or option number. |
+| Install / use docs for everyday users | Locale hubs: `docs/user/<lang>/`, `prompts/<lang>/` when STATUS marks that locale `current` (`fr`, `ar` live). EN SoT remains root README / `docs/` / `prompts/` |
 | Exported CV content | Per application `meta.language` |
 
 ## Project-only constraints

@@ -2,6 +2,8 @@
 
 Glyphs and envelope match cv-creation `ui-turn-types.md`. `ui.chat_host`: `gui` | `tui`. Glyph modes: unicode | ascii | emoji (chat `auto` → emoji on gui, unicode on tui).
 
+**Locale packs:** load `references/locales/<lang>.yaml` from `ui.locale` in `career.config.yaml` (`en` \| `fr` \| `ar`; missing ⇒ `en`). Use the pack for HITL **display** (headers, option labels, journey line). Machine decision tokens stay English; accept localized label **or** English token **or** option number. Shared turn keys with cv-creation must stay identical (see `docs/i18n/PLAYBOOK.md`).
+
 **Human labeling:** never bare `T0` / `T1` / `T3` / `T6` — use `Turn N: <plain name>`; show `current of total` when the queue/stage total is known. See `COMMUNICATION_CONTRACT.md`.
 
 **Progress strip (when total known):** directly under the Turn header (gui and tui), show a monospace-friendly bar + counts, e.g. `Ingest  [##########------] 10/16`. Use `#`/`-` or unicode blocks (`█`/`░`); one cell per item or a fixed-width scale that still reads as current/total. Omit the strip only when total is unknown (Turn 0 G1 may omit until the queue size is approved).

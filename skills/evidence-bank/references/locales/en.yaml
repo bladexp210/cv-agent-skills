@@ -1,0 +1,93 @@
+# HITL display pack (English). Machine decision keys never change by locale.
+# Shared turn keys (t3, t6, decisions.turn3, decisions.turn6, meta.acceptance,
+# journey fragments used on shared turns) MUST match cv-creation locales/<lang>.yaml.
+meta:
+  locale: en
+  acceptance: >-
+    User may reply with the localized display label, the English machine token,
+    or the option number. English tokens remain valid in every locale.
+  plain_label_form: "Turn {n}: {plain_name}"
+  progress_form: "{current} of {total}"
+
+journey:
+  bank_ingest: "Facts bank (now) → later: match a job → draft CV → export"
+  application: "Match job (now) → close gaps → draft CV → export"
+
+turns:
+  t0:
+    plain_name: Ingest scope
+    header: "Turn 0: Ingest scope"
+  t1:
+    plain_name: Experience validation
+    header: "Turn 1: Experience validation"
+  t2:
+    plain_name: Keyword validation
+    header: "Turn 2: Keyword validation"
+  t3:
+    plain_name: Gap probe
+    header: "Turn 3: Gap probe"
+  t4:
+    plain_name: Differentiator confirmation
+    header: "Turn 4: Differentiator confirmation"
+  t5:
+    plain_name: Norms tie-breaker
+    header: "Turn 5: Norms tie-breaker"
+  t6:
+    plain_name: Gate summary
+    header: "Turn 6: Gate summary"
+  t7:
+    plain_name: Draft review
+    header: "Turn 7: Draft review"
+  t8:
+    plain_name: ATS readiness report
+    header: "Turn 8: ATS readiness report"
+
+# Map: English machine token → display string (EN display == token).
+decisions:
+  turn0:
+    "approve full": "approve full"
+    "approve curated": "approve curated"
+    revise: revise
+    "defer pass": "defer pass"
+    "approve queue": "approve queue"
+    "revise queue": "revise queue"
+  turn1:
+    confirm: confirm
+    amend: amend
+    waive: waive
+    "mark ambiguous": "mark ambiguous"
+  turn2:
+    approve: approve
+    remap: remap
+    drop: drop
+    add: add
+  turn3:
+    "has evidence": "has evidence"
+    "no evidence": "no evidence"
+    waive: waive
+  turn4:
+    confirm: confirm
+    reject: reject
+    "route-to-bank": "route-to-bank"
+  turn5:
+    once: once
+    "scoped rule": "scoped rule"
+    "wider rule": "wider rule"
+  turn6:
+    approve: approve
+    revise: revise
+    resolve: resolve
+    accept: accept
+  turn7:
+    approve: approve
+    revise: revise
+    "resolve-flag": "resolve-flag"
+    drop: drop
+    rephrase: rephrase
+    "route-to-bank": "route-to-bank"
+    waive: waive
+  turn8:
+    approve: approve
+    "accept-edge": "accept-edge"
+    export: export
+    override: override
