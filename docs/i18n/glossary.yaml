@@ -1,0 +1,266 @@
+# Critical user-facing terms. Machine decision tokens stay English forever (en column = token).
+# Do not invent synonyms in locale docs — reuse these strings.
+
+terms:
+  - id: agent_skills
+    en: Agent Skills
+    fr: Agent Skills
+    ar: مهارات الوكيل (Agent Skills)
+    notes: Product term; keep English brand next to localized gloss on first use.
+
+  - id: evidence_bank
+    en: evidence-bank
+    fr: evidence-bank
+    ar: evidence-bank
+    notes: Skill folder / skill id — path literal; may gloss as « banque de faits » / « بنك الحقائق » after first mention.
+
+  - id: evidence_bank_gloss
+    en: facts bank
+    fr: banque de faits
+    ar: بنك الحقائق
+    notes: Plain gloss for evidence-bank after the path id is introduced.
+
+  - id: cv_creation
+    en: cv-creation
+    fr: cv-creation
+    ar: cv-creation
+    notes: Skill folder / skill id — path literal; may gloss after first mention.
+
+  - id: cv_creation_gloss
+    en: CV pipeline
+    fr: pipeline CV
+    ar: مسار السيرة الذاتية
+    notes: Plain gloss for cv-creation.
+
+  - id: turn
+    en: Turn
+    fr: Tour
+    ar: جولة
+    notes: HITL primitive noun; always with number + plain name.
+
+  - id: turn_0
+    en: "Turn 0: Ingest scope"
+    fr: "Tour 0 : Périmètre d'ingestion"
+    ar: "الجولة 0: نطاق الإدخال"
+    notes: Bank-only.
+
+  - id: turn_1
+    en: "Turn 1: Experience validation"
+    fr: "Tour 1 : Validation d'expérience"
+    ar: "الجولة 1: التحقق من التجربة"
+
+  - id: turn_2
+    en: "Turn 2: Keyword validation"
+    fr: "Tour 2 : Validation des mots-clés"
+    ar: "الجولة 2: التحقق من الكلمات المفتاحية"
+
+  - id: turn_3
+    en: "Turn 3: Gap probe"
+    fr: "Tour 3 : Sonde d'écart"
+    ar: "الجولة 3: فحص الفجوة"
+
+  - id: turn_4
+    en: "Turn 4: Differentiator confirmation"
+    fr: "Tour 4 : Confirmation des différenciateurs"
+    ar: "الجولة 4: تأكيد عوامل التميّز"
+
+  - id: turn_5
+    en: "Turn 5: Norms tie-breaker"
+    fr: "Tour 5 : Départage des normes"
+    ar: "الجولة 5: كسر التعادل في المعايير"
+
+  - id: turn_6
+    en: "Turn 6: Gate summary"
+    fr: "Tour 6 : Synthèse de jalon"
+    ar: "الجولة 6: ملخص البوابة"
+
+  - id: turn_7
+    en: "Turn 7: Draft review"
+    fr: "Tour 7 : Revue du brouillon"
+    ar: "الجولة 7: مراجعة المسودة"
+
+  - id: turn_8
+    en: "Turn 8: ATS readiness report"
+    fr: "Tour 8 : Rapport de préparation ATS"
+    ar: "الجولة 8: تقرير جاهزية ATS"
+
+  # Decision tokens — en is the machine token; fr/ar are display labels only.
+  - id: decision_approve_full
+    en: approve full
+    fr: approuver tout
+    ar: الموافقة على الكل
+    notes: Turn 0 G1 machine token.
+
+  - id: decision_approve_curated
+    en: approve curated
+    fr: approuver la sélection
+    ar: الموافقة على الانتقاء
+    notes: Turn 0 G1 machine token.
+
+  - id: decision_revise
+    en: revise
+    fr: réviser
+    ar: مراجعة
+    notes: Shared across several turns; same machine token.
+
+  - id: decision_defer_pass
+    en: defer pass
+    fr: reporter ce passage
+    ar: تأجيل هذه الجولة
+    notes: Turn 0 G1 machine token.
+
+  - id: decision_approve_queue
+    en: approve queue
+    fr: approuver la file
+    ar: الموافقة على الطابور
+    notes: Turn 0 G2 machine token.
+
+  - id: decision_revise_queue
+    en: revise queue
+    fr: réviser la file
+    ar: مراجعة الطابور
+    notes: Turn 0 G2 machine token.
+
+  - id: decision_confirm
+    en: confirm
+    fr: confirmer
+    ar: تأكيد
+    notes: Turn 1 / Turn 4 machine token.
+
+  - id: decision_amend
+    en: amend
+    fr: modifier
+    ar: تعديل
+    notes: Turn 1 machine token.
+
+  - id: decision_waive
+    en: waive
+    fr: renoncer
+    ar: التنازل
+    notes: Turn 1 / Turn 3 / resolve-flag machine token.
+
+  - id: decision_mark_ambiguous
+    en: mark ambiguous
+    fr: marquer ambigu
+    ar: وسم كغامض
+    notes: Turn 1 machine token.
+
+  - id: decision_has_evidence
+    en: has evidence
+    fr: a des preuves
+    ar: توجد أدلة
+    notes: Turn 3 machine token (shared).
+
+  - id: decision_no_evidence
+    en: no evidence
+    fr: pas de preuves
+    ar: لا توجد أدلة
+    notes: Turn 3 machine token (shared).
+
+  - id: decision_approve
+    en: approve
+    fr: approuver
+    ar: موافقة
+    notes: Turn 2 / Turn 6 / Turn 7 / Turn 8 machine token.
+
+  - id: decision_remap
+    en: remap
+    fr: remapper
+    ar: إعادة الربط
+    notes: Turn 2 machine token.
+
+  - id: decision_drop
+    en: drop
+    fr: supprimer
+    ar: إسقاط
+    notes: Turn 2 / resolve-flag machine token.
+
+  - id: decision_add
+    en: add
+    fr: ajouter
+    ar: إضافة
+    notes: Turn 2 machine token.
+
+  - id: decision_reject
+    en: reject
+    fr: rejeter
+    ar: رفض
+    notes: Turn 4 machine token.
+
+  - id: decision_route_to_bank
+    en: route-to-bank
+    fr: renvoyer à la banque
+    ar: تحويل إلى البنك
+    notes: Turn 4 / resolve-flag machine token.
+
+  - id: decision_once
+    en: once
+    fr: une fois
+    ar: مرة واحدة
+    notes: Turn 5 machine token.
+
+  - id: decision_scoped_rule
+    en: scoped rule
+    fr: règle limitée
+    ar: قاعدة محدودة النطاق
+    notes: Turn 5 machine token.
+
+  - id: decision_wider_rule
+    en: wider rule
+    fr: règle élargie
+    ar: قاعدة أوسع
+    notes: Turn 5 machine token.
+
+  - id: decision_resolve
+    en: resolve
+    fr: résoudre
+    ar: حل
+    notes: Turn 6 machine token (shared).
+
+  - id: decision_accept
+    en: accept
+    fr: accepter
+    ar: قبول
+    notes: Turn 6 machine token (shared).
+
+  - id: decision_resolve_flag
+    en: resolve-flag
+    fr: résoudre le signalement
+    ar: حل التنبيه
+    notes: Turn 7 machine token.
+
+  - id: decision_rephrase
+    en: rephrase
+    fr: reformuler
+    ar: إعادة صياغة
+    notes: Turn 7 resolve-flag sub-decision.
+
+  - id: decision_accept_edge
+    en: accept-edge
+    fr: accepter l'écart
+    ar: قبول الحالة الحدّية
+    notes: Turn 8 machine token.
+
+  - id: decision_export
+    en: export
+    fr: exporter
+    ar: تصدير
+    notes: Turn 8 machine token.
+
+  - id: decision_override
+    en: override
+    fr: forcer
+    ar: تجاوز
+    notes: Turn 8 machine token.
+
+  - id: current_of_total
+    en: current of total
+    fr: "actuel sur total"
+    ar: "الحالي من الإجمالي"
+    notes: Progress phrasing; localized numerals OK if meaning matches.
+
+  - id: ui_locale
+    en: ui.locale
+    fr: ui.locale
+    ar: ui.locale
+    notes: Config key — never translate the key name.

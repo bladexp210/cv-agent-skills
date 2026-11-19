@@ -1,0 +1,95 @@
+# HITL display pack (French). Machine decision keys never change by locale.
+# Shared turn keys (t3, t6, decisions.turn3, decisions.turn6, meta.acceptance,
+# journey fragments used on shared turns) MUST match cv-creation locales/<lang>.yaml.
+# Worked example header form: "Tour 3 : Sonde d'écart" — never bare T3 / G4 alone.
+meta:
+  locale: fr
+  acceptance: >-
+    L'utilisateur peut répondre avec le libellé d'affichage localisé, le jeton
+    machine anglais, ou le numéro d'option. Les jetons anglais restent valides
+    dans chaque locale.
+  plain_label_form: "Tour {n} : {plain_name}"
+  progress_form: "{current} sur {total}"
+
+journey:
+  bank_ingest: "Banque de faits (maintenant) → plus tard : matcher un poste → rédiger le CV → exporter"
+  application: "Matcher le poste (maintenant) → combler les écarts → rédiger le CV → exporter"
+
+turns:
+  t0:
+    plain_name: Périmètre d'ingestion
+    header: "Tour 0 : Périmètre d'ingestion"
+  t1:
+    plain_name: Validation d'expérience
+    header: "Tour 1 : Validation d'expérience"
+  t2:
+    plain_name: Validation des mots-clés
+    header: "Tour 2 : Validation des mots-clés"
+  t3:
+    plain_name: Sonde d'écart
+    header: "Tour 3 : Sonde d'écart"
+  t4:
+    plain_name: Confirmation des différenciateurs
+    header: "Tour 4 : Confirmation des différenciateurs"
+  t5:
+    plain_name: Départage des normes
+    header: "Tour 5 : Départage des normes"
+  t6:
+    plain_name: Synthèse de jalon
+    header: "Tour 6 : Synthèse de jalon"
+  t7:
+    plain_name: Revue du brouillon
+    header: "Tour 7 : Revue du brouillon"
+  t8:
+    plain_name: Rapport de préparation ATS
+    header: "Tour 8 : Rapport de préparation ATS"
+
+# Map: English machine token → French display string (keys stay English forever).
+decisions:
+  turn0:
+    "approve full": "approuver tout"
+    "approve curated": "approuver la sélection"
+    revise: réviser
+    "defer pass": "reporter ce passage"
+    "approve queue": "approuver la file"
+    "revise queue": "réviser la file"
+  turn1:
+    confirm: confirmer
+    amend: modifier
+    waive: renoncer
+    "mark ambiguous": "marquer ambigu"
+  turn2:
+    approve: approuver
+    remap: remapper
+    drop: supprimer
+    add: ajouter
+  turn3:
+    "has evidence": "a des preuves"
+    "no evidence": "pas de preuves"
+    waive: renoncer
+  turn4:
+    confirm: confirmer
+    reject: rejeter
+    "route-to-bank": "renvoyer à la banque"
+  turn5:
+    once: "une fois"
+    "scoped rule": "règle limitée"
+    "wider rule": "règle élargie"
+  turn6:
+    approve: approuver
+    revise: réviser
+    resolve: résoudre
+    accept: accepter
+  turn7:
+    approve: approuver
+    revise: réviser
+    "resolve-flag": "résoudre le signalement"
+    drop: supprimer
+    rephrase: reformuler
+    "route-to-bank": "renvoyer à la banque"
+    waive: renoncer
+  turn8:
+    approve: approuver
+    "accept-edge": "accepter l'écart"
+    export: exporter
+    override: forcer

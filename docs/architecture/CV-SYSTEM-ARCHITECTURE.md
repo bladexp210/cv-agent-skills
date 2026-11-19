@@ -4,7 +4,7 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-19 (quick-start / Makefile / adversarial brief; dsh web-mode smoke report)
+**Updated:** 2026-11-19 (user-docs i18n Arabic corpus + ar.yaml HITL packs)
 
 Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`; discover per client — see `docs/portability.md`). Do not invent files beyond this inventory.
 
@@ -19,16 +19,47 @@ SECURITY.md
 Makefile
 requirements-dev.txt
 .github/workflows/ci.yml
+COMMUNICATION_CONTRACT.md
 docs/portability.md
 docs/portability-smoke-dsh-web.md
 docs/quick-start.md
+docs/web-chat.md
+docs/i18n/PLAYBOOK.md
+docs/i18n/fail-tests.md
+docs/i18n/glossary.yaml
+docs/i18n/STATUS.md
+docs/user/_template/README.md
+docs/user/_template/quick-start.md
+docs/user/_template/web-chat.md
+docs/user/_template/privacy-security.md
+docs/user/fr/README.md
+docs/user/fr/quick-start.md
+docs/user/fr/web-chat.md
+docs/user/fr/privacy-security.md
+docs/user/ar/README.md
+docs/user/ar/quick-start.md
+docs/user/ar/web-chat.md
+docs/user/ar/privacy-security.md
 prompts/adversarial-scripts-pass.md
+prompts/install-full.md
+prompts/install-lite.md
+prompts/update.md
+prompts/_template/install-full.md
+prompts/_template/install-lite.md
+prompts/_template/update.md
+prompts/fr/install-full.md
+prompts/fr/install-lite.md
+prompts/fr/update.md
+prompts/ar/install-full.md
+prompts/ar/install-lite.md
+prompts/ar/update.md
 tests/test_validate_evidence.py
 tests/test_validate_application.py
 tests/test_validate_application_grounding.py
 tests/test_export_resume_md_html.py
 tests/test_export_pdf_security.py
 tests/test_evidence_schema_json.py
+tests/test_i18n_locale_packs.py
 skills/
   cv-creation/SKILL.md
   cv-creation/assets/application-meta.template.yaml
@@ -93,6 +124,9 @@ skills/
   cv-creation/references/state-machine.md
   cv-creation/references/taxonomy-mechanics.md
   cv-creation/references/ui-turn-types.md
+  cv-creation/references/locales/en.yaml
+  cv-creation/references/locales/fr.yaml
+  cv-creation/references/locales/ar.yaml
   cv-creation/references/voice-guide.md
   cv-creation/scripts/bootstrap_career.py
   cv-creation/scripts/export_resume.py
@@ -112,6 +146,9 @@ skills/
   evidence-bank/references/first-run-briefing.md
   evidence-bank/references/probe-question-bank.md
   evidence-bank/references/probe-ui.md
+  evidence-bank/references/locales/en.yaml
+  evidence-bank/references/locales/fr.yaml
+  evidence-bank/references/locales/ar.yaml
   evidence-bank/references/status-taxonomy.md
   evidence-bank/scripts/validate_evidence.py
 ```
@@ -127,6 +164,36 @@ skills/
 | `docs/portability.md` | Multi-client matrix, copyable smoke checklist, Results for Cursor and DeepSeek Harness (`dsh`, headless + web). |
 | `docs/portability-smoke-dsh-web.md` | Point-in-time record of the `dsh` **web-mode** portability smoke at `v0.8.0`: resolved skills path, checklist 1–7 evidence, web-mode notes, cleanup confirmation. |
 | `docs/quick-start.md` | Five-minute human overview: paths, smoke, known limitations. |
+| `docs/web-chat.md` | Guided path when there is no Agent Skills client. |
+| `COMMUNICATION_CONTRACT.md` | Project language: turn labels, glossary, HITL rules, locale display vs English logic. |
+| `docs/i18n/PLAYBOOK.md` | User-locale playbook: principles, corpus, glossary, ui.locale, sync rule. |
+| `docs/i18n/fail-tests.md` | P*/S*/H* fail-tests gate for shipping FR/AR user locales. |
+| `docs/i18n/glossary.yaml` | Critical terms en/fr/ar (decision tokens stay English machine form). |
+| `docs/i18n/STATUS.md` | Locale currency vs EN pin (`fr`/`ar` current when shipped). |
+| `docs/user/_template/README.md` | Translator template for localized user README. |
+| `docs/user/_template/quick-start.md` | Translator template for localized quick-start. |
+| `docs/user/_template/web-chat.md` | Translator template for localized web-chat. |
+| `docs/user/_template/privacy-security.md` | Translator template for short user privacy slice. |
+| `docs/user/fr/README.md` | French user README (install/use hub). |
+| `docs/user/fr/quick-start.md` | French quick-start (≈5 minutes). |
+| `docs/user/fr/web-chat.md` | French web-chat path (no Agent Skills client). |
+| `docs/user/fr/privacy-security.md` | French short user privacy slice; links EN SECURITY. |
+| `docs/user/ar/README.md` | Arabic user README (install/use hub; RTL note). |
+| `docs/user/ar/quick-start.md` | Arabic quick-start (≈5 minutes). |
+| `docs/user/ar/web-chat.md` | Arabic web-chat path (no Agent Skills client; RTL note). |
+| `docs/user/ar/privacy-security.md` | Arabic short user privacy slice; links EN SECURITY. |
+| `prompts/install-full.md` | EN paste-prompt: Full install. |
+| `prompts/install-lite.md` | EN paste-prompt: Lite install. |
+| `prompts/update.md` | EN paste-prompt: refresh installed skills. |
+| `prompts/_template/install-full.md` | Translator template for Full install prompt. |
+| `prompts/_template/install-lite.md` | Translator template for Lite install prompt. |
+| `prompts/_template/update.md` | Translator template for Update prompt. |
+| `prompts/fr/install-full.md` | French wrapper + EN paste-prompt: Full install. |
+| `prompts/fr/install-lite.md` | French wrapper + EN paste-prompt: Lite install. |
+| `prompts/fr/update.md` | French wrapper + EN paste-prompt: Update. |
+| `prompts/ar/install-full.md` | Arabic wrapper + EN paste-prompt: Full install. |
+| `prompts/ar/install-lite.md` | Arabic wrapper + EN paste-prompt: Lite install. |
+| `prompts/ar/update.md` | Arabic wrapper + EN paste-prompt: Update. |
 | `prompts/adversarial-scripts-pass.md` | Paste-ready scoped red-team brief for a different model (export / validate scripts). |
 | `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
 | `tests/test_validate_application.py` | Pytest for validate_application against mini-app. |
@@ -134,10 +201,11 @@ skills/
 | `tests/test_export_resume_md_html.py` | Pytest for md/html export on a temp mini-app copy. |
 | `tests/test_export_pdf_security.py` | Pytest for page/margin allowlist and deny-all PDF url_fetcher. |
 | `tests/test_evidence_schema_json.py` | Pytest that fixtures match evidence.schema.json. |
+| `tests/test_i18n_locale_packs.py` | Pytest S1–S4: corpus presence, link checks, shared-key identity, key parity. |
 | `cv-creation/SKILL.md` | CV-creation skill entrypoint, stages, and shared T3/T6 contract. |
 | `cv-creation/assets/application-meta.template.yaml` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/ats-rules.template.yaml` | Copy-ready template or checklist asset. |
-| `cv-creation/assets/career.config.template.yaml` | Copy-ready template or checklist asset. |
+| `cv-creation/assets/career.config.template.yaml` | Career config template including `ui.locale` (`en`\|`fr`\|`ar`; missing ⇒ `en`). |
 | `cv-creation/assets/checkpoint.template.yaml` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/composition.template.yaml` | Scaffold for composition.yaml on app create. |
 | `cv-creation/assets/export-style.template.yaml` | Copy-ready template or checklist asset. |
@@ -197,7 +265,10 @@ skills/
 | `cv-creation/references/scoring-rubric.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/state-machine.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/taxonomy-mechanics.md` | skills.yaml add/merge/DAG rules. |
-| `cv-creation/references/ui-turn-types.md` | Chat primitives T2–T8; T6 Coverage line; notes Turn 0 is bank-only. |
+| `cv-creation/references/ui-turn-types.md` | Chat primitives T2–T8; T6 Coverage line; notes Turn 0 is bank-only; load HITL display by `ui.locale`. |
+| `cv-creation/references/locales/en.yaml` | Canonical EN HITL display pack (shared keys must match evidence-bank). |
+| `cv-creation/references/locales/fr.yaml` | French HITL display pack (shared keys byte-identical with evidence-bank). |
+| `cv-creation/references/locales/ar.yaml` | Arabic HITL display pack (shared keys byte-identical with evidence-bank). |
 | `cv-creation/references/voice-guide.md` | On-demand reference loaded by the skill. |
 | `cv-creation/scripts/bootstrap_career.py` | Create career/ tree from templates. |
 | `cv-creation/scripts/export_resume.py` | Parse draft.md and export md/html/docx/pdf. |
@@ -215,7 +286,10 @@ skills/
 | `evidence-bank/references/evidence-schema.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/references/first-run-briefing.md` | One-shot onboarding; mentions Turn 0 scope before Turn 1 (flagged so it does not repeat). |
 | `evidence-bank/references/probe-question-bank.md` | On-demand reference loaded by the skill. |
-| `evidence-bank/references/probe-ui.md` | Turn envelopes incl. Turn 0 Ingest scope (G1/G2) + Turn 6 Coverage examples. |
+| `evidence-bank/references/probe-ui.md` | Turn envelopes incl. Turn 0 Ingest scope (G1/G2) + Turn 6 Coverage examples; load HITL display by `ui.locale`. |
+| `evidence-bank/references/locales/en.yaml` | Canonical EN HITL display pack (shared keys must match cv-creation). |
+| `evidence-bank/references/locales/fr.yaml` | French HITL display pack (shared keys byte-identical with cv-creation). |
+| `evidence-bank/references/locales/ar.yaml` | Arabic HITL display pack (shared keys byte-identical with cv-creation). |
 | `evidence-bank/references/status-taxonomy.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/scripts/validate_evidence.py` | Validate evidence.yaml integrity (Q8 hard-fail vs warn). |
 
@@ -223,6 +297,9 @@ skills/
 
 Added across design sessions:
 
+- User-docs i18n foundation (2026-11-19): `docs/i18n/*`, `docs/user/_template/*`, `prompts/_template/*`, `skills/*/references/locales/en.yaml`, `tests/test_i18n_locale_packs.py`; `ui.locale` on career.config template; README language switcher (FR/AR hubs live after french/arabic deliveries)
+- User-docs i18n French (2026-11-19): `docs/user/fr/{README,quick-start,web-chat,privacy-security}.md`, `prompts/fr/{install-full,install-lite,update}.md`, `skills/*/references/locales/fr.yaml`; STATUS `fr=current`
+- User-docs i18n Arabic (2026-11-19): `docs/user/ar/{README,quick-start,web-chat,privacy-security}.md`, `prompts/ar/{install-full,install-lite,update}.md`, `skills/*/references/locales/ar.yaml`; STATUS `ar=current`
 - `evidence-bank/references/first-run-briefing.md`
 - `evidence-bank/references/probe-ui.md`
 - `cv-creation/references/ui-turn-types.md`
