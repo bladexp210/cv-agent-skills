@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate application artifacts, export-style MUST flags, and taxonomy DAG."""
+"""Validate application artifacts, export-style MUST flags, taxonomy DAG, and G4 grounding."""
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,22 @@ MUST = {
     "content_headers_footers": False,
     "real_list_styles": True,
 }
+
+SUMMARY_EXPERIENCE = frozenset({"summary", "experience"})
+EDU_CERT = frozenset(
+    {
+        "education",
+        "certification",
+        "certifications",
+        "certs",
+        "certificate",
+        "certificates",
+    }
+)
+STRENGTH_RANK = {"weak": 1, "moderate": 2, "strong": 3}
+ACTION_STRENGTH_FLOOR = {"core": "strong", "use": "moderate"}
+SKILLS_LINE_ACTIONS = frozenset({"core", "use", "mention"})
+_WS = re.compile(r"\s+")
 
 
 def load_yaml(path: Path):
@@ -49,7 +66,6 @@ def check_taxonomy(skills_doc: dict) -> list[str]:
                 errors.append(f"{sid}: unknown parent_id {parent}")
             else:
                 children[parent].append(sid)
-    # cycle detect
     visiting, visited = set(), set()
 
     def dfs(n: str) -> None:
@@ -69,12 +85,229 @@ def check_taxonomy(skills_doc: dict) -> list[str]:
     return errors
 
 
+def _norm_ws(text: str) -> str:
+    return _WS.sub(" ", (text or "").strip())
+
+
+def _waived_has_reason(row: dict) -> bool:
+    if row.get("reason") and str(row.get("reason")).strip():
+        return True
+    if row.get("waiver_reason") and str(row.get("waiver_reason")).strip():
+        return True
+    hist = row.get("probe_history") or []
+    return bool(hist)
+
+
+def _section_source_identity(comp: dict, section: str) -> bool:
+    for entry in comp.get("section_plan") or []:
+        if entry.get("id") == section and entry.get("source") == "identity":
+            return True
+    return False
+
+
+def _bullet_identity_exempt(bullet: dict, comp: dict, *, identity_enabled: bool) -> bool:
+    """Edu/cert bullets are exempt only when --identity is provided and sourced from identity."""
+    if not identity_enabled:
+        return False
+    section = (bullet.get("section") or "").lower()
+    if section not in EDU_CERT:
+        return False
+    if bullet.get("source") == "identity":
+        return True
+    return _section_source_identity(comp, section)
+
+
+def _build_skill_name_index(skills_doc: dict) -> dict[str, str]:
+    """Map lowercase display forms → skill id."""
+    index: dict[str, str] = {}
+    for s in skills_doc.get("skills") or []:
+        sid = s.get("id")
+        if not sid:
+            continue
+        forms: list[str] = []
+        if s.get("canonical_name"):
+            forms.append(str(s["canonical_name"]))
+        for form in s.get("ats_forms") or []:
+            forms.append(str(form))
+        for form in s.get("aliases") or []:
+            forms.append(str(form))
+        for form in forms:
+            key = form.strip().lower()
+            if key:
+                index[key] = sid
+    return index
+
+
+def _matching_by_skill(matching_doc: dict) -> dict[str, dict]:
+    out: dict[str, dict] = {}
+    for row in matching_doc.get("matching") or []:
+        sid = row.get("skill_id")
+        if sid:
+            out[sid] = row
+    return out
+
+
+def _evidence_indexes(evidence_doc: dict) -> tuple[dict[str, dict], dict[str, dict[str, str]]]:
+    """Return (ev_id → row, ev_id → {skill_id → strength})."""
+    by_id: dict[str, dict] = {}
+    for row in evidence_doc.get("evidence") or []:
+        eid = row.get("id")
+        if eid:
+            by_id[eid] = row
+    links: dict[str, dict[str, str]] = {eid: {} for eid in by_id}
+    for link in evidence_doc.get("evidence_skills") or []:
+        eid = link.get("evidence_id")
+        sid = link.get("skill_id")
+        if not eid or not sid:
+            continue
+        links.setdefault(eid, {})[sid] = link.get("strength") or ""
+    return by_id, links
+
+
+def check_grounding(
+    comp: dict,
+    evidence_doc: dict,
+    *,
+    matching_doc: dict | None = None,
+    skills_doc: dict | None = None,
+    draft_text: str | None = None,
+    identity_enabled: bool = False,
+) -> list[str]:
+    """G4 structural checks 1–7 + cited_ev_ids integrity + optional draft substring."""
+    errors: list[str] = []
+    grounding = comp.get("grounding") or {}
+    uncovered = grounding.get("uncovered")
+    if uncovered:
+        errors.append("grounding.uncovered must be empty at G4")
+
+    ev_by_id, ev_skill_links = _evidence_indexes(evidence_doc)
+    cited_list = list(grounding.get("cited_ev_ids") or [])
+    cited_set = set(cited_list)
+
+    for eid in cited_list:
+        if eid not in ev_by_id:
+            errors.append(f"grounding.cited_ev_ids: unknown evidence id {eid}")
+
+    match_by_skill = _matching_by_skill(matching_doc) if matching_doc is not None else {}
+    name_index = _build_skill_name_index(skills_doc) if skills_doc is not None else {}
+
+    bullets = comp.get("bullets") or []
+    for bullet in bullets:
+        bid = bullet.get("id") or "<bullet>"
+        section = (bullet.get("section") or "").lower()
+        identity_exempt = _bullet_identity_exempt(
+            bullet, comp, identity_enabled=identity_enabled
+        )
+
+        if identity_exempt:
+            continue
+
+        # Summary/Experience always; edu/cert when not identity-exempt;
+        # other sections only if they cite evidence.
+        if section in SUMMARY_EXPERIENCE or section in EDU_CERT:
+            needs_ev = True
+        elif section:
+            needs_ev = bool(bullet.get("ev_ids"))
+        else:
+            needs_ev = True
+
+        if not needs_ev:
+            continue
+
+        ev_ids = list(bullet.get("ev_ids") or [])
+        if len(ev_ids) < 1:
+            errors.append(f"{bid}: ev_ids length must be ≥ 1")
+            continue
+
+        for eid in ev_ids:
+            if eid not in ev_by_id:
+                errors.append(f"{bid}: unknown evidence id {eid}")
+                continue
+            if eid not in cited_set:
+                errors.append(f"{bid}: cites {eid} not listed in grounding.cited_ev_ids")
+            row = ev_by_id[eid]
+            status = row.get("status")
+            if status == "fact":
+                pass
+            elif status == "waived":
+                if not _waived_has_reason(row):
+                    errors.append(f"{bid}: cited {eid} is waived without recorded reason")
+            else:
+                errors.append(f"{bid}: cited {eid} status must be fact or waived, got {status}")
+
+        skill_ids = bullet.get("skill_ids")
+        if skill_ids is None:
+            errors.append(f"{bid}: missing skill_ids[]")
+            skill_ids = []
+        elif not isinstance(skill_ids, list):
+            errors.append(f"{bid}: skill_ids must be a list")
+            skill_ids = []
+        elif len(skill_ids) < 1 and section in SUMMARY_EXPERIENCE:
+            errors.append(f"{bid}: skill_ids[] must be non-empty")
+
+        union_skills: dict[str, str] = {}
+        for eid in ev_ids:
+            for sid, strength in ev_skill_links.get(eid, {}).items():
+                prev = union_skills.get(sid)
+                if prev is None or STRENGTH_RANK.get(strength, 0) > STRENGTH_RANK.get(prev, 0):
+                    union_skills[sid] = strength
+
+        for sid in skill_ids:
+            if sid not in union_skills:
+                errors.append(
+                    f"{bid}: skill_id {sid} not linked via evidence_skills for cited evidence"
+                )
+                continue
+            if matching_doc is not None:
+                action = (match_by_skill.get(sid) or {}).get("action")
+                floor = ACTION_STRENGTH_FLOOR.get(action) if action else None
+                if floor:
+                    got = union_skills.get(sid) or ""
+                    if STRENGTH_RANK.get(got, 0) < STRENGTH_RANK.get(floor, 0):
+                        errors.append(
+                            f"{bid}: skill_id {sid} action {action} needs ≥{floor} evidence link, got {got or 'none'}"
+                        )
+
+    if matching_doc is not None and skills_doc is not None:
+        allowed = {
+            sid
+            for sid, row in match_by_skill.items()
+            if row.get("action") in SKILLS_LINE_ACTIONS
+        }
+        for group in comp.get("skills_line") or []:
+            gname = group.get("group") or "<group>"
+            for item in group.get("items") or []:
+                key = str(item).strip().lower()
+                sid = name_index.get(key)
+                if not sid:
+                    errors.append(f"skills_line {gname}: unresolved item {item!r}")
+                elif sid not in allowed:
+                    errors.append(
+                        f"skills_line {gname}: {item!r} → {sid} not in matching as core|use|mention"
+                    )
+
+    if draft_text is not None:
+        draft_norm = _norm_ws(draft_text)
+        for bullet in bullets:
+            text = bullet.get("text")
+            if not text:
+                continue
+            if _norm_ws(str(text)) not in draft_norm:
+                bid = bullet.get("id") or "<bullet>"
+                errors.append(f"{bid}: bullet text not found as substring of draft.md")
+
+    return errors
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--style", type=Path, help="export-style.yaml")
     p.add_argument("--skills", type=Path, help="skills.yaml")
     p.add_argument("--composition", type=Path, help="composition.yaml")
-    p.add_argument("--draft", type=Path, help="draft.md (existence check)")
+    p.add_argument("--draft", type=Path, help="draft.md (existence + optional substring check)")
+    p.add_argument("--evidence", type=Path, help="evidence.yaml (required with --composition for G4)")
+    p.add_argument("--matching", type=Path, help="matching.yaml (skills-line + strength floors)")
+    p.add_argument("--identity", type=Path, help="identity.yaml (edu/cert identity exemption)")
     args = p.parse_args(argv)
     errors: list[str] = []
     if args.style:
@@ -85,16 +318,60 @@ def main(argv: list[str] | None = None) -> int:
         if any("layout." in e for e in errors):
             for e in errors:
                 print(f"ERROR: {e}", file=sys.stderr)
-            print("Recovery: 1) reset from export-style.template.yaml  2) fix MUST flags", file=sys.stderr)
+            print(
+                "Recovery: 1) reset from export-style.template.yaml  2) fix MUST flags",
+                file=sys.stderr,
+            )
             return 3
-    if args.skills and args.skills.is_file():
-        errors.extend(check_taxonomy(load_yaml(args.skills)))
-    if args.composition and args.composition.is_file():
-        comp = load_yaml(args.composition)
-        if (comp.get("grounding") or {}).get("uncovered"):
-            errors.append("grounding.uncovered must be empty at G4")
-    if args.draft and not args.draft.is_file():
+    skills_doc = None
+    if args.skills:
+        if not args.skills.is_file():
+            errors.append(f"skills missing: {args.skills}")
+        else:
+            skills_doc = load_yaml(args.skills)
+            errors.extend(check_taxonomy(skills_doc))
+
+    if args.composition:
+        if not args.composition.is_file():
+            errors.append(f"composition missing: {args.composition}")
+        elif not args.evidence:
+            errors.append("--evidence is required when --composition is set (G4 grounding)")
+        elif not args.evidence.is_file():
+            errors.append(f"evidence missing: {args.evidence}")
+        else:
+            comp = load_yaml(args.composition)
+            evidence_doc = load_yaml(args.evidence)
+            matching_doc = None
+            if args.matching:
+                if not args.matching.is_file():
+                    errors.append(f"matching missing: {args.matching}")
+                else:
+                    matching_doc = load_yaml(args.matching)
+            identity_enabled = False
+            if args.identity:
+                if not args.identity.is_file():
+                    errors.append(f"identity missing: {args.identity}")
+                else:
+                    identity_enabled = True
+            draft_text = None
+            if args.draft:
+                if not args.draft.is_file():
+                    errors.append(f"draft missing: {args.draft}")
+                else:
+                    draft_text = args.draft.read_text(encoding="utf-8")
+            errors.extend(
+                check_grounding(
+                    comp,
+                    evidence_doc,
+                    matching_doc=matching_doc,
+                    skills_doc=skills_doc,
+                    draft_text=draft_text,
+                    identity_enabled=identity_enabled,
+                )
+            )
+    elif args.draft and not args.draft.is_file():
         errors.append(f"draft missing: {args.draft}")
+
     if errors:
         for e in errors:
             print(f"ERROR: {e}", file=sys.stderr)

@@ -33,5 +33,11 @@ def test_mini_app_profile_and_app_pass_validator():
         str(APP / "composition.yaml"),
         "--draft",
         str(APP / "draft.md"),
+        "--evidence",
+        str(MINI / "profile" / "evidence.yaml"),
+        "--matching",
+        str(APP / "matching.yaml"),
+        "--identity",
+        str(MINI / "profile" / "identity.yaml"),
     ]
     assert va.main(argv) == 0

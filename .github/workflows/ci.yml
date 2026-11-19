@@ -28,11 +28,33 @@ jobs:
         run: |
           set -euo pipefail
           SKILL_ROOT=skills
+          MINI=$SKILL_ROOT/cv-creation/assets/fixtures/mini-app
+          APP=$MINI/applications/acme-de-2026-01-01
+          BAD=$SKILL_ROOT/cv-creation/assets/fixtures/grounding-bad
           python -m py_compile $SKILL_ROOT/evidence-bank/scripts/*.py $SKILL_ROOT/cv-creation/scripts/*.py
           python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
             $SKILL_ROOT/evidence-bank/assets/fixtures/ok.yaml
           if python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
             $SKILL_ROOT/evidence-bank/assets/fixtures/bad-missing-source.yaml; then
             echo "expected validate_evidence to fail on bad-missing-source.yaml" >&2
+            exit 1
+          fi
+          python $SKILL_ROOT/cv-creation/scripts/validate_application.py \
+            --style $MINI/profile/export-style.yaml \
+            --skills $MINI/profile/skills.yaml \
+            --composition $APP/composition.yaml \
+            --draft $APP/draft.md \
+            --evidence $MINI/profile/evidence.yaml \
+            --matching $APP/matching.yaml \
+            --identity $MINI/profile/identity.yaml
+          if python $SKILL_ROOT/cv-creation/scripts/validate_application.py \
+            --style $MINI/profile/export-style.yaml \
+            --skills $MINI/profile/skills.yaml \
+            --composition $BAD/empty-ev-ids/composition.yaml \
+            --draft $APP/draft.md \
+            --evidence $MINI/profile/evidence.yaml \
+            --matching $APP/matching.yaml \
+            --identity $MINI/profile/identity.yaml; then
+            echo "expected validate_application to fail on grounding-bad/empty-ev-ids" >&2
             exit 1
           fi

@@ -16,9 +16,11 @@ We aim to acknowledge within 7 days and to share a remediation plan or status up
 
 ## Network
 
+Scripts open **no sockets** and import no HTTP clients (`urllib` / `requests` / similar). The PDF path is still a WeasyPrint render surface: resource URLs are blocked by a **deny-by-default** `url_fetcher` (only `data:` allowed; `http` / `https` / `file` refused). Style `page.size` is allowlisted (`A4` / `Letter` / `A3` / `Legal`) and margins must match a strict numeric+unit pattern before HTML is built — so injection-shaped values never reach WeasyPrint CSS.
+
 | Script | Network |
 | :--- | :--- |
-| All six scripts below | **None** (confirmed by source review: no `urllib` / `requests` / sockets; WeasyPrint PDF path renders from an in-memory HTML string with no external URLs) |
+| All six scripts below | **None opened by script code**; PDF export additionally uses a deny-by-default WeasyPrint `url_fetcher` (see `export_resume` row) |
 
 ## Script matrix
 
@@ -35,10 +37,10 @@ We aim to acknowledge within 7 days and to share a remediation plan or status up
 
 | | |
 | :--- | :--- |
-| **Reads** | Optional paths: `--style`, `--skills`, `--composition` (YAML if present); `--draft` existence only |
+| **Reads** | Optional paths: `--style`, `--skills`, `--composition`, `--evidence` (required with `--composition` for G4), `--matching`, `--identity` (YAML if present); `--draft` existence + substring check when paired with composition |
 | **Writes** | Nothing (stdout/stderr only) |
 | **Network** | None |
-| **Exits** | `0` OK; `1` validation errors; `3` export-style MUST flag failure; `4` `--style` path missing. Missing PyYAML → `SystemExit` |
+| **Exits** | `0` OK; `1` validation / G4 grounding errors; `3` export-style MUST flag failure; `4` `--style` path missing. Missing PyYAML → `SystemExit` |
 
 ### `skills/cv-creation/scripts/bootstrap_career.py`
 
@@ -73,8 +75,8 @@ We aim to acknowledge within 7 days and to share a remediation plan or status up
 | :--- | :--- |
 | **Reads** | `app_dir/draft.md`; career `profile/identity.yaml` and optional `profile/export-style.yaml` (career root = `--career-root` or `app_dir/../..`). Optional `--check-env` only probes local package imports |
 | **Writes** | `app_dir/export/` only (`resume.md` / `.html` / `.docx` / `.pdf` as requested + `export_manifest.yaml`). **Never mutates** draft, identity, or style inputs |
-| **Network** | None |
-| **Exits** | `0` success; `1` unknown format or explicitly requested docx/pdf deps missing / `--check-env` missing deps; `2` no `app_dir`, draft missing, or draft has no `##` sections; `3` style MUST flags; `4` identity missing; `5` cannot create/write `export/`. Missing PyYAML → `SystemExit` |
+| **Network** | None opened by this script. PDF: WeasyPrint called with deny-by-default `url_fetcher` (only `data:`; refuses `http`/`https`/`file`). `page.size` allowlisted; margins validated before HTML build |
+| **Exits** | `0` success; `1` unknown format or explicitly requested docx/pdf deps missing / `--check-env` missing deps; `2` no `app_dir`, draft missing, or draft has no `##` sections; `3` style MUST flags or invalid `page.size` / margins; `4` identity missing; `5` cannot create/write `export/`. Missing PyYAML → `SystemExit` |
 
 ## Script count
 

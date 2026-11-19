@@ -36,6 +36,75 @@ H2_RE = re.compile(r"^##\s+(.+)$")
 H3_RE = re.compile(r"^###\s+(.+)$")
 BULLET_RE = re.compile(r"^[-*]\s+(.+)$")
 
+# Page style allowlist — reject CSS injection before HTML/PDF build.
+ALLOWED_PAGE_SIZES = frozenset({"A4", "Letter", "A3", "Legal"})
+MARGIN_RE = re.compile(r"^\d+(\.\d+)?(mm|cm|in|pt)$")
+MARGIN_SIDES = ("top", "right", "bottom", "left")
+
+
+def validate_page_style(style: dict) -> list[str]:
+    """Allowlist page.size and strict numeric+unit margins. Fail closed on injection shapes."""
+    errs: list[str] = []
+    page = style.get("page") or {}
+    size = page.get("size", "A4")
+    if not isinstance(size, str) or size not in ALLOWED_PAGE_SIZES:
+        errs.append(
+            f"page.size must be one of {sorted(ALLOWED_PAGE_SIZES)}; got {size!r}"
+        )
+    margins = page.get("margins") or {}
+    if not isinstance(margins, dict):
+        errs.append(f"page.margins must be a mapping; got {type(margins).__name__}")
+        return errs
+    for side in MARGIN_SIDES:
+        if side not in margins:
+            continue
+        val = margins[side]
+        if not isinstance(val, str) or not MARGIN_RE.fullmatch(val):
+            errs.append(
+                f"page.margins.{side} must match "
+                r"^\d+(\.\d+)?(mm|cm|in|pt)$; "
+                f"got {val!r}"
+            )
+    return errs
+
+
+def deny_external_url_fetcher(url: str, *args, **kwargs):
+    """WeasyPrint url_fetcher: allow only data: URIs; refuse http/https/file/network.
+
+    Fail closed. Compatible as a plain callable for older WeasyPrint; also usable
+    as the body of a custom fetcher. Unit-testable without WeasyPrint installed.
+    """
+    scheme = ""
+    if isinstance(url, str):
+        m = re.match(r"^([A-Za-z][A-Za-z0-9+.-]*):", url)
+        if m:
+            scheme = m.group(1).lower()
+    if scheme != "data":
+        raise ValueError(f"Refused to fetch URL (only data: allowed): {url}")
+    # data: — delegate to WeasyPrint when present so PDF path can embed inlines.
+    try:
+        from weasyprint import default_url_fetcher  # type: ignore
+
+        return default_url_fetcher(url, *args, **kwargs)
+    except ImportError:
+        pass
+    try:
+        from weasyprint.urls import URLFetcher  # type: ignore
+
+        return URLFetcher(allowed_protocols={"data"}).fetch(url)
+    except ImportError as e:
+        raise ValueError("weasyprint required to decode data: URLs") from e
+
+
+def _pdf_url_fetcher():
+    """Prefer WeasyPrint URLFetcher(allowed_protocols={'data'}) when available."""
+    try:
+        from weasyprint.urls import URLFetcher  # type: ignore
+
+        return URLFetcher(allowed_protocols={"data"})
+    except ImportError:
+        return deny_external_url_fetcher
+
 
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
@@ -302,6 +371,16 @@ def main(argv: list[str] | None = None) -> int:
         print("Recovery: 1) fix style MUST flags  2) reset template", file=sys.stderr)
         return 3
 
+    page_errs = validate_page_style(style)
+    if page_errs:
+        for e in page_errs:
+            print(f"ERROR: {e}", file=sys.stderr)
+        print(
+            "Recovery: 1) fix page.size / margins  2) reset from template",
+            file=sys.stderr,
+        )
+        return 3
+
     if not draft.is_file():
         print(f"ERROR: draft missing: {draft}", file=sys.stderr)
         print("Recovery: 1) run composition  2) pass correct app_dir", file=sys.stderr)
@@ -357,7 +436,7 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 html = render_html(model, identity, style)
                 out = export_dir / "resume.pdf"
-                WeasyHTML(string=html).write_pdf(out)
+                WeasyHTML(string=html, url_fetcher=_pdf_url_fetcher()).write_pdf(out)
                 produced.append(fmt)
                 outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out)})
         else:

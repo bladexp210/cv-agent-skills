@@ -4,7 +4,7 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-18 (repo layout option A; Option C trust-pack inventory)
+**Updated:** 2026-11-19 (P0/P1: PDF security tests + G4 grounding fixtures/CI smoke)
 
 Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Do not invent files beyond this inventory.
 
@@ -20,7 +20,9 @@ requirements-dev.txt
 .github/workflows/ci.yml
 tests/test_validate_evidence.py
 tests/test_validate_application.py
+tests/test_validate_application_grounding.py
 tests/test_export_resume_md_html.py
+tests/test_export_pdf_security.py
 tests/test_evidence_schema_json.py
 skills/
   cv-creation/SKILL.md
@@ -30,6 +32,15 @@ skills/
   cv-creation/assets/checkpoint.template.yaml
   cv-creation/assets/composition.template.yaml
   cv-creation/assets/export-style.template.yaml
+  cv-creation/assets/fixtures/grounding-bad/cited-not-listed/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/draft-mismatch/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/draft-mismatch/draft.md
+  cv-creation/assets/fixtures/grounding-bad/empty-ev-ids/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/missing-ev/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/non-fact-status/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/non-fact-status/evidence.yaml
+  cv-creation/assets/fixtures/grounding-bad/skill-not-on-evidence/composition.yaml
+  cv-creation/assets/fixtures/grounding-bad/uncovered/composition.yaml
   cv-creation/assets/fixtures/mini-app/README.md
   cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/ats-check.yaml
   cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/audit.md
@@ -108,7 +119,9 @@ skills/
 | `.github/workflows/ci.yml` | GitHub Actions workflow: pytest plus architecture smoke. |
 | `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
 | `tests/test_validate_application.py` | Pytest for validate_application against mini-app. |
+| `tests/test_validate_application_grounding.py` | Pytest for G4 grounding OK + negative fixtures. |
 | `tests/test_export_resume_md_html.py` | Pytest for md/html export on a temp mini-app copy. |
+| `tests/test_export_pdf_security.py` | Pytest for page/margin allowlist and deny-all PDF url_fetcher. |
 | `tests/test_evidence_schema_json.py` | Pytest that fixtures match evidence.schema.json. |
 | `cv-creation/SKILL.md` | CV-creation skill entrypoint, stages, and shared T3/T6 contract. |
 | `cv-creation/assets/application-meta.template.yaml` | Copy-ready template or checklist asset. |
@@ -117,6 +130,15 @@ skills/
 | `cv-creation/assets/checkpoint.template.yaml` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/composition.template.yaml` | Scaffold for composition.yaml on app create. |
 | `cv-creation/assets/export-style.template.yaml` | Copy-ready template or checklist asset. |
+| `cv-creation/assets/fixtures/grounding-bad/cited-not-listed/composition.yaml` | G4 negative: cited ev_id missing from grounding.cited_ev_ids. |
+| `cv-creation/assets/fixtures/grounding-bad/draft-mismatch/composition.yaml` | G4 negative: composition paired with draft missing bullet text. |
+| `cv-creation/assets/fixtures/grounding-bad/draft-mismatch/draft.md` | G4 negative draft for draft-mismatch. |
+| `cv-creation/assets/fixtures/grounding-bad/empty-ev-ids/composition.yaml` | G4 negative: empty ev_ids on a bullet (CI smoke fail fixture). |
+| `cv-creation/assets/fixtures/grounding-bad/missing-ev/composition.yaml` | G4 negative: cited ev_id absent from evidence.yaml. |
+| `cv-creation/assets/fixtures/grounding-bad/non-fact-status/composition.yaml` | G4 negative: composition citing non-fact evidence. |
+| `cv-creation/assets/fixtures/grounding-bad/non-fact-status/evidence.yaml` | G4 negative evidence with non-fact status. |
+| `cv-creation/assets/fixtures/grounding-bad/skill-not-on-evidence/composition.yaml` | G4 negative: skill_id not linked via evidence_skills. |
+| `cv-creation/assets/fixtures/grounding-bad/uncovered/composition.yaml` | G4 negative: grounding.uncovered non-empty. |
 | `cv-creation/assets/fixtures/mini-app/README.md` | Deterministic CI fixture data. |
 | `cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/ats-check.yaml` | Deterministic CI fixture data. |
 | `cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/audit.md` | Deterministic CI fixture data. |
@@ -203,6 +225,7 @@ Added across design sessions:
 - `cv-creation/assets/gitignore.template`
 - `cv-creation/assets/inbox.README.md`
 - `cv-creation/assets/fixtures/mini-app/`
+- `cv-creation/assets/fixtures/grounding-bad/`
 - `cv-creation/scripts/export_resume.py`
 
 Option C trust pack (shipped):
@@ -212,7 +235,9 @@ Option C trust pack (shipped):
 - `.github/workflows/ci.yml`
 - `tests/test_validate_evidence.py`
 - `tests/test_validate_application.py`
+- `tests/test_validate_application_grounding.py`
 - `tests/test_export_resume_md_html.py`
+- `tests/test_export_pdf_security.py`
 - `tests/test_evidence_schema_json.py`
 - `evidence-bank/assets/evidence.schema.json` (repo path: `skills/evidence-bank/assets/evidence.schema.json`)
 
@@ -226,6 +251,9 @@ Stage outputs: [6] → composition.yaml + draft.md; [7] → ats-check.yaml + aud
 ```bash
 # From this repo
 SKILL_ROOT=skills
+MINI=$SKILL_ROOT/cv-creation/assets/fixtures/mini-app
+APP=$MINI/applications/acme-de-2026-01-01
+BAD=$SKILL_ROOT/cv-creation/assets/fixtures/grounding-bad
 
 python -m py_compile $SKILL_ROOT/evidence-bank/scripts/*.py $SKILL_ROOT/cv-creation/scripts/*.py
 
@@ -235,6 +263,26 @@ python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
 
 python $SKILL_ROOT/evidence-bank/scripts/validate_evidence.py \
   $SKILL_ROOT/evidence-bank/assets/fixtures/bad-missing-source.yaml
+# expect exit 1
+
+python $SKILL_ROOT/cv-creation/scripts/validate_application.py \
+  --style $MINI/profile/export-style.yaml \
+  --skills $MINI/profile/skills.yaml \
+  --composition $APP/composition.yaml \
+  --draft $APP/draft.md \
+  --evidence $MINI/profile/evidence.yaml \
+  --matching $APP/matching.yaml \
+  --identity $MINI/profile/identity.yaml
+# expect exit 0
+
+python $SKILL_ROOT/cv-creation/scripts/validate_application.py \
+  --style $MINI/profile/export-style.yaml \
+  --skills $MINI/profile/skills.yaml \
+  --composition $BAD/empty-ev-ids/composition.yaml \
+  --draft $APP/draft.md \
+  --evidence $MINI/profile/evidence.yaml \
+  --matching $APP/matching.yaml \
+  --identity $MINI/profile/identity.yaml
 # expect exit 1
 
 # Install into a career project (examples — use your client’s skills folder)

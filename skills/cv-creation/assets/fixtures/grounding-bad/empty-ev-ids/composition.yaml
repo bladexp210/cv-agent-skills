@@ -1,0 +1,15 @@
+section_plan:
+  - {id: experience, order: 1, experiences: [exp_acme]}
+bullets:
+  - id: b_empty_ev
+    section: experience
+    experience_id: exp_acme
+    text: "Rebuilt nightly billing ETL (Python, Airflow); −40% runtime."
+    ev_ids: []
+    skill_ids: [sk_python, sk_airflow]
+skills_line: []
+grounding:
+  uncovered: []
+  unconfirmed_differentiators_used: []
+  cited_ev_ids: [ev_001]
+buffered_flags: []

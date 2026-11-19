@@ -2,22 +2,17 @@
 
 ## 0. How to use this file
 
-1. Start a new DeepSeek chat.
-2. Upload **this file only**.
-3. Type `read`.
-4. Follow **§20** (working method). Clusters 1–3 are complete; next is the Architecture File (§21).
-5. The session's **only deliverable** is the Architecture File specified in **§21**.
-6. Download it, open a fresh Cursor project, add it, tell Cursor to build.
-7. Cursor produces one folder tree. Paste it into `career/.cursor/skills/`.
-8. The skills bootstrap `career/` on first run.
+This file is **settled design SoT**. Load only the slices your task needs. Do **not** reopen Clusters 1–3 or Q1–Q7 (§19.5–§19.7 and the locked body in §1–§19).
 
-**Operational sections: §19.5, §19.6, §19.7, §20, §21, §22.** §1–§19 settled design. Decision records: §19.5 Cluster 1, §19.6 Cluster 2, §19.7 Cluster 3 — read all, do not re-open.
+**Read order** for work in this repo: `AGENTS.md` → this file (needed slices) → `docs/design/EVIDENCE-BANK-DECISIONS.md` when on evidence-bank → `skills/<skill>/` → `docs/architecture/CV-SYSTEM-ARCHITECTURE.md` (inventory / install only) → `COMMUNICATION_CONTRACT.md`.
 
-**If you are the receiving session:** confirm you have read the whole file, restate §20 in one sentence, and stop for the user to say "go."
+**Skill code SoT:** repo `skills/` only (`evidence-bank`, `cv-creation`). Do not invent files outside the architecture inventory. Do not duplicate skill trees under `career/` or `architecture-v1.0/`.
 
-**If you are the user:** the next session writes the Architecture File (§21), then self-checks (§22). It is expected to be long. Do not shortcut §21.
+**Install (Agent Skills clients):** copy `skills/evidence-bank` and `skills/cv-creation` into the client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Career data lives in an external career project — not this repo; skills bootstrap that data tree on first run.
 
-**If you have v0.3:** the substantive addition is §19.7 (ATS through testing); §20 rewritten to produce the Architecture File; §21 inventory updated. §1–§19.6 unchanged in intent.
+**§21** is the **historical build inventory — already shipped**. It is not a next-step instruction to produce a new Architecture File or to paste a build into `career/.cursor/skills/`. Live inventory / install cues: `AGENTS.md` and `docs/architecture/CV-SYSTEM-ARCHITECTURE.md`.
+
+**Operational references:** §19.5, §19.6, §19.7 (decision records — read, do not reopen); §20–§22 (historical working method / deliverable / self-check from the design phase).
 
 ---
 
@@ -1104,9 +1099,11 @@ Follow strictly. Stop at every 🔴.
 
 ### 21. Deliverable — the Architecture File
 
-**21.1 Target of the build.**
+> **Status:** historical build inventory — **already shipped.** Skill SoT is repo `skills/`. Install by copying into the client skills folder (see §0 / `AGENTS.md`). Do not treat this section as a next-step build or as “paste into `career/.cursor/skills/`.”
 
-Cursor will produce **one folder tree** to paste into `career/.cursor/skills/`. It must contain both skills, complete, and every asset the bootstrap needs. It must NOT produce the `career/` data tree — that is created by the skills on first run.
+**21.1 Target of the build (historical).**
+
+The Architecture File phase targeted **one folder tree** containing both skills, complete, and every asset the bootstrap needs — today that tree lives under repo `skills/` and is installed into the client’s skills folder (e.g. `.cursor/skills/`, `.agents/skills/`). It must NOT produce the career data tree — that is created by the skills on first run in the external career project.
 
 **21.2 The Architecture File itself.**
 
