@@ -1,3 +1,4 @@
-# ATS audit (fixture)
+# ATS readiness audit (fixture)
 
-Coverage 100%.
+Local coverage vs extracted requirements: 100%.
+Not an employer ATS pass probability.

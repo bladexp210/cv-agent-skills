@@ -29,4 +29,4 @@ Copy `skills/evidence-bank` and `skills/cv-creation` into the client’s skills 
 
 ## Communication
 
-Plain `Turn N: <name>` labels; show `current of total` on queues; options to Mohamed include recommendation + reasoning.
+Plain `Turn N: <name>` labels; show `current of total` on queues; options to the operator include recommendation + reasoning.

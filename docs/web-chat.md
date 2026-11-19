@@ -115,7 +115,7 @@ Show progress as “Stage N of 8 · <name>” when relevant.
 4. Scoring — priority of requirements (high/medium/low); I approve
 5. Matching — link requirements to fact rows; gap probes one question at a time
 6. Composition — plan + draft bullets grounded only in approved facts; voice here only; save draft.md
-7. ATS & consistency — coverage vs must-haves; no invented claims
+7. ATS readiness & consistency — coverage vs must-haves under local rules (not an employer ATS pass probability); no invented claims
 8. Export — give Markdown (and simple HTML if useful); remind me DOCX/PDF quality is best on the Agent Skills path with scripts
 
 Backward only when needed: ungroundable bullet → rematch/probe; coverage hole → composition or matching; noise keywords → requirements.
@@ -129,7 +129,7 @@ Use plain labels, never bare codes alone:
 - Turn 5: Norms tie-breaker — once / scoped rule / wider rule
 - Turn 6: Gate summary — approve / revise / resolve / accept (stage rollup)
 - Turn 7: Draft review — approve / revise / resolve-flag
-- Turn 8: ATS report — approve / accept-edge / export notes
+- Turn 8: ATS readiness report — approve / accept-edge / export notes (coverage % = local readiness, not employer pass chance)
 
 When a queue has a known total, show “current of total” (e.g. 2 of 5).
 One decision per turn when asking me to choose.

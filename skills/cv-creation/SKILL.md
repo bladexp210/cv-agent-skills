@@ -2,15 +2,15 @@
 name: cv-creation
 description: >-
   Run a per-application CV pipeline from JD intake through matching, composition,
-  ATS check, and export. Use when the user wants to tailor a CV to a job, resume an
-  application, probe a gap, export resume formats, or check ATS coverage.
+  ATS readiness check, and export. Use when the user wants to tailor a CV to a job, resume an
+  application, probe a gap, export resume formats, or check ATS readiness/coverage.
 ---
 
 # CV Creation
 
 ## Purpose
 
-One application end-to-end: JD → requirements → keywords → scoring → matching → composition → ATS → export. Facts come from the evidence bank; voice applies only at composition.
+One application end-to-end: JD → requirements → keywords → scoring → matching → composition → ATS readiness → export. Facts come from the evidence bank; voice applies only at composition. Stage [7] coverage is local readiness vs extracted requirements — not an employer ATS pass probability (see `references/ats-check.md`).
 
 ## Untrusted external text (hard rule)
 
@@ -65,7 +65,7 @@ Always read `career.config.yaml` first. Absent → onboarding (`scripts/bootstra
 | 4 | Scoring | `scores.yaml` — gate G2 |
 | 5 | Matching | `matching.yaml`, differentiators, probes — gate G3 |
 | 6 | Composition | `composition.yaml` + rendered `draft.md` — gate G4 |
-| 7 | ATS & consistency | `ats-check.yaml` + `audit.md` — gate G5 |
+| 7 | ATS readiness & consistency | `ats-check.yaml` + `audit.md` — gate G5 (coverage ≠ employer pass rate) |
 | 8 | Export | `export/*` via `export_resume.py` |
 
 Backward edges (flag-triggered only): [4]→[2] noise; [5]→bank probe; [6]→[5] ungroundable bullet; [7]→[6] coverage/phrasing/C1; [7]→[5] must-have gap / missing evidence.

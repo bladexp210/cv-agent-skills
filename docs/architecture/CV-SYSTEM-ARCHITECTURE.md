@@ -171,7 +171,7 @@ skills/
 | `cv-creation/assets/tracker.template.md` | Copy-ready template or checklist asset. |
 | `cv-creation/assets/voice.template.md` | Copy-ready template or checklist asset. |
 | `cv-creation/references/ats-baseline-rules.md` | On-demand reference loaded by the skill. |
-| `cv-creation/references/ats-check.md` | Stage [7] coverage and consistency rules. |
+| `cv-creation/references/ats-check.md` | Stage [7] readiness/coverage rules (local; not employer pass probability). |
 | `cv-creation/references/checkpoint-schema.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/continuity.md` | LIVE/STATUS progress SoT + memory mirror (identical to evidence-bank). |
 | `evidence-bank/references/continuity.md` | LIVE/STATUS progress SoT + memory mirror (identical to cv-creation). |

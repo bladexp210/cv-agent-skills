@@ -2,13 +2,13 @@ generated_at: 2026-11-18T17:55Z
 application_id: acme-de-2026-01-01
 inputs:
   draft_md:
-    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/applications/acme-de-2026-01-01/draft.md
+    path: applications/acme-de-2026-01-01/draft.md
     sha256: 46e907d9316144d2aaebcea06333496810711cb4a03e6fcc39ba6fc136bcf850
   identity_yaml:
-    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/profile/identity.yaml
+    path: profile/identity.yaml
     sha256: 360d6e91740974605b602346969eaba721d910097642c77d9d1f25f3bbe8d989
   export_style:
-    path: /home/mohamed/Projects/application-skills/architecture-v1.0/.cursor/skills/cv-creation/assets/fixtures/mini-app/profile/export-style.yaml
+    path: profile/export-style.yaml
     sha256: 27166811e282bd5f3fdf0ff925ed7b54bda59b03478bf1857acc45481030b4e7
 tool:
   python: 3.15.2

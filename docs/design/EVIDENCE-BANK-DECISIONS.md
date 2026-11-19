@@ -32,7 +32,7 @@ This record is the design SoT for `evidence-bank`. Skill files live under `skill
 |---|---|
 | Plain labels | Never bare `T1`…`T8` to humans — `Turn N: <plain name>`; optional `(TN)` after |
 | Stage progress | Show `current of total` when total known |
-| Options to Mohamed | Always include recommendation + short reasoning |
+| Options to the operator | Always include recommendation + short reasoning |
 
 ---
 

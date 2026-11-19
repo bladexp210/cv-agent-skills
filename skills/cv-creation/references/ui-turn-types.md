@@ -40,7 +40,7 @@ gui: bold header lines, numbered options, italic checkpoint. tui: aligned box wi
 | T5 | Turn 5: Norms tie-breaker | Norms tie-breaker | once / scoped rule / wider rule |
 | T6 | Turn 6: Gate summary | Gate summary | approve / revise / resolve / accept (verbatim shared) |
 | T7 | Turn 7: Draft review | Draft review | approve / revise / resolve-flag (drop\|rephrase\|route-to-bank\|waive) |
-| T8 | Turn 8: ATS report | ATS report | approve / accept-edge / export / override |
+| T8 | Turn 8: ATS readiness report | ATS readiness report | approve / accept-edge / export / override |
 
 ## T2 gui example
 
@@ -92,7 +92,7 @@ Show conflict, current values, three save options narrow→wide.
 
 ## T7 / T8
 
-T7: draft excerpt, section plan, bullet→ev table, buffered flags batch, unconfirmed differentiator dispositions (T4 embedded). T8: coverage table, warnings, proposed edges, override reason field.
+T7: draft excerpt, section plan, bullet→ev table, buffered flags batch, unconfirmed differentiator dispositions (T4 embedded). T8: coverage table, warnings, proposed edges, override reason field. Always frame coverage % as **local readiness vs extracted requirements**, never as employer ATS pass probability (see `ats-check.md` Scope).
 
 ## Tracker cadence
 

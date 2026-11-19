@@ -1,10 +1,11 @@
 # Communication contract
 
 > Project overlay for Adaptive Clarity.  
-> Global defaults: `/home/mohamed/.cursor/USER_PROFILE.md` + skill `adaptive-clarity`.
+> Optional host defaults: `~/.cursor/USER_PROFILE.md` (if present) + skill `adaptive-clarity`.  
+> If no host profile exists, this contract and the skills are enough.
 
 **Project:** application-skills (CV System)  
-**Updated:** 2026-11-18
+**Updated:** 2026-11-19
 
 ---
 
@@ -12,9 +13,9 @@
 
 | Who | What they need |
 | :--- | :---- |
-| Mohamed (operator / designer) | Plain labels; stage progress; Decision-mode options tables; recommend+reason |
+| Operator / designer | Plain labels; stage progress; Decision-mode options tables; recommend+reason |
 | Future agents | `AGENTS.md` → design docs → `skills/`; do not invent from chat |
-| Skill end-users (CV / evidence-bank in Cursor) | Same plain-label + progress rules on every HITL turn |
+| Skill end-users (CV / evidence-bank in an Agent Skills client) | Same plain-label + progress rules on every HITL turn |
 
 ## Source of truth (read order)
 
@@ -24,7 +25,7 @@
 4. `skills/` (skill SoT)
 5. `docs/architecture/CV-SYSTEM-ARCHITECTURE.md` (inventory only)
 6. This contract
-7. Global `USER_PROFILE.md`
+7. Optional host Adaptive Clarity profile (`~/.cursor/USER_PROFILE.md` if present)
 
 ## Glossary (critical terms — no synonym drift)
 
@@ -40,7 +41,7 @@
 
 | Artifact / task | Mode |
 | :--- | :---- |
-| Chat with Mohamed | Chat / Decision (one question per turn while designing) |
+| Chat with the operator | Chat / Decision (one question per turn while designing) |
 | Session / handoff updates | Handoff |
 | Skill user-facing HITL | Procedure-shaped envelope + plain labels |
 | Architecture / ADR locks | Decision |
@@ -56,7 +57,7 @@
 
 ### Plain labels (locked 2026-11-18)
 
-- Never show bare turn codes to Mohamed or skill users.
+- Never show bare turn codes to the operator or skill users.
 - Required form: **`Turn N: <plain name>`** (example: `Turn 1: Experience validation`).
 - Optional builder cue: append `(T1)` only after the plain label.
 
@@ -66,7 +67,7 @@
 
 ### Recommend + reason (locked 2026-11-18)
 
-- Options/proposals to Mohamed always include a **recommendation** and **short reasoning**.
+- Options/proposals to the operator always include a **recommendation** and **short reasoning**.
 
 ### Repo layout (locked 2026-11-18, option A)
 

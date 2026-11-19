@@ -1,8 +1,14 @@
 # ATS & consistency check
 
+## Scope (say this to the user)
+
+This stage measures **ATS readiness and coverage**: how well the draft covers requirements you extracted, under local deterministic rules (`profile/norms/ats/` + this file).
+
+It is **not** a prediction that any employer’s ATS will rank, parse, or “pass” the CV at the same percentage. Do not present `coverage_pct` or G5 “pass” as an employer pass probability.
+
 ## Artifacts
 
-`ats-check.yaml` (machine) + `audit.md` (narrative).
+`ats-check.yaml` (machine) + `audit.md` (narrative). Title/human copy: prefer **ATS readiness report** over bare “ATS score.”
 
 ## Universe
 

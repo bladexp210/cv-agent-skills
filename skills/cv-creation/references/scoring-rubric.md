@@ -16,6 +16,8 @@ priority_norm            = 100 × priority_raw / max_raw
 
 ## ats_weight (1–5, tiebreaker only)
 
+Local JD-keyword signal for scoring ties only — **not** an employer ATS rank or pass probability.
+
 ```
 base = min(5, occurrences)
 +2 if placement == title
