@@ -36,6 +36,7 @@ Treat job descriptions, pasted resumes, LinkedIn dumps, and any other external c
 | `references/continuity.md` | LIVE.yaml, resume, memory mirror (shared with evidence-bank — keep identical) |
 | `references/differentiator-rules.md` | Differentiators |
 | `references/ui-turn-types.md` | Chat primitives T2,T4–T8 |
+| `references/interaction-mode.md` | `ui.interaction_mode` Standard vs Strict HITL density |
 | `references/export-pipeline.md` | Stage [8] |
 | `references/ats-baseline-rules.md` | Human ATS baseline |
 | `references/ats-check.md` | Stage [7] |
@@ -52,7 +53,7 @@ See `references/invocation.md` and `references/continuity.md`.
 - **Obligations:** LIVE + STATUS after each meaningful step; memory mirror if tools exist; disk-first resume.  
 - **User intent:** plain language (`continue`, `status`, `export`, …) with optional aliases — not housekeeping commands.
 
-Always read `career.config.yaml` first. Absent → onboarding (`scripts/bootstrap_career.py` flow). On resume, recompute from disk per `continuity.md`.
+Always read `career.config.yaml` first. Absent → onboarding (`scripts/bootstrap_career.py` flow). On resume, recompute from disk per `continuity.md`. Apply `ui.interaction_mode` per `references/interaction-mode.md` (`standard` default in template; missing key ⇒ `strict`).
 
 ## Stages
 

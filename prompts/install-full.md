@@ -25,10 +25,11 @@ You are installing the CV Agent Skills (Agent Skills open standard) into this pr
 Install evidence-bank and cv-creation so I can maintain a de-styled evidence bank and run a per-application CV pipeline with bundled scripts.
 
 ## Rules
-1. Use YOUR client's skill-install path and docs. Do not hardcode Cursor-only paths. If unsure, check your product docs for where Agent Skills folders go, then tell me the path you will use before copying.
-2. Career / personal data stays in THIS project (or another path I name). Do not invent facts. Prefer fixtures from the skills pack for smoke tests.
-3. Prefer bundled scripts under each skill's `scripts/` folder over reinventing validation, views, bootstrap, or export.
-4. When a step needs Python packages, install them. Do not skip deps on this full path. Ask me before any heavy or surprising install (system packages, WeasyPrint system libs, global pip). Guide me through permission / approval prompts in plain language.
+1. Use YOUR client's skill-install path and docs. Do not hardcode Cursor-only paths. Common Agent Skills locations include `.cursor/skills/` and `.agents/skills/`; DeepSeek Harness (`dsh`) profiles may use a project skills dir — discover via profile/docs (e.g. `dsh --profile <name> --dump-config`), not a guessed path. If unsure, check your product docs for where Agent Skills folders go, then tell me the path you will use before copying.
+2. At start and in the final handoff, report **client name** (e.g. Cursor, DeepSeek Harness / `dsh`, other) and the **skills path** you used. After install, walk the copyable smoke checklist in the skills pack’s `docs/portability.md` (or summarize each checkbox if that file is not in the workspace).
+3. Career / personal data stays in THIS project (or another path I name). Do not invent facts. Prefer fixtures from the skills pack for smoke tests.
+4. Prefer bundled scripts under each skill's `scripts/` folder over reinventing validation, views, bootstrap, or export.
+5. When a step needs Python packages, install them. Do not skip deps on this full path. Ask me before any heavy or surprising install (system packages, WeasyPrint system libs, global pip). Guide me through permission / approval prompts in plain language.
 
 ## Steps (do in order)
 
@@ -38,7 +39,8 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
 - Report the source you used (GitHub URL + ref/commit if known, or the explicit local path I gave you).
 
 ### 2) Locate install target
-- Find where this client loads Agent Skills from (for this project).
+- Name the client (Cursor, DeepSeek Harness / `dsh`, or other).
+- Find where this client loads Agent Skills from (for this project). Do not assume `.cursor/skills/` only.
 - Confirm with me: skill root path you will write to.
 
 ### 3) Install both skills
@@ -81,12 +83,12 @@ Install evidence-bank and cv-creation so I can maintain a de-styled evidence ban
 
 ### 8) Hand off
 Tell me in short bullets:
+- Client name + skills path used
 - Source used (GitHub vs explicit local path)
 - Temp fetch cleaned up? (yes + path removed / n/a permanent path)
-- Skill install path used
 - Both skills load? (yes/no)
 - Python packages installed (names)
-- Smoke validate result
+- Smoke validate result (and portability checklist status if you ran it — see pack `docs/portability.md`)
 - Career bootstrap / inbox paths ready
 - Where to drop files: `inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`
 - Offer next step YOU can do: e.g. “Drop your CV/LinkedIn into inbox, or say ingest if files are already there” — then wait for my reply (do not invent career facts).
@@ -100,5 +102,6 @@ Tell me in short bullets:
 | :--- | :--- |
 | Source | Default = GitHub `bladexp210/cv-agent-skills`. Pass a local path only when you mean to. |
 | vs Lite | Lite installs skills only and asks before deps. Full installs deps when a step needs them. |
+| Portability | Agent must report client name + skills path. Checklist: [`docs/portability.md`](../docs/portability.md). |
 | Scripts | `evidence-bank/scripts/validate_evidence.py`; `cv-creation/scripts/` (bootstrap, validate, views, export). |
 | Data | Put real career YAML in your private project, not in the public skills repo. |

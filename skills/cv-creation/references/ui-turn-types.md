@@ -1,5 +1,7 @@
 # UI turn types (cv-creation)
 
+HITL **density** (Standard vs Strict) is governed by `ui.interaction_mode` — see `references/interaction-mode.md`. Turn envelopes and labels below apply in both modes; Standard may batch or skip surfaces per that table.
+
 ## Hosts
 
 `ui.chat_host`: `gui` (markdown-native) | `tui` (monospace). Glyphs: chat `auto` → emoji on gui, unicode on tui; `views` default emoji. `ascii` overrides both.

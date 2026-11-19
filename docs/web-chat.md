@@ -213,6 +213,10 @@ Fill this before you close a chat or open a new one. Paste it after the mega-pro
 
 ---
 
+## Density vs Agent Skills path
+
+This web path has no `career.config.yaml` / `ui.interaction_mode`. Emulate **Standard** HITL density where possible (batched keyword map, skip unused differentiator/norms turns, compact gate rollups) while keeping Turn 1 solo, Turn 3 one-question, and G4/G5-equivalent review. Full Standard vs Strict rules live in the Agent Skills ref `skills/cv-creation/references/interaction-mode.md`.
+
 ## Related links
 
 | Path | Purpose |

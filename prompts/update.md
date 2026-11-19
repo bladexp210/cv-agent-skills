@@ -33,7 +33,8 @@ Replace the installed evidence-bank and cv-creation skill folders with a newer p
 ## Steps (do in order)
 
 ### 1) Locate current install
-- Find where this project’s Agent Skills live (read career.config.yaml `paths.skills_dir` if present; also check `.agents/skills/` and `.cursor/skills/`).
+- Report **client name** (Cursor, DeepSeek Harness / `dsh`, or other) and the **skills path** you will update. Do not hardcode Cursor-only paths; `dsh` profiles may use a project skills dir — discover via profile/docs if needed.
+- Find where this project’s Agent Skills live (read career.config.yaml `paths.skills_dir` if present; also check `.agents/skills/`, `.cursor/skills/`, and other Agent Skills locations per this client).
 - Confirm both folders exist: `<skill-root>/evidence-bank/`, `<skill-root>/cv-creation/`.
 - If missing, stop and tell me to run Full or Lite install instead.
 - Record current version hint if any (e.g. a VERSION file, or say “unknown / no pin”).
@@ -71,9 +72,11 @@ Replace the installed evidence-bank and cv-creation skill folders with a newer p
 - Run validate on the fixture:
   `python <skill-root>/evidence-bank/scripts/validate_evidence.py <skill-root>/evidence-bank/assets/fixtures/ok.yaml`
 - Report pass/fail.
+- Prefer the copyable checklist in pack `docs/portability.md` if you run a fuller smoke after update.
 
 ### 9) Hand off
 Short bullets:
+- Client name + skills path used
 - Previous install root
 - Ref updated to (tag/branch + commit)
 - Temp cleanup (yes/n/a)
@@ -92,6 +95,7 @@ Stop unless I ask to continue.
 | Topic | Detail |
 | :--- | :--- |
 | vs Full/Lite | Those are first-time install. Use **Update** when skills already exist. |
+| Portability | Agent must report client name + skills path. Checklist: [`docs/portability.md`](../docs/portability.md). |
 | Data safety | Update replaces skill code only. Your `inbox/` and `profile/` stay. |
 | Pinning | Pass a tag (e.g. `v0.2.0`) in chat to avoid surprise `main` commits. |
 | After update | Restart/reload skills in your client if the new instructions do not appear. |

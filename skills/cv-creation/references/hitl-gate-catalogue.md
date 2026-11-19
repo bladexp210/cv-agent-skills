@@ -1,5 +1,7 @@
 # HITL gate catalogue
 
+Gate **presentation** density follows `ui.interaction_mode` (`references/interaction-mode.md`). G4/G5 machine checks are required in both modes.
+
 | Gate | After | Includes | Decisions |
 |---|---|---|---|
 | G1 | [2] | Requirements, weights | Approve, revise, add/remove |

@@ -4,9 +4,9 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-19 (P0/P1: PDF security tests + G4 grounding fixtures/CI smoke)
+**Updated:** 2026-11-19 (portability docs: `docs/portability.md`)
 
-Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`). Do not invent files beyond this inventory.
+Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`; discover per client — see `docs/portability.md`). Do not invent files beyond this inventory.
 
 ## A. Build target
 
@@ -18,6 +18,7 @@ Repo root (trust / CI / tests) plus skill SoT under `skills/`. Paths under `skil
 SECURITY.md
 requirements-dev.txt
 .github/workflows/ci.yml
+docs/portability.md
 tests/test_validate_evidence.py
 tests/test_validate_application.py
 tests/test_validate_application_grounding.py
@@ -80,6 +81,7 @@ skills/
   cv-creation/references/differentiator-rules.md
   cv-creation/references/export-pipeline.md
   cv-creation/references/hitl-gate-catalogue.md
+  cv-creation/references/interaction-mode.md
   cv-creation/references/invocation.md
   cv-creation/references/matching-rules.md
   cv-creation/references/norms-guide.md
@@ -117,6 +119,7 @@ skills/
 | `SECURITY.md` | Script I/O / network / exit matrix and privacy boundary for this repo. |
 | `requirements-dev.txt` | Dev-only pytest and jsonschema pins for local tests and CI. |
 | `.github/workflows/ci.yml` | GitHub Actions workflow: pytest plus architecture smoke. |
+| `docs/portability.md` | Multi-client matrix, copyable smoke checklist, Results for Cursor and DeepSeek Harness (`dsh`). |
 | `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
 | `tests/test_validate_application.py` | Pytest for validate_application against mini-app. |
 | `tests/test_validate_application_grounding.py` | Pytest for G4 grounding OK + negative fixtures. |
@@ -179,6 +182,7 @@ skills/
 | `cv-creation/references/differentiator-rules.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/export-pipeline.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/hitl-gate-catalogue.md` | On-demand reference loaded by the skill. |
+| `cv-creation/references/interaction-mode.md` | Standard vs Strict HITL density (`ui.interaction_mode`). |
 | `cv-creation/references/invocation.md` | Shared chat verbs and script CLIs. |
 | `cv-creation/references/matching-rules.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/norms-guide.md` | On-demand reference loaded by the skill. |
@@ -219,6 +223,7 @@ Added across design sessions:
 - `cv-creation/references/ats-check.md`
 - `cv-creation/references/taxonomy-mechanics.md`
 - `cv-creation/references/invocation.md`
+- `cv-creation/references/interaction-mode.md`
 - `cv-creation/assets/export-style.template.yaml`
 - `cv-creation/assets/ats-rules.template.yaml`
 - `cv-creation/assets/composition.template.yaml`
@@ -240,6 +245,10 @@ Option C trust pack (shipped):
 - `tests/test_export_pdf_security.py`
 - `tests/test_evidence_schema_json.py`
 - `evidence-bank/assets/evidence.schema.json` (repo path: `skills/evidence-bank/assets/evidence.schema.json`)
+
+Portability (docs + Wave 2 Results filled 2026-11-19 — Cursor script PASS, dsh PARTIAL):
+
+- `docs/portability.md`
 
 Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `_skill_state/LIVE.yaml`, `_skill_state/STATUS.md`, `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
 

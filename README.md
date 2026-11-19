@@ -74,8 +74,9 @@ flowchart TD
 | Skills + reliable Python deps (first time) | [`prompts/install-full.md`](prompts/install-full.md) |
 | Skills only; ask before any package install (first time) | [`prompts/install-lite.md`](prompts/install-lite.md) |
 | Refresh skills already installed (keep career data) | [`prompts/update.md`](prompts/update.md) |
+| Multi-client matrix + smoke checklist | [`docs/portability.md`](docs/portability.md) |
 
-The agent should use **its own** skill-install location (see that product’s docs). Do not assume one vendor path.
+The agent should use **its own** skill-install location (see that product’s docs). Do not assume one vendor path. Portability smoke clients: Cursor and DeepSeek Harness (`dsh`) — see [`docs/portability.md`](docs/portability.md).
 
 ---
 

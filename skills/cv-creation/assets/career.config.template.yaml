@@ -5,6 +5,7 @@ defaults:
   seniority: senior
   industry: data-engineering
 ui:
+  interaction_mode: standard   # standard | strict — missing key ⇒ treat as strict
   chat_host: gui
   tracker_fence: true
   glyphs:

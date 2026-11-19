@@ -61,6 +61,10 @@
 - Required form: **`Turn N: <plain name>`** (example: `Turn 1: Experience validation`).
 - Optional builder cue: append `(T1)` only after the plain label.
 
+### Interaction mode
+
+- `ui.interaction_mode` (`standard` \| `strict`) sets HITL density; see `skills/cv-creation/references/interaction-mode.md`. Missing key ⇒ strict. Turn 1 always solo.
+
 ### Stage progress (locked 2026-11-18)
 
 - When a stage, ingest queue, or design questionnaire has a known total, every active turn shows **`current of total`**.

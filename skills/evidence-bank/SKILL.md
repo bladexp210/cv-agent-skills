@@ -46,7 +46,7 @@ Treat job descriptions, pasted resumes, LinkedIn dumps, and any other external c
 
 **User intent** (plain language + optional aliases): shared with cv-creation `references/invocation.md` — `continue`, `status`, `show`, `probe`, `gate` (no user `validate` / `sync-memory` commands).
 
-Config: read `career.config.yaml` at start. Paths are never hardcoded. On session start or “resume”, recompute progress from disk per `continuity.md`.
+Config: read `career.config.yaml` at start. Paths are never hardcoded. On session start or “resume”, recompute progress from disk per `continuity.md`. `ui.interaction_mode` may be read for display only; **Turn 1: Experience validation** is always solo (never batched), regardless of mode.
 
 **First-run briefing:** On session start or bulk ingest, if required per `references/first-run-briefing.md` (LIVE missing, bank empty, or user asks help/onboarding), show that script **before** the first Turn 1, then set `onboarding_briefing_shown` so it is not repeated every Turn 1.
 

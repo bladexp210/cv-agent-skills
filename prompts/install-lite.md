@@ -25,13 +25,14 @@ Goals
 3. Tell me what works strongly and what is weak. I decide next steps.
 
 How to install skills
-- Use your own product docs for where Agent Skills live on this client.
-- Do not hardcode one vendor path.
+- Name the client (Cursor, DeepSeek Harness / `dsh`, or other) and the skills path you will use.
+- Use your own product docs for where Agent Skills live on this client. Do not hardcode Cursor-only paths. Common locations: `.cursor/skills/`, `.agents/skills/`; `dsh` profiles may use a project skills dir — discover via profile/docs (e.g. `dsh --profile <name> --dump-config`).
 - Obtain the pack from GitHub (default) or from an explicit local path I gave you.
 - Copy or link both skill trees from the pack’s skills/ folder into the correct skills location for this client.
 - If you used a temporary clone/download dir, delete it now (required). Confirm path removed, or state “no temp dir — used explicit permanent path.” Never delete my career project, skill install target, or a permanent path I gave you.
 - Confirm both skills load (or say clearly if one did not).
 - Report the source you used (GitHub URL + ref/commit if known, or the explicit local path).
+- Point me at the copyable smoke checklist in the pack’s `docs/portability.md` (or summarize each checkbox if that file is not in the workspace).
 
 Dependencies policy (lite)
 - Do not run pip, apt, brew, or similar to add packages unless I explicitly agree.
@@ -47,9 +48,11 @@ Check these partial cases and say pass / fail / unknown for each:
 
 Report format
 Give me a short table or list:
+- Client name + skills path used
 - Source used
 - Strong: what already works without new installs
 - Weak: what is missing or unreliable
+- Portability checklist pointer: pack `docs/portability.md` (status if you ran any smoke steps)
 - Recommendation: what you suggest I do next (and why)
 Then wait for my decision.
 
@@ -71,10 +74,19 @@ Bootstrap the career project (you do this — do not ask me to DIY)
 - Tell me briefly what you created. Do not stop at “you should create folders.”
 
 When you finish
-1. Confirm both skills are installed (or what failed) and the source used.
+1. Confirm client name, skills path, both skills installed (or what failed), and the source used.
 2. Confirm temp fetch cleaned up (yes + path / n/a permanent path).
 3. Confirm career bootstrap / inbox paths.
 4. Show the strong vs weak inventory.
 5. Tell me where to drop CV / LinkedIn / URL saves (`inbox/resumes/`, `inbox/linkedin/`, `inbox/from-links/`).
 6. Ask me whether to install any missing deps, stay lite, ingest from inbox, or adapt another way — offer to do the next step yourself when I agree.
 ```
+
+---
+
+## Notes for humans
+
+| Topic | Detail |
+| :--- | :--- |
+| Portability | Agent must report client name + skills path. Checklist: [`docs/portability.md`](../docs/portability.md). |
+| vs Full | Full installs deps when needed. Lite asks before any package install. |
