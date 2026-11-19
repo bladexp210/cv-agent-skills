@@ -64,3 +64,61 @@ def test_export_md_html_on_temp_copy_does_not_mutate_fixtures(tmp_path: Path):
 
     after = _fingerprint_tree(MINI)
     assert after == before, "committed mini-app fixtures must not change"
+
+
+def test_empty_identity_exits_4(tmp_path: Path):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    identity = career / "profile" / "identity.yaml"
+    identity.write_bytes(b"")
+    app_dir = career / APP_REL
+    export_dir = app_dir / "export"
+    if export_dir.exists():
+        shutil.rmtree(export_dir)
+    rc = er.main(
+        ["--formats", "md", "--career-root", str(career), str(app_dir)]
+    )
+    assert rc == 4
+    assert not (export_dir / "resume.md").exists()
+
+
+def test_symlink_resume_md_does_not_overwrite_outside(tmp_path: Path):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    app_dir = career / APP_REL
+    export_dir = app_dir / "export"
+    export_dir.mkdir(parents=True, exist_ok=True)
+    existing = export_dir / "resume.md"
+    if existing.exists() or existing.is_symlink():
+        existing.unlink()
+    victim = tmp_path / "outside_victim.md"
+    victim.write_text("SAFE_MARKER\n", encoding="utf-8")
+    link = export_dir / "resume.md"
+    link.symlink_to(victim)
+    rc = er.main(
+        ["--formats", "md", "--career-root", str(career), str(app_dir)]
+    )
+    assert rc == 5
+    assert victim.read_text(encoding="utf-8") == "SAFE_MARKER\n"
+    assert link.is_symlink()
+
+
+def test_symlink_export_dir_outside_refused(tmp_path: Path):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    app_dir = career / APP_REL
+    existing_export = app_dir / "export"
+    if existing_export.exists() or existing_export.is_symlink():
+        if existing_export.is_symlink() or existing_export.is_file():
+            existing_export.unlink()
+        else:
+            shutil.rmtree(existing_export)
+    outside = tmp_path / "outside_export"
+    outside.mkdir()
+    export_link = app_dir / "export"
+    export_link.symlink_to(outside)
+    rc = er.main(
+        ["--formats", "md", "--career-root", str(career), str(app_dir)]
+    )
+    assert rc == 5
+    assert list(outside.iterdir()) == []

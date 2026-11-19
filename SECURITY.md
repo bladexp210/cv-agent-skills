@@ -74,9 +74,9 @@ Scripts open **no sockets** and import no HTTP clients (`urllib` / `requests` / 
 | | |
 | :--- | :--- |
 | **Reads** | `app_dir/draft.md`; career `profile/identity.yaml` and optional `profile/export-style.yaml` (career root = `--career-root` or `app_dir/../..`). Optional `--check-env` only probes local package imports |
-| **Writes** | `app_dir/export/` only (`resume.md` / `.html` / `.docx` / `.pdf` as requested + `export_manifest.yaml`). **Never mutates** draft, identity, or style inputs |
+| **Writes** | `app_dir/export/` only (`resume.md` / `.html` / `.docx` / `.pdf` as requested + `export_manifest.yaml`). Resolved `export/` must stay under `app_dir`; refuses symlink escape of `export/` or symlink overwrite of output files (exit `5`). **Never mutates** draft, identity, or style inputs |
 | **Network** | None opened by this script. PDF: WeasyPrint called with deny-by-default `url_fetcher` (only `data:`; refuses `http`/`https`/`file`). `page.size` allowlisted; margins validated before HTML build |
-| **Exits** | `0` success; `1` unknown format or explicitly requested docx/pdf deps missing / `--check-env` missing deps; `2` no `app_dir`, draft missing, or draft has no `##` sections; `3` style MUST flags or invalid `page.size` / margins; `4` identity missing; `5` cannot create/write `export/`. Missing PyYAML → `SystemExit` |
+| **Exits** | `0` success; `1` unknown format or explicitly requested docx/pdf deps missing / `--check-env` missing deps; `2` no `app_dir`, draft missing, or draft has no `##` sections; `3` style MUST flags or invalid `page.size` / margins; `4` identity missing or empty mapping; `5` cannot create/write `export/` (incl. symlink escape / symlink output). Missing PyYAML → `SystemExit` |
 
 ## Script count
 
