@@ -113,6 +113,25 @@ Install / update prompts: [`prompts/install-full.md`](../prompts/install-full.md
 | OpenRouter on headless | Without `--patch` adding `llm-pi-ai` openrouter provider + `agent-default-model` → `NO_ADAPTER: openrouter`. **Re-smoke applied** `/tmp/as-dsh-openrouter-full.patch.yml` and LLM calls succeeded. |
 | Full install HITL | Still not exercised (headless one-shot cannot complete multi-turn HITL). Lite checklist 2–7 passed via headless + scripts; item 1 remains partial. |
 
+### DeepSeek Harness (`dsh`) — web
+
+| Field | Value |
+| :--- | :--- |
+| Date (UTC) | 2026-11-19 |
+| Pass / fail | **PASS** (Lite script smoke; item 1 partial by design) |
+| Skills path | `<temp-career>/career-project/.agents/skills/{evidence-bank,cv-creation}` — resolved as `project-agents`, rank 200 (temp project was `git init`-ed so `projectRoot` stopped there, not at the skills repo) |
+| Profile / mode | `dsh --profile web` (`DeepSeek Harness (\`dsh\`) — web mode`); **no `--patch` used** |
+| Full / Lite | **Lite** — copy skills + system Python (`3.15.2`, PyYAML `6.0.3`); no `pip install` |
+| Source ref | tag **`v0.8.0`** (HEAD `3cf88ce`); temp project `/tmp/as-dsh-web-smoke-259142` (**deleted**) |
+| Checklist | 1 **partial** (copied from this checkout, not a GitHub fetch) · 2 **pass** · 3 **pass** · 4 **pass** · 5 **pass** (full G4 argv) · 6 **pass** · 7 **pass** (`interaction_mode: standard`) |
+| Notes | `dsh` **0.2.1-rc.2**. Item 2 verified by driving the harness's own `FileSystemSkillProvider` → `catalogued=2, warnings=[]`, both `source=project-agents rank=200 modelInvocable=true`. Negative controls confirmed enforcement (`ev_bad_001`, `b_cite_gap`). **No OpenRouter / `--patch` blocker in web mode** — the `web` profile patch already wires `llm-pi-ai` + `agent-default-model`. Full detail: [`portability-smoke-dsh-web.md`](portability-smoke-dsh-web.md). |
+
+**Web-mode differences from the headless result above:** web mode mounts `skill-filesystem` per agent
+via presets (`dsh-web-app/presets/cordis.patch.yml`) with no `includeDefaultRoots: false`, so
+`.agents/skills` works without a patch; and the LLM provider is pre-wired, so the headless
+`MISSING_CREDENTIAL` / `NO_ADAPTER: openrouter` blockers do not apply. Still **not** exercised in web
+mode: live GUI skill invocation (agent-driven), Full-install multi-turn HITL, and the API-key LLM path.
+
 ### Other (optional)
 
 | Client | Date (UTC) | Pass / fail | Skills path | Notes |

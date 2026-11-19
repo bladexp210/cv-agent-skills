@@ -58,7 +58,7 @@ Default smoke covers md/html export — not PDF.
 ## Known limitations (honest)
 
 - **Not 1.0.** Bank and application cold-path still need operator verification on real career data.
-- **Portability:** Cursor script smoke **PASS**; DeepSeek Harness (`dsh`) **PARTIAL** — Lite headless may need OpenRouter `--patch`; Full HITL not verified on `dsh`. Details: [`portability.md`](portability.md).
+- **Portability:** Cursor script smoke **PASS**. DeepSeek Harness (`dsh`): **web** Lite script smoke **PASS** (item 1 partial — local copy); **headless** Lite **PARTIAL** (may need OpenRouter `--patch`). Full HITL not verified on `dsh`. Details: [`portability.md`](portability.md), [`portability-smoke-dsh-web.md`](portability-smoke-dsh-web.md).
 - **PDF:** WeasyPrint needs OS libraries; install via `make deps-export` / `requirements-export.txt` when you need PDF.
 
 ## Next
