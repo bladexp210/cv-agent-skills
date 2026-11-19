@@ -34,13 +34,15 @@ gui: bold header lines, numbered options, italic checkpoint. tui: aligned box wi
 
 ## Turn catalogue
 
+**Note:** **Turn 0: Ingest scope** is owned by evidence-bank only (bulk ingest queue composition). It is not part of this cv-creation catalogue.
+
 | # | Human label | Type | Decisions |
 |---|---|---|---|
 | T2 | Turn 2: Keyword validation | Keyword validation | approve / remap / drop / add |
 | T3 | Turn 3: Gap probe | Gap probe | has evidence / no evidence / waive (verbatim shared) |
 | T4 | Turn 4: Differentiator confirmation | Differentiator | confirm / reject / route-to-bank |
 | T5 | Turn 5: Norms tie-breaker | Norms tie-breaker | once / scoped rule / wider rule |
-| T6 | Turn 6: Gate summary | Gate summary | approve / revise / resolve / accept (verbatim shared) |
+| T6 | Turn 6: Gate summary | Gate summary | approve / revise / resolve / accept (verbatim shared; includes Coverage) |
 | T7 | Turn 7: Draft review | Draft review | approve / revise / resolve-flag (drop\|rephrase\|route-to-bank\|waive) |
 | T8 | Turn 8: ATS readiness report | ATS readiness report | approve / accept-edge / export / override |
 
@@ -85,6 +87,7 @@ Show conflict, current values, three save options narrow→wide.
 **Actions:** core 4 · use 3 · mention 2 · gap 2 · ask_user 1
 *(core = high priority + strong evidence; use = high priority + moderate evidence; …)*
 **Buffered flags:** 0
+**Coverage:** N/A (not bulk ingest)
 1. approve
 2. revise
 3. resolve

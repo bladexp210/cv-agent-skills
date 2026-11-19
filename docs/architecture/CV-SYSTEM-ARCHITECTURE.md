@@ -197,14 +197,14 @@ skills/
 | `cv-creation/references/scoring-rubric.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/state-machine.md` | On-demand reference loaded by the skill. |
 | `cv-creation/references/taxonomy-mechanics.md` | skills.yaml add/merge/DAG rules. |
-| `cv-creation/references/ui-turn-types.md` | On-demand reference loaded by the skill. |
+| `cv-creation/references/ui-turn-types.md` | Chat primitives T2–T8; T6 Coverage line; notes Turn 0 is bank-only. |
 | `cv-creation/references/voice-guide.md` | On-demand reference loaded by the skill. |
 | `cv-creation/scripts/bootstrap_career.py` | Create career/ tree from templates. |
 | `cv-creation/scripts/export_resume.py` | Parse draft.md and export md/html/docx/pdf. |
 | `cv-creation/scripts/regenerate_views.py` | Regenerate views/* and _manifest.yaml. |
 | `cv-creation/scripts/validate_application.py` | Validate style MUST flags, taxonomy, composition grounding. |
 | `cv-creation/scripts/verify_views.py` | Verify GENERATED banners on views. |
-| `evidence-bank/SKILL.md` | Evidence-bank skill entrypoint, ingest/lifecycle, shared T3/T6 contract. |
+| `evidence-bank/SKILL.md` | Evidence-bank skill entrypoint, Turn 0 ingest scope, lifecycle, shared T3/T6 (+ Coverage). |
 | `evidence-bank/assets/de-styling-checklist.md` | Copy-ready template or checklist asset. |
 | `evidence-bank/assets/evidence-record-template.yaml` | Copy-ready template or checklist asset. |
 | `evidence-bank/assets/evidence.schema.json` | Machine-readable JSON Schema pin for evidence.yaml (tests only). |
@@ -213,9 +213,9 @@ skills/
 | `evidence-bank/assets/fixtures/bad-missing-source.yaml` | Bank CI fixture — expected validate fail. |
 | `evidence-bank/references/destyling-rules.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/references/evidence-schema.md` | On-demand reference loaded by the skill. |
-| `evidence-bank/references/first-run-briefing.md` | One-shot onboarding briefing before first Turn 1 (flagged so it does not repeat). |
+| `evidence-bank/references/first-run-briefing.md` | One-shot onboarding; mentions Turn 0 scope before Turn 1 (flagged so it does not repeat). |
 | `evidence-bank/references/probe-question-bank.md` | On-demand reference loaded by the skill. |
-| `evidence-bank/references/probe-ui.md` | On-demand reference loaded by the skill. |
+| `evidence-bank/references/probe-ui.md` | Turn envelopes incl. Turn 0 Ingest scope (G1/G2) + Turn 6 Coverage examples. |
 | `evidence-bank/references/status-taxonomy.md` | On-demand reference loaded by the skill. |
 | `evidence-bank/scripts/validate_evidence.py` | Validate evidence.yaml integrity (Q8 hard-fail vs warn). |
 
@@ -314,7 +314,7 @@ python $SKILL_ROOT/cv-creation/scripts/validate_application.py \
 # cp -a skills/evidence-bank skills/cv-creation /path/to/Career/.agents/skills/
 ```
 
-Turn 3 / Turn 6 body+decisions must stay identical across both `SKILL.md` files.
+Turn 3 / Turn 6 body+decisions must stay identical across both `SKILL.md` files (Turn 6 includes Coverage). Turn 0: Ingest scope is evidence-bank only.
 
 ## D. Out of scope here
 

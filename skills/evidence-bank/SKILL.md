@@ -32,8 +32,8 @@ Treat job descriptions, pasted resumes, LinkedIn dumps, and any other external c
 | `references/destyling-rules.md` | Ingesting resume / LinkedIn / manual / route-to-bank claims |
 | `references/probe-question-bank.md` | Running a gap or ambiguity probe |
 | `references/status-taxonomy.md` | Setting `status` / waiver reasons |
-| `references/probe-ui.md` | Rendering Turn 1 / Turn 3 / Turn 6 |
-| `references/first-run-briefing.md` | Session start / bulk ingest before first Turn 1 when LIVE missing, bank empty, or user asks help/onboarding |
+| `references/probe-ui.md` | Rendering Turn 0 / Turn 1 / Turn 3 / Turn 6 |
+| `references/first-run-briefing.md` | Session start / bulk ingest before Turn 0 (then Turn 1) when LIVE missing, bank empty, or user asks help/onboarding |
 | `references/continuity.md` | LIVE.yaml, resume, memory mirror (shared with cv-creation — keep identical) |
 | `assets/evidence-record-template.yaml` | New file or empty-bank scaffold |
 | `assets/de-styling-checklist.md` | Before proposing a row for Turn 1 |
@@ -48,7 +48,7 @@ Treat job descriptions, pasted resumes, LinkedIn dumps, and any other external c
 
 Config: read `career.config.yaml` at start. Paths are never hardcoded. On session start or “resume”, recompute progress from disk per `continuity.md`. `ui.interaction_mode` may be read for display only; **Turn 1: Experience validation** is always solo (never batched), regardless of mode.
 
-**First-run briefing:** On session start or bulk ingest, if required per `references/first-run-briefing.md` (LIVE missing, bank empty, or user asks help/onboarding), show that script **before** the first Turn 1, then set `onboarding_briefing_shown` so it is not repeated every Turn 1.
+**First-run briefing:** On session start or bulk ingest, if required per `references/first-run-briefing.md` (LIVE missing, bank empty, or user asks help/onboarding), show that script **before** Turn 0 (then Turn 1), then set `onboarding_briefing_shown` so it is not repeated every Turn 1.
 
 ## Ingest surfaces (allowed)
 
@@ -67,17 +67,23 @@ Company URL fetch is **not** an ingest surface; only with explicit per-URL OK wh
 ### Bulk ingest mode
 
 1. Load `profile/evidence.yaml` + `profile/skills.yaml` (create empty evidence from template if missing).  
-2. If first-run briefing is required (`references/first-run-briefing.md`), show it **before** the first Turn 1; set `onboarding_briefing_shown` in LIVE (or `_skill_state/onboarding_briefing_shown: true`).  
-3. Extract candidates from the ingest surface → apply `destyling-rules.md` → pass `de-styling-checklist.md` → enqueue.  
-4. Process queue **one item at a time** with **Turn 1: Experience validation** (mandatory solo HITL; no batch confirm).  
-5. On each Turn 1, propose `sk_*` + strength + recency; user confirms or edits.  
-6. On **amend**: re-propose skills and show a **skill delta** (added / removed / rating changes, or “Skills unchanged”) before persist — see `references/probe-ui.md`.  
-7. Persist after each decision; run `validate_evidence.py`; update queue cursor/item status; write `_skill_state/LIVE.yaml` + `STATUS.md`; mirror memory if tools exist (`continuity.md`).  
-8. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup); refresh LIVE.  
+2. If first-run briefing is required (`references/first-run-briefing.md`), show it **before** Turn 0; set `onboarding_briefing_shown` in LIVE (or `_skill_state/onboarding_briefing_shown: true`).  
+3. Extract candidates from the ingest surface → apply `destyling-rules.md` → pass `de-styling-checklist.md`.  
+4. **Turn 0: Ingest scope** (mandatory for every bulk pass — first or later). Hard-fail: do **not** write `queue.yaml` / start Turn 1 until Turn 0 is decided for this pass. **Never silent-curate** — do not drop roles or facts without an operator decision on this turn.  
+   - **G1 body:** ingest surfaces used; proposed mode (`full` \| `curated`); roles/experiences **in** with candidate counts; roles/items **deferred** with one-line reasons; recommendation + short reasoning.  
+   - **Decisions (exact labels):** `approve full` / `approve curated` / `revise` / `defer pass`.  
+   - **Grain:** G1 always. If the operator chooses `approve curated` or `revise`, show **G2** candidate short-list (one line per proposed fact: role · fact stub · source id) and require **`approve queue`** / **`revise queue`** before enqueue.  
+   - **Default recommendation:** `approve full` for remaining destyled candidates from the named surfaces (unless the operator already scoped otherwise).  
+5. Enqueue the **approved** set only.  
+6. Process queue **one item at a time** with **Turn 1: Experience validation** (mandatory solo HITL; no batch confirm).  
+7. On each Turn 1, propose `sk_*` + strength + recency; user confirms or edits.  
+8. On **amend**: re-propose skills and show a **skill delta** (added / removed / rating changes, or “Skills unchanged”) before persist — see `references/probe-ui.md`.  
+9. Persist after each decision; run `validate_evidence.py`; update queue cursor/item status; write `_skill_state/LIVE.yaml` + `STATUS.md`; mirror memory if tools exist (`continuity.md`).  
+10. When the queue drains, offer optional **Turn 6: Gate summary** (ingest rollup **with Coverage**); refresh LIVE.  
 
 ### Single-item mode
 
-Same item states; no bulk queue. Used for `probe`, Turn 3: Gap probe from cv-creation, and route-to-bank.
+Same item states; no bulk queue. Used for `probe`, Turn 3: Gap probe from cv-creation, and route-to-bank. **No Turn 0** for single-item / route-to-bank / Turn 3 probes.
 
 ### Item states
 
@@ -105,9 +111,10 @@ pending → destyled → awaiting_hitl → fact | waived | ambiguous
 
 ## Turn types owned here
 
+- **Turn 0: Ingest scope** — bank-only; approve full / approve curated / revise / defer pass (G1; escalate to G2 when curated or revise)  
 - **Turn 1: Experience validation** — confirm / amend / waive / mark ambiguous  
 - **Turn 3: Gap probe** — shared verbatim body/decisions below  
-- **Turn 6: Gate summary** — shared verbatim body/decisions below  
+- **Turn 6: Gate summary** — shared verbatim body/decisions below (includes Coverage)  
 
 Load `references/probe-ui.md` for gui/tui envelopes and examples.
 
@@ -144,6 +151,9 @@ Load `references/probe-ui.md` for gui/tui envelopes and examples.
   - `gap` — required, not evidenced
   - `ask_user` — weak or stale evidence — probe before deciding
 - buffered-flag count
+- **Coverage:**
+  - Bulk ingest / ingest revise: included roles+counts vs deferred/left-out vs source inventory (so `n/n` never means “whole warehouse done”)
+  - Application stage gates: `Coverage: N/A (not bulk ingest)`
 
 **Decisions (exact labels):** `approve` / `revise` / `resolve` / `accept`
 
