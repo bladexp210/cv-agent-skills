@@ -66,6 +66,33 @@ def test_good_margins_pass():
     assert er.validate_page_style(style) == []
 
 
+def test_incomplete_margins_fail_e3():
+    """E3: when page.margins is set, all four sides are required."""
+    style = _ok_style(margins={"top": "20mm", "left": "18mm"})
+    errs = er.validate_page_style(style)
+    assert any("page.margins.right" in e for e in errs)
+    assert any("page.margins.bottom" in e for e in errs)
+
+
+def test_incomplete_margins_main_exits_3(tmp_path: Path):
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    style_path = career / "profile" / "export-style.yaml"
+    style_path.write_text(
+        "page:\n  size: A4\n"
+        "  margins: { top: 20mm, left: 18mm }\n"
+        "layout:\n  single_column: true\n  tables: false\n"
+        "  text_boxes: false\n  content_headers_footers: false\n"
+        "  real_list_styles: true\n",
+        encoding="utf-8",
+    )
+    app_dir = career / APP_REL
+    rc = er.main(
+        ["--formats", "md", "--career-root", str(career), str(app_dir)]
+    )
+    assert rc == 3
+
+
 @pytest.mark.parametrize(
     "size",
     [
@@ -156,7 +183,7 @@ def test_weasyprint_pdf_write_with_deny_fetcher(tmp_path: Path):
 
 
 def test_pdf_main_passes_deny_url_fetcher(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
-    """X8: PDF path must pass a url_fetcher that refuses http (no weasyprint required)."""
+    """X8: PDF path must pass a url_fetcher that refuses http/https/file (no weasyprint required)."""
     captured: dict = {}
 
     class FakeHTML:
@@ -168,6 +195,8 @@ def test_pdf_main_passes_deny_url_fetcher(monkeypatch: pytest.MonkeyPatch, tmp_p
 
     monkeypatch.setattr(er, "HAVE_WEASYPRINT", True)
     monkeypatch.setattr(er, "WeasyHTML", FakeHTML, raising=False)
+    # Force the plain deny callable so refusal is unit-testable without weasyprint.
+    monkeypatch.setattr(er, "_pdf_url_fetcher", lambda: er.deny_external_url_fetcher)
 
     career = tmp_path / "mini-app"
     shutil.copytree(MINI, career)
@@ -178,10 +207,11 @@ def test_pdf_main_passes_deny_url_fetcher(monkeypatch: pytest.MonkeyPatch, tmp_p
     assert rc == 0
     fetcher = captured.get("url_fetcher")
     assert fetcher is not None
-    with pytest.raises(Exception):
-        if callable(fetcher) and not hasattr(fetcher, "fetch"):
-            fetcher("http://example.com/x.png")
-        elif hasattr(fetcher, "fetch"):
-            fetcher.fetch("http://example.com/x.png")
-        else:
-            fetcher("http://example.com/x.png")  # type: ignore[operator]
+    assert fetcher is er.deny_external_url_fetcher
+    for bad in (
+        "http://example.com/x.png",
+        "https://evil.example/steal",
+        "file:///etc/passwd",
+    ):
+        with pytest.raises(ValueError, match="Refused to fetch"):
+            fetcher(bad)

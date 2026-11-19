@@ -5,8 +5,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import shutil
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,6 +43,10 @@ BULLET_RE = re.compile(r"^[-*]\s+(.+)$")
 ALLOWED_PAGE_SIZES = frozenset({"A4", "Letter", "A3", "Legal"})
 MARGIN_RE = re.compile(r"^\d+(\.\d+)?(mm|cm|in|pt)$")
 MARGIN_SIDES = ("top", "right", "bottom", "left")
+# XML 1.0 illegal controls (keep TAB/LF/CR); strip before DOCX/HTML/MD.
+_CTRL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+# Bidi overrides / isolates — strip from HTML-escaped text.
+_BIDI_RE = re.compile("[\u202a-\u202e\u2066-\u2069]")
 
 
 def validate_page_style(style: dict) -> list[str]:
@@ -51,12 +58,17 @@ def validate_page_style(style: dict) -> list[str]:
         errs.append(
             f"page.size must be one of {sorted(ALLOWED_PAGE_SIZES)}; got {size!r}"
         )
-    margins = page.get("margins") or {}
+    if "margins" not in page:
+        return errs
+    margins = page["margins"]
     if not isinstance(margins, dict):
         errs.append(f"page.margins must be a mapping; got {type(margins).__name__}")
         return errs
     for side in MARGIN_SIDES:
         if side not in margins:
+            errs.append(
+                f"page.margins.{side} is required when page.margins is set"
+            )
             continue
         val = margins[side]
         if not isinstance(val, str) or not MARGIN_RE.fullmatch(val):
@@ -71,8 +83,8 @@ def validate_page_style(style: dict) -> list[str]:
 def deny_external_url_fetcher(url: str, *args, **kwargs):
     """WeasyPrint url_fetcher: allow only data: URIs; refuse http/https/file/network.
 
-    Fail closed. Compatible as a plain callable for older WeasyPrint; also usable
-    as the body of a custom fetcher. Unit-testable without WeasyPrint installed.
+    Fail closed. For data: URLs, decode via URLFetcher(allowed_protocols={'data'}).
+    Unit-testable without WeasyPrint installed (non-data schemes raise immediately).
     """
     scheme = ""
     if isinstance(url, str):
@@ -81,13 +93,6 @@ def deny_external_url_fetcher(url: str, *args, **kwargs):
             scheme = m.group(1).lower()
     if scheme != "data":
         raise ValueError(f"Refused to fetch URL (only data: allowed): {url}")
-    # data: — delegate to WeasyPrint when present so PDF path can embed inlines.
-    try:
-        from weasyprint import default_url_fetcher  # type: ignore
-
-        return default_url_fetcher(url, *args, **kwargs)
-    except ImportError:
-        pass
     try:
         from weasyprint.urls import URLFetcher  # type: ignore
 
@@ -97,7 +102,7 @@ def deny_external_url_fetcher(url: str, *args, **kwargs):
 
 
 def _pdf_url_fetcher():
-    """Prefer WeasyPrint URLFetcher(allowed_protocols={'data'}) when available."""
+    """Prefer WeasyPrint URLFetcher(allowed_protocols={'data'}); else deny callable."""
     try:
         from weasyprint.urls import URLFetcher  # type: ignore
 
@@ -116,7 +121,28 @@ def load_yaml(path: Path) -> dict:
     if yaml is None:
         raise SystemExit("PyYAML required: pip install pyyaml")
     with path.open(encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+        data = yaml.safe_load(f)
+    if data is None:
+        return {}
+    if not isinstance(data, dict):
+        raise TypeError(
+            f"expected mapping at root of {path}, got {type(data).__name__}"
+        )
+    return data
+
+
+def _sanitize_text(s: str) -> str:
+    return _CTRL_RE.sub("", s)
+
+
+def _sanitize_tree(obj):
+    if isinstance(obj, str):
+        return _sanitize_text(obj)
+    if isinstance(obj, list):
+        return [_sanitize_tree(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: _sanitize_tree(v) for k, v in obj.items()}
+    return obj
 
 
 def parse_draft(text: str) -> dict:
@@ -204,13 +230,29 @@ def check_style_must(style: dict) -> list[str]:
     return [f"layout.{k} must be {v}" for k, v in must.items() if layout.get(k) != v]
 
 
-def render_md(model: dict, identity: dict) -> str:
+def _contact_links(contact: dict, warnings: list[str]) -> list:
+    """Return links list; warn and skip if identity contact.links is not a list."""
+    links = contact.get("links")
+    if links is None:
+        return []
+    if not isinstance(links, list):
+        warnings.append(
+            f"contact.links must be a list; got {type(links).__name__} — skipping"
+        )
+        return []
+    return links
+
+
+def render_md(model: dict, identity: dict, warnings: list[str] | None = None) -> str:
+    warn = warnings if warnings is not None else []
     name = identity.get("name") or model["header"]["name"]
     contact = identity.get("contact") or {}
+    if not isinstance(contact, dict):
+        contact = {}
     lines = [name]
     bits = [contact.get("email"), contact.get("phone"), contact.get("location")]
     lines.append(" · ".join(x for x in bits if x))
-    for link in contact.get("links") or []:
+    for link in _contact_links(contact, warn):
         lines.append(str(link))
     lines.append("")
     for sec in model["sections"]:
@@ -236,7 +278,6 @@ def render_md(model: dict, identity: dict) -> str:
 
 
 def render_html(model: dict, identity: dict, style: dict) -> str:
-    md_like = render_md(model, identity)
     # minimal semantic HTML from model
     name = identity.get("name") or model["header"]["name"]
     margins = (style.get("page") or {}).get("margins") or {}
@@ -250,6 +291,8 @@ def render_html(model: dict, identity: dict, style: dict) -> str:
         f"<h1>{_esc(name)}</h1>",
     ]
     contact = identity.get("contact") or {}
+    if not isinstance(contact, dict):
+        contact = {}
     parts.append("<p>" + _esc(" · ".join(x for x in [contact.get("email"), contact.get("phone"), contact.get("location")] if x)) + "</p>")
     for sec in model["sections"]:
         parts.append(f"<h2>{_esc(sec['heading'])}</h2>")
@@ -266,11 +309,13 @@ def render_html(model: dict, identity: dict, style: dict) -> str:
 
 
 def _esc(s: str) -> str:
+    s = _BIDI_RE.sub("", s)
     return (
         s.replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
         .replace('"', "&quot;")
+        .replace("'", "&#39;")
     )
 
 
@@ -338,6 +383,113 @@ def _refuse_symlink_write(out: Path) -> int | None:
     return None
 
 
+def _fail_io(exc: BaseException) -> int:
+    print(f"ERROR: {exc}", file=sys.stderr)
+    print(
+        "Recovery: 1) fix YAML syntax, permissions, or encoding  2) re-run export",
+        file=sys.stderr,
+    )
+    return 2
+
+
+def _render_formats_to_dir(
+    *,
+    staging: Path,
+    requested: list[str],
+    formats_explicit: bool,
+    model: dict,
+    identity: dict,
+    style: dict,
+    warnings: list[str],
+    app_dir: Path,
+) -> tuple[list[str], list[str], list[dict], int | None]:
+    """Render all formats into staging. Returns (produced, skipped, outputs, err_exit)."""
+    produced: list[str] = []
+    skipped: list[str] = []
+    outputs: list[dict] = []
+
+    will_docx = "docx" in requested and HAVE_DOCX
+    if will_docx and "fonts" in style:
+        warnings.append(
+            "fonts in export-style.yaml are HTML/CSS-only; not applied to DOCX"
+        )
+
+    for fmt in requested:
+        if fmt == "md":
+            out = staging / "resume.md"
+            out.write_text(render_md(model, identity, warnings), encoding="utf-8")
+            produced.append(fmt)
+            outputs.append(
+                {
+                    "format": fmt,
+                    "path": str((app_dir / "export" / "resume.md").relative_to(app_dir)),
+                    "sha256": sha256_file(out),
+                    "bytes": out.stat().st_size,
+                }
+            )
+        elif fmt == "html":
+            out = staging / "resume.html"
+            out.write_text(render_html(model, identity, style), encoding="utf-8")
+            produced.append(fmt)
+            outputs.append(
+                {
+                    "format": fmt,
+                    "path": str((app_dir / "export" / "resume.html").relative_to(app_dir)),
+                    "sha256": sha256_file(out),
+                    "bytes": out.stat().st_size,
+                }
+            )
+        elif fmt == "docx":
+            if not HAVE_DOCX:
+                if not formats_explicit:
+                    skipped.append(fmt)
+                    print("warn: python-docx missing; skipping docx", file=sys.stderr)
+                else:
+                    print(
+                        "ERROR: docx requested but python-docx missing. pip install python-docx",
+                        file=sys.stderr,
+                    )
+                    return produced, skipped, outputs, 1
+            else:
+                out = staging / "resume.docx"
+                render_docx(model, identity, style, out)
+                produced.append(fmt)
+                outputs.append(
+                    {
+                        "format": fmt,
+                        "path": str((app_dir / "export" / "resume.docx").relative_to(app_dir)),
+                        "sha256": sha256_file(out),
+                    }
+                )
+        elif fmt == "pdf":
+            if not HAVE_WEASYPRINT:
+                if not formats_explicit:
+                    skipped.append(fmt)
+                    print("warn: weasyprint missing; skipping pdf", file=sys.stderr)
+                else:
+                    print(
+                        "ERROR: pdf requested but weasyprint missing. pip install weasyprint",
+                        file=sys.stderr,
+                    )
+                    return produced, skipped, outputs, 1
+            else:
+                html = render_html(model, identity, style)
+                out = staging / "resume.pdf"
+                WeasyHTML(string=html, url_fetcher=_pdf_url_fetcher()).write_pdf(out)
+                produced.append(fmt)
+                outputs.append(
+                    {
+                        "format": fmt,
+                        "path": str((app_dir / "export" / "resume.pdf").relative_to(app_dir)),
+                        "sha256": sha256_file(out),
+                    }
+                )
+        else:
+            print(f"ERROR: unknown format {fmt}", file=sys.stderr)
+            return produced, skipped, outputs, 1
+    return produced, skipped, outputs, None
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("app_dir", type=Path, nargs="?", help="applications/<app>/ directory")
@@ -367,13 +519,47 @@ def main(argv: list[str] | None = None) -> int:
         print("Recovery: 1) run bootstrap  2) create identity.yaml", file=sys.stderr)
         return 4
 
+    try:
+        return _main_export(
+            app_dir=app_dir,
+            draft=draft,
+            identity_path=identity_path,
+            style_path=style_path,
+            export_dir=export_dir,
+            requested=requested,
+            formats_explicit=formats_explicit,
+        )
+    except SystemExit:
+        raise
+    except Exception as exc:  # noqa: BLE001 — mirror validate_evidence; no traceback
+        return _fail_io(exc)
+
+
+def _main_export(
+    *,
+    app_dir: Path,
+    draft: Path,
+    identity_path: Path,
+    style_path: Path,
+    export_dir: Path,
+    requested: list[str],
+    formats_explicit: bool,
+) -> int:
     warnings: list[str] = []
     if style_path.is_file():
         style = load_yaml(style_path)
     else:
         warnings.append("style missing; using safe defaults")
         style = {
-            "page": {"size": "A4", "margins": {"top": "20mm", "bottom": "20mm", "left": "18mm", "right": "18mm"}},
+            "page": {
+                "size": "A4",
+                "margins": {
+                    "top": "20mm",
+                    "bottom": "20mm",
+                    "left": "18mm",
+                    "right": "18mm",
+                },
+            },
             "layout": {
                 "single_column": True,
                 "tables": False,
@@ -408,7 +594,10 @@ def main(argv: list[str] | None = None) -> int:
     model = parse_draft(draft.read_text(encoding="utf-8"))
     if not model["sections"]:
         print("ERROR: draft.md has no ## sections", file=sys.stderr)
-        print("Recovery: 1) re-render draft from composition  2) fix headings", file=sys.stderr)
+        print(
+            "Recovery: 1) re-render draft from composition  2) fix headings",
+            file=sys.stderr,
+        )
         return 2
 
     identity = load_yaml(identity_path)
@@ -417,109 +606,120 @@ def main(argv: list[str] | None = None) -> int:
         print("Recovery: 1) run bootstrap  2) create identity.yaml", file=sys.stderr)
         return 4
 
+    # X2: strip XML-illegal controls before any format write.
+    model = _sanitize_tree(model)
+    identity = _sanitize_tree(identity)
+
+    # Confinement / symlink checks on final export path before staging install.
+    if export_dir.exists() or export_dir.is_symlink():
+        if export_dir.is_symlink() or not export_dir.is_dir():
+            # resolve may follow symlink — refuse escape
+            pass
+        try:
+            resolved = export_dir.resolve()
+        except OSError as e:
+            print(f"ERROR: cannot resolve export dir {export_dir}: {e}", file=sys.stderr)
+            print("Recovery: 1) fix permissions  2) choose writable path", file=sys.stderr)
+            return 5
+        if not _export_dir_confined(app_dir, resolved):
+            print(
+                f"ERROR: export dir escapes app_dir (symlink?): {resolved}",
+                file=sys.stderr,
+            )
+            print(
+                "Recovery: 1) remove export/ symlink  2) use a real dir under app_dir",
+                file=sys.stderr,
+            )
+            return 5
+
+    staging = Path(tempfile.mkdtemp(prefix=".export_staging_", dir=app_dir))
     try:
-        export_dir.mkdir(parents=True, exist_ok=True)
-    except OSError as e:
-        print(f"ERROR: cannot write export dir {export_dir}: {e}", file=sys.stderr)
-        print("Recovery: 1) fix permissions  2) choose writable path", file=sys.stderr)
-        return 5
-
-    export_dir = export_dir.resolve()
-    if not _export_dir_confined(app_dir, export_dir):
-        print(
-            f"ERROR: export dir escapes app_dir (symlink?): {export_dir}",
-            file=sys.stderr,
+        produced, skipped, outputs, err = _render_formats_to_dir(
+            staging=staging,
+            requested=requested,
+            formats_explicit=formats_explicit,
+            model=model,
+            identity=identity,
+            style=style,
+            warnings=warnings,
+            app_dir=app_dir,
         )
-        print(
-            "Recovery: 1) remove export/ symlink  2) use a real dir under app_dir",
-            file=sys.stderr,
-        )
-        return 5
+        if err is not None:
+            return err
 
-    produced, skipped, outputs = [], [], []
-    for fmt in requested:
-        if fmt == "md":
-            out = export_dir / "resume.md"
-            bad = _refuse_symlink_write(out)
-            if bad is not None:
-                return bad
-            out.write_text(render_md(model, identity), encoding="utf-8")
-            produced.append(fmt)
-            outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out), "bytes": out.stat().st_size})
-        elif fmt == "html":
-            out = export_dir / "resume.html"
-            bad = _refuse_symlink_write(out)
-            if bad is not None:
-                return bad
-            out.write_text(render_html(model, identity, style), encoding="utf-8")
-            produced.append(fmt)
-            outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out), "bytes": out.stat().st_size})
-        elif fmt == "docx":
-            if not HAVE_DOCX:
-                if not formats_explicit:
-                    skipped.append(fmt)
-                    print("warn: python-docx missing; skipping docx", file=sys.stderr)
-                else:
-                    print("ERROR: docx requested but python-docx missing. pip install python-docx", file=sys.stderr)
-                    return 1
-            else:
-                out = export_dir / "resume.docx"
-                bad = _refuse_symlink_write(out)
-                if bad is not None:
-                    return bad
-                render_docx(model, identity, style, out)
-                produced.append(fmt)
-                outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out)})
-        elif fmt == "pdf":
-            if not HAVE_WEASYPRINT:
-                if not formats_explicit:
-                    skipped.append(fmt)
-                    print("warn: weasyprint missing; skipping pdf", file=sys.stderr)
-                else:
-                    print("ERROR: pdf requested but weasyprint missing. pip install weasyprint", file=sys.stderr)
-                    return 1
-            else:
-                html = render_html(model, identity, style)
-                out = export_dir / "resume.pdf"
-                bad = _refuse_symlink_write(out)
-                if bad is not None:
-                    return bad
-                WeasyHTML(string=html, url_fetcher=_pdf_url_fetcher()).write_pdf(out)
-                produced.append(fmt)
-                outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out)})
+        for w in warnings:
+            print(f"WARN: {w}", file=sys.stderr)
+
+        manifest = {
+            "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
+            "application_id": app_dir.name,
+            "inputs": {
+                "draft_md": {"path": str(draft), "sha256": sha256_file(draft)},
+                "identity_yaml": {
+                    "path": str(identity_path),
+                    "sha256": sha256_file(identity_path),
+                },
+                "export_style": {
+                    "path": str(style_path) if style_path.is_file() else None,
+                    "sha256": sha256_file(style_path) if style_path.is_file() else None,
+                },
+            },
+            "tool": {
+                "python": ".".join(map(str, sys.version_info[:3])),
+                "python_docx": _ver("docx") if HAVE_DOCX else None,
+                "weasyprint": _ver("weasyprint") if HAVE_WEASYPRINT else None,
+            },
+            "requested_formats": requested,
+            "produced_formats": produced,
+            "skipped_formats": skipped,
+            "outputs": outputs,
+            "warnings": warnings,
+        }
+        man_staging = staging / "export_manifest.yaml"
+        if yaml:
+            man_staging.write_text(
+                yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8"
+            )
         else:
-            print(f"ERROR: unknown format {fmt}", file=sys.stderr)
-            return 1
+            man_staging.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
-    manifest = {
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-        "application_id": app_dir.name,
-        "inputs": {
-            "draft_md": {"path": str(draft), "sha256": sha256_file(draft)},
-            "identity_yaml": {"path": str(identity_path), "sha256": sha256_file(identity_path)},
-            "export_style": {"path": str(style_path) if style_path.is_file() else None, "sha256": sha256_file(style_path) if style_path.is_file() else None},
-        },
-        "tool": {
-            "python": ".".join(map(str, sys.version_info[:3])),
-            "python_docx": _ver("docx") if HAVE_DOCX else None,
-            "weasyprint": _ver("weasyprint") if HAVE_WEASYPRINT else None,
-        },
-        "requested_formats": requested,
-        "produced_formats": produced,
-        "skipped_formats": skipped,
-        "outputs": outputs,
-        "warnings": warnings,
-    }
-    man_path = export_dir / "export_manifest.yaml"
-    bad = _refuse_symlink_write(man_path)
-    if bad is not None:
-        return bad
-    if yaml:
-        man_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
-    else:
-        man_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    print(f"Wrote {len(produced)} format(s) to {export_dir}")
-    return 0
+        # Install: create export/ if needed, refuse symlink targets, then replace.
+        try:
+            export_dir.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            print(f"ERROR: cannot write export dir {export_dir}: {e}", file=sys.stderr)
+            print(
+                "Recovery: 1) fix permissions  2) choose writable path",
+                file=sys.stderr,
+            )
+            return 5
+
+        export_dir = export_dir.resolve()
+        if not _export_dir_confined(app_dir, export_dir):
+            print(
+                f"ERROR: export dir escapes app_dir (symlink?): {export_dir}",
+                file=sys.stderr,
+            )
+            print(
+                "Recovery: 1) remove export/ symlink  2) use a real dir under app_dir",
+                file=sys.stderr,
+            )
+            return 5
+
+        staged_names = [p.name for p in staging.iterdir() if p.is_file()]
+        for name in staged_names:
+            dest = export_dir / name
+            bad = _refuse_symlink_write(dest)
+            if bad is not None:
+                return bad
+
+        for name in staged_names:
+            os.replace(staging / name, export_dir / name)
+
+        print(f"Wrote {len(produced)} format(s) to {export_dir}")
+        return 0
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
 
 if __name__ == "__main__":
