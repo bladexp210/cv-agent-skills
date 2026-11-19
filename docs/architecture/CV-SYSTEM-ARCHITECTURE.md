@@ -4,7 +4,7 @@
 > **Design SoT:** `docs/design/`.  
 > Full historical embed archived at `docs/archive/CV-SYSTEM-ARCHITECTURE-v1.0-full-embed.md`.
 
-**Updated:** 2026-11-19 (portability docs: `docs/portability.md`)
+**Updated:** 2026-11-19 (quick-start / Makefile / adversarial brief)
 
 Install: copy `skills/evidence-bank` and `skills/cv-creation` into the Agent Skills client’s skills folder (examples: `.cursor/skills/`, `.agents/skills/`; discover per client — see `docs/portability.md`). Do not invent files beyond this inventory.
 
@@ -16,9 +16,12 @@ Repo root (trust / CI / tests) plus skill SoT under `skills/`. Paths under `skil
 
 ```
 SECURITY.md
+Makefile
 requirements-dev.txt
 .github/workflows/ci.yml
 docs/portability.md
+docs/quick-start.md
+prompts/adversarial-scripts-pass.md
 tests/test_validate_evidence.py
 tests/test_validate_application.py
 tests/test_validate_application_grounding.py
@@ -117,9 +120,12 @@ skills/
 | Path | Purpose |
 |---|---|
 | `SECURITY.md` | Script I/O / network / exit matrix and privacy boundary for this repo. |
+| `Makefile` | Solo-operator targets: deps, pytest, architecture smoke (`make smoke` / `make check`). |
 | `requirements-dev.txt` | Dev-only pytest and jsonschema pins for local tests and CI. |
 | `.github/workflows/ci.yml` | GitHub Actions workflow: pytest plus architecture smoke. |
 | `docs/portability.md` | Multi-client matrix, copyable smoke checklist, Results for Cursor and DeepSeek Harness (`dsh`). |
+| `docs/quick-start.md` | Five-minute human overview: paths, smoke, known limitations. |
+| `prompts/adversarial-scripts-pass.md` | Paste-ready scoped red-team brief for a different model (export / validate scripts). |
 | `tests/test_validate_evidence.py` | Pytest for validate_evidence against bank fixtures. |
 | `tests/test_validate_application.py` | Pytest for validate_application against mini-app. |
 | `tests/test_validate_application_grounding.py` | Pytest for G4 grounding OK + negative fixtures. |
@@ -249,6 +255,12 @@ Option C trust pack (shipped):
 Portability (docs + Wave 2 Results filled 2026-11-19 — Cursor script PASS, dsh PARTIAL):
 
 - `docs/portability.md`
+
+Operator convenience + adversarial brief (2026-11-19):
+
+- `Makefile`
+- `docs/quick-start.md`
+- `prompts/adversarial-scripts-pass.md`
 
 Runtime-created under `career/` (not in this tree): `inbox/` (resumes, linkedin, from-links), `_skill_state/LIVE.yaml`, `_skill_state/STATUS.md`, `applications/<app>/composition.yaml`, `applications/<app>/ats-check.yaml`, `applications/<app>/export/`, `profile/export-style.yaml`, `profile/norms/ats/*.yaml`.
 

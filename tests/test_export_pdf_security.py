@@ -153,3 +153,35 @@ def test_weasyprint_pdf_write_with_deny_fetcher(tmp_path: Path):
     )
     assert rc == 0
     assert (app_dir / "export" / "resume.pdf").is_file()
+
+
+def test_pdf_main_passes_deny_url_fetcher(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    """X8: PDF path must pass a url_fetcher that refuses http (no weasyprint required)."""
+    captured: dict = {}
+
+    class FakeHTML:
+        def __init__(self, string=None, url_fetcher=None, **kwargs):
+            captured["url_fetcher"] = url_fetcher
+
+        def write_pdf(self, path):
+            Path(path).write_bytes(b"%PDF-fake")
+
+    monkeypatch.setattr(er, "HAVE_WEASYPRINT", True)
+    monkeypatch.setattr(er, "WeasyHTML", FakeHTML, raising=False)
+
+    career = tmp_path / "mini-app"
+    shutil.copytree(MINI, career)
+    app_dir = career / APP_REL
+    rc = er.main(
+        ["--formats", "pdf", "--career-root", str(career), str(app_dir)]
+    )
+    assert rc == 0
+    fetcher = captured.get("url_fetcher")
+    assert fetcher is not None
+    with pytest.raises(Exception):
+        if callable(fetcher) and not hasattr(fetcher, "fetch"):
+            fetcher("http://example.com/x.png")
+        elif hasattr(fetcher, "fetch"):
+            fetcher.fetch("http://example.com/x.png")
+        else:
+            fetcher("http://example.com/x.png")  # type: ignore[operator]

@@ -28,6 +28,8 @@ Career PII stays in your private career tree — not in this repo. Bundled scrip
 
 **Security:** [SECURITY.md](SECURITY.md) — per-script reads / writes / network / exits.
 
+**Quick start (5 minutes):** [`docs/quick-start.md`](docs/quick-start.md)
+
 ---
 
 ## Dependencies (full path)
@@ -136,8 +138,11 @@ Repo map (design, architecture, contract, agent load order): [`docs/README.md`](
 Maintainer smoke (after cloning):
 
 ```bash
-pip install -r requirements.txt -r requirements-dev.txt && pytest -q
+make deps && make check
+# or: pip install -r requirements.txt -r requirements-dev.txt && pytest -q && make smoke
 ```
+
+`make smoke` runs bank + mini-app G4 + grounding-bad (md/html export; PDF not required). See also [`docs/quick-start.md`](docs/quick-start.md) **Known limitations**.
 
 ---
 

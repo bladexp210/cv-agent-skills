@@ -89,13 +89,29 @@ def _norm_ws(text: str) -> str:
     return _WS.sub(" ", (text or "").strip())
 
 
+_PROBE_REASON_KEYS = ("reason", "answer", "note", "summary", "text")
+
+
+def _nonempty_str(val) -> bool:
+    return val is not None and bool(str(val).strip())
+
+
 def _waived_has_reason(row: dict) -> bool:
-    if row.get("reason") and str(row.get("reason")).strip():
+    if _nonempty_str(row.get("reason")):
         return True
-    if row.get("waiver_reason") and str(row.get("waiver_reason")).strip():
+    if _nonempty_str(row.get("waiver_reason")):
         return True
     hist = row.get("probe_history") or []
-    return bool(hist)
+    if not isinstance(hist, list):
+        return False
+    for entry in hist:
+        if isinstance(entry, str) and entry.strip():
+            return True
+        if isinstance(entry, dict):
+            for key in _PROBE_REASON_KEYS:
+                if _nonempty_str(entry.get(key)):
+                    return True
+    return False
 
 
 def _section_source_identity(comp: dict, section: str) -> bool:
@@ -147,21 +163,39 @@ def _matching_by_skill(matching_doc: dict) -> dict[str, dict]:
     return out
 
 
-def _evidence_indexes(evidence_doc: dict) -> tuple[dict[str, dict], dict[str, dict[str, str]]]:
-    """Return (ev_id → row, ev_id → {skill_id → strength})."""
+def _evidence_indexes(
+    evidence_doc: dict,
+) -> tuple[dict[str, dict], dict[str, dict[str, str]], list[str]]:
+    """Return (ev_id → row, ev_id → {skill_id → strength}, index errors)."""
+    errors: list[str] = []
     by_id: dict[str, dict] = {}
+    seen_ids: set[str] = set()
     for row in evidence_doc.get("evidence") or []:
         eid = row.get("id")
-        if eid:
-            by_id[eid] = row
+        if not eid:
+            continue
+        if eid in seen_ids:
+            errors.append(f"duplicate evidence id {eid}")
+        else:
+            seen_ids.add(eid)
+        by_id[eid] = row
     links: dict[str, dict[str, str]] = {eid: {} for eid in by_id}
+    seen_links: set[tuple[str, str]] = set()
     for link in evidence_doc.get("evidence_skills") or []:
         eid = link.get("evidence_id")
         sid = link.get("skill_id")
         if not eid or not sid:
             continue
+        if eid not in by_id:
+            errors.append(f"evidence_skills: unknown evidence_id {eid}")
+            continue
+        key = (eid, sid)
+        if key in seen_links:
+            errors.append(f"duplicate evidence_skills link ({eid}, {sid})")
+        else:
+            seen_links.add(key)
         links.setdefault(eid, {})[sid] = link.get("strength") or ""
-    return by_id, links
+    return by_id, links, errors
 
 
 def check_grounding(
@@ -180,7 +214,8 @@ def check_grounding(
     if uncovered:
         errors.append("grounding.uncovered must be empty at G4")
 
-    ev_by_id, ev_skill_links = _evidence_indexes(evidence_doc)
+    ev_by_id, ev_skill_links, index_errors = _evidence_indexes(evidence_doc)
+    errors.extend(index_errors)
     cited_list = list(grounding.get("cited_ev_ids") or [])
     cited_set = set(cited_list)
 
@@ -191,7 +226,16 @@ def check_grounding(
     match_by_skill = _matching_by_skill(matching_doc) if matching_doc is not None else {}
     name_index = _build_skill_name_index(skills_doc) if skills_doc is not None else {}
 
-    bullets = comp.get("bullets") or []
+    bullets_raw = comp.get("bullets")
+    if not bullets_raw:
+        errors.append("composition has no bullets")
+        bullets: list = []
+    elif not isinstance(bullets_raw, list):
+        errors.append("composition has no bullets")
+        bullets = []
+    else:
+        bullets = bullets_raw
+
     for bullet in bullets:
         bid = bullet.get("id") or "<bullet>"
         section = (bullet.get("section") or "").lower()
@@ -201,6 +245,10 @@ def check_grounding(
 
         if identity_exempt:
             continue
+
+        text = bullet.get("text")
+        if not _nonempty_str(text):
+            errors.append(f"{bid}: missing or empty bullet text")
 
         # Summary/Experience always; edu/cert when not identity-exempt;
         # other sections only if they cite evidence.
@@ -289,8 +337,13 @@ def check_grounding(
     if draft_text is not None:
         draft_norm = _norm_ws(draft_text)
         for bullet in bullets:
+            if _bullet_identity_exempt(bullet, comp, identity_enabled=identity_enabled):
+                continue
             text = bullet.get("text")
-            if not text:
+            if not _nonempty_str(text):
+                bid = bullet.get("id") or "<bullet>"
+                if f"{bid}: missing or empty bullet text" not in errors:
+                    errors.append(f"{bid}: missing or empty bullet text")
                 continue
             if _norm_ws(str(text)) not in draft_norm:
                 bid = bullet.get("id") or "<bullet>"
@@ -352,7 +405,21 @@ def main(argv: list[str] | None = None) -> int:
                 if not args.identity.is_file():
                     errors.append(f"identity missing: {args.identity}")
                 else:
-                    identity_enabled = True
+                    try:
+                        identity_doc = load_yaml(args.identity)
+                    except SystemExit:
+                        raise
+                    except Exception as exc:
+                        if yaml is not None and isinstance(exc, yaml.YAMLError):
+                            errors.append("identity empty or unreadable")
+                            identity_doc = None
+                        else:
+                            raise
+                    else:
+                        if not identity_doc:
+                            errors.append("identity empty or unreadable")
+                        else:
+                            identity_enabled = True
             draft_text = None
             if args.draft:
                 if not args.draft.is_file():

@@ -319,6 +319,25 @@ def _ver(pkg: str) -> str:
         return ""
 
 
+def _export_dir_confined(app_dir: Path, export_dir: Path) -> bool:
+    """True if resolved export_dir stays under resolved app_dir (no symlink escape)."""
+    app_r = app_dir.resolve()
+    exp_r = export_dir.resolve()
+    return exp_r.is_relative_to(app_r)
+
+
+def _refuse_symlink_write(out: Path) -> int | None:
+    """Refuse writing through a symlink (do not follow to outside). Exit 5 on refuse."""
+    if out.is_symlink():
+        print(f"ERROR: refuse to write through symlink: {out}", file=sys.stderr)
+        print(
+            "Recovery: 1) remove the symlink under export/  2) re-run export",
+            file=sys.stderr,
+        )
+        return 5
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("app_dir", type=Path, nargs="?", help="applications/<app>/ directory")
@@ -393,6 +412,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     identity = load_yaml(identity_path)
+    if not identity:
+        print(f"ERROR: identity missing or empty: {identity_path}", file=sys.stderr)
+        print("Recovery: 1) run bootstrap  2) create identity.yaml", file=sys.stderr)
+        return 4
+
     try:
         export_dir.mkdir(parents=True, exist_ok=True)
     except OSError as e:
@@ -400,15 +424,33 @@ def main(argv: list[str] | None = None) -> int:
         print("Recovery: 1) fix permissions  2) choose writable path", file=sys.stderr)
         return 5
 
+    export_dir = export_dir.resolve()
+    if not _export_dir_confined(app_dir, export_dir):
+        print(
+            f"ERROR: export dir escapes app_dir (symlink?): {export_dir}",
+            file=sys.stderr,
+        )
+        print(
+            "Recovery: 1) remove export/ symlink  2) use a real dir under app_dir",
+            file=sys.stderr,
+        )
+        return 5
+
     produced, skipped, outputs = [], [], []
     for fmt in requested:
         if fmt == "md":
             out = export_dir / "resume.md"
+            bad = _refuse_symlink_write(out)
+            if bad is not None:
+                return bad
             out.write_text(render_md(model, identity), encoding="utf-8")
             produced.append(fmt)
             outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out), "bytes": out.stat().st_size})
         elif fmt == "html":
             out = export_dir / "resume.html"
+            bad = _refuse_symlink_write(out)
+            if bad is not None:
+                return bad
             out.write_text(render_html(model, identity, style), encoding="utf-8")
             produced.append(fmt)
             outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out), "bytes": out.stat().st_size})
@@ -422,6 +464,9 @@ def main(argv: list[str] | None = None) -> int:
                     return 1
             else:
                 out = export_dir / "resume.docx"
+                bad = _refuse_symlink_write(out)
+                if bad is not None:
+                    return bad
                 render_docx(model, identity, style, out)
                 produced.append(fmt)
                 outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out)})
@@ -436,6 +481,9 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 html = render_html(model, identity, style)
                 out = export_dir / "resume.pdf"
+                bad = _refuse_symlink_write(out)
+                if bad is not None:
+                    return bad
                 WeasyHTML(string=html, url_fetcher=_pdf_url_fetcher()).write_pdf(out)
                 produced.append(fmt)
                 outputs.append({"format": fmt, "path": str(out.relative_to(app_dir)), "sha256": sha256_file(out)})
@@ -463,6 +511,9 @@ def main(argv: list[str] | None = None) -> int:
         "warnings": warnings,
     }
     man_path = export_dir / "export_manifest.yaml"
+    bad = _refuse_symlink_write(man_path)
+    if bad is not None:
+        return bad
     if yaml:
         man_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
     else:
